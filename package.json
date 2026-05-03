@@ -1,0 +1,73 @@
+{
+  "name": "promptweave",
+  "version": "0.1.0",
+  "description": "YAML composer for assembling agent prompts, hooks, and MCP configs from reusable behaviors",
+  "type": "module",
+  "license": "MIT",
+  "author": "Maxime Gagnon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swoofer/promptweave.git"
+  },
+  "homepage": "https://swoofer.github.io/promptweave",
+  "bugs": {
+    "url": "https://github.com/swoofer/promptweave/issues"
+  },
+  "keywords": [
+    "yaml",
+    "agent",
+    "prompt",
+    "composition",
+    "claude",
+    "mcp",
+    "behaviors"
+  ],
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    },
+    "./types": {
+      "types": "./dist/src/types.d.ts",
+      "default": "./dist/src/types.js"
+    }
+  },
+  "bin": {
+    "promptweave": "./dist/cli/index.js"
+  },
+  "files": [
+    "dist/src/",
+    "dist/cli/",
+    "behaviors/",
+    "presets/",
+    "compositions/",
+    "scripts/",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "cli": "tsx cli/index.ts",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "dependencies": {
+    "commander": "^14.0.3",
+    "handlebars": "^4.7.9",
+    "js-yaml": "^4.1.1",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
