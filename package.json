@@ -1,9 +1,12 @@
 {
-  "name": "promptweave",
+  "name": "@swoofer/promptweave",
   "version": "0.1.0",
   "description": "YAML composer for assembling agent prompts, hooks, and MCP configs from reusable behaviors",
   "type": "module",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Maxime Gagnon",
   "repository": {
     "type": "git",

@@ -3,7 +3,7 @@
 **YAML composer for assembling agent prompts, hooks, and MCP configs from reusable behaviors.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![npm](https://img.shields.io/npm/v/promptweave.svg)](https://www.npmjs.com/package/promptweave)
+[![npm](https://img.shields.io/npm/v/@swoofer/promptweave.svg)](https://www.npmjs.com/package/promptweave)
 [![Tests](https://github.com/swoofer/promptweave/actions/workflows/test.yml/badge.svg)](https://github.com/swoofer/promptweave/actions)
 
 ## What it does
@@ -20,7 +20,7 @@ The same behavior catalog can target Claude Code, Cursor, Aider, or any agent fr
 ## Quick start
 
 ```bash
-npm install -g promptweave
+npm install -g @swoofer/promptweave
 promptweave list behaviors                     # 4 generic behaviors ship bundled
 promptweave list presets                        # 2 demo presets: dev, inspect
 promptweave build inspect --dry-run             # preview a preset
@@ -75,7 +75,7 @@ Composition rules adapt assembly when certain behavior combinations appear toget
 ## Programmatic API
 
 ```ts
-import { Registry, runPipeline } from "promptweave";
+import { Registry, runPipeline } from "@swoofer/promptweave";
 
 const registry = Registry.load("./my-prompts");
 const result = runPipeline(
