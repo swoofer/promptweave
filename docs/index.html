@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>promptweave — YAML composer for prompts, hooks, and MCP configs</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #060b18;
+      --bg-alt: #0a1120;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #4ade80;
+      --border: rgba(255,255,255,0.08);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 4rem 2rem; }
+    h1 { font-size: 3rem; margin-bottom: 1rem; letter-spacing: -0.02em; }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; color: var(--accent); }
+    .lead { color: var(--muted); font-size: 1.25rem; margin-bottom: 2rem; max-width: 640px; }
+    pre {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+    }
+    code { font-family: 'Fira Code', 'JetBrains Mono', monospace; color: var(--accent); }
+    pre code { color: var(--text); }
+    ul { padding-left: 1.5rem; margin: 1rem 0; }
+    li { margin: 0.5rem 0; }
+    .related {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .related p { margin: 0.75rem 0; color: var(--muted); }
+    .related strong { color: var(--text); }
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>promptweave</h1>
+    <p class="lead">YAML composer for assembling agent prompts, hooks, and MCP configs from reusable behaviors.</p>
+
+    <h2>Quick start</h2>
+    <pre><code>npm install -g promptweave
+promptweave list behaviors
+promptweave build inspect --dry-run</code></pre>
+
+    <h2>Why</h2>
+    <p>Hand-writing agent prompts gets messy fast. You end up copy-pasting the same coordination rules, hook scripts, and MCP configs across every agent profile. promptweave lets you write each behavior once as a small YAML, then compose them into presets — the engine assembles a deterministic prompt, hooks per lifecycle, an `.mcp.json`, and env vars.</p>
+
+    <h2>Use cases</h2>
+    <ul>
+      <li>Version-controlled agent profiles for Claude Code, Cursor, Aider, custom agents.</li>
+      <li>Shared behavior catalog across a dev team — one source of truth for prompts/hooks/MCP configs.</li>
+      <li>CI-enforced consistency of agent assemblies.</li>
+    </ul>
+
+    <p style="margin-top: 2rem;"><a href="https://github.com/swoofer/promptweave">View on GitHub</a> · <a href="https://www.npmjs.com/package/promptweave">npm</a></p>
+
+    <section class="related">
+      <h2>Related projects</h2>
+      <p><strong><a href="https://github.com/swoofer/mcp-coordinator">mcp-coordinator</a></strong> — embedded MQTT broker + MCP server for multi-agent coordination.</p>
+      <p><strong><a href="https://github.com/swoofer/essaim">essaim</a></strong> — end-to-end orchestrator (coming soon).</p>
+    </section>
+
+    <footer>
+      <p>Released under the MIT License.</p>
+    </footer>
+  </main>
+</body>
+</html>
