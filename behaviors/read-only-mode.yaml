@@ -1,0 +1,10 @@
+name: read-only-mode
+description: "Agent cannot modify files — analysis and communication only"
+category: safety
+
+sections:
+  "090-safety-readonly":
+    prompt: |
+      ## Contrainte
+      Tu es en mode lecture seule. Tu ne modifies JAMAIS de fichiers.
+      Tu analyses, communiques et rapportes. Tu ne codes pas.

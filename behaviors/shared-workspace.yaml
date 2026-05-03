@@ -1,0 +1,12 @@
+name: shared-workspace
+description: "Shared workspace — all agents work in the same directory (read-only typical)"
+category: workspace
+
+conflicts_with: [worktree-isolation]
+
+sections:
+  "010-preconditions":
+    prompt: |
+      ## Workspace
+      Tu travailles dans un workspace partagé avec les autres agents.
+      Coordonne-toi avant toute modification.

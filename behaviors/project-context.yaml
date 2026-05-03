@@ -1,0 +1,25 @@
+name: project-context
+description: "Project identity — language, test command, modules"
+category: coordination
+
+params:
+  language:
+    type: string
+    required: false
+    description: "Project language"
+  test_command:
+    type: string
+    required: false
+    description: "Test command"
+  modules:
+    type: "string[]"
+    required: false
+    description: "Project modules"
+
+sections:
+  "000-identity":
+    prompt: |
+      ## Contexte du projet
+      - Langage: {{params.language}}
+      - Commande de test: {{params.test_command}}
+      - Modules: {{params.modules}}

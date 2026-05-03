@@ -1,0 +1,7 @@
+name: inspect
+description: "Read-only project inspection in an isolated worktree"
+profile: codeur
+behaviors:
+  - project-context
+  - worktree-isolation
+  - read-only-mode

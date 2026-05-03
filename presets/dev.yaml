@@ -1,0 +1,6 @@
+name: dev
+description: "Solo development session with project briefing in an isolated worktree"
+profile: codeur
+behaviors:
+  - project-context
+  - worktree-isolation

@@ -1,0 +1,26 @@
+name: worktree-isolation
+description: "Isolate agent in a dedicated git worktree branch"
+category: workspace
+
+conflicts_with: [shared-workspace]
+
+sections:
+  "010-preconditions":
+    prompt: |
+      ## Workspace
+      Tu travailles dans un worktree git isolé. Ta branche est dédiée à ton travail.
+      Tes modifications ne touchent PAS le code des autres agents.
+  "055-after-coding":
+    prompt: |
+      ## Fin de session
+      Une fois ton travail terminé, commite tes changements dans ta branche avant de terminer la session.
+
+hooks:
+  session-start:
+    script: setup_worktree.sh
+    blocking: true
+    order: 10
+  session-stop:
+    script: cleanup_worktree.sh
+    blocking: false
+    order: 90
