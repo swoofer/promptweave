@@ -1,0 +1,10 @@
+name: announce-after-relay
+description: "Announce comes after relay"
+priority: 0
+when:
+  all: [announce-before-write, sequential-pipeline]
+actions:
+  override_sections:
+    - behavior: announce-before-write
+      section: "020-before-coding"
+      prompt: "Wait for relay, then announce."

@@ -1,0 +1,13 @@
+name: worktree-isolation
+description: "Isolate agent in a git worktree"
+category: workspace
+sections:
+  "010-preconditions":
+    prompt: "Tu travailles dans un worktree git isolé."
+  "050-after-coding":
+    prompt: "Commite tes changements dans ta branche."
+hooks:
+  session-start:
+    script: setup_worktree.sh
+    blocking: true
+    order: 10

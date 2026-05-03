@@ -1,0 +1,22 @@
+name: announce-before-write
+description: "Announce intentions before writing code"
+category: coordination
+requires:
+  behaviors: [conflict-resolution]
+  infrastructure: [mcp-coordinator]
+conflicts_with: [silent-mode]
+suggests: [worktree-isolation]
+params:
+  announce_threshold:
+    type: number
+    default: 1
+    required: false
+sections:
+  "020-before-coding":
+    prompt: "AVANT de coder, appelle announce_work."
+hooks:
+  pre-tool-use:
+    script: check_announce.sh
+    blocking: true
+    order: 20
+mcp_tools: [announce_work, post_to_thread]

@@ -1,0 +1,6 @@
+name: formal-tone
+description: "Use formal and technical tone"
+category: tone
+sections:
+  "060-tone":
+    prompt: "Adopte un ton formel et technique."

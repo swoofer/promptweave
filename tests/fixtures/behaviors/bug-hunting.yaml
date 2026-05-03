@@ -1,0 +1,11 @@
+name: bug-hunting
+description: "Hunt bugs in assigned modules"
+category: mission
+params:
+  modules:
+    type: string[]
+    required: false
+    description: "Modules to analyze"
+sections:
+  "030-mission":
+    prompt: "Ta mission: identifier les bugs dans {{params.modules}}."

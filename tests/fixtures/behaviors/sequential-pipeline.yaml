@@ -1,0 +1,8 @@
+name: sequential-pipeline
+description: "Wait for previous agent before starting"
+category: coordination
+sections:
+  "010-preconditions":
+    prompt: "Attends que l'agent précédent ait fini."
+  "020-before-coding":
+    prompt: "Vérifie le thread de relais."

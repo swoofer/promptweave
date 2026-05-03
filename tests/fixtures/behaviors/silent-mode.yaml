@@ -1,0 +1,6 @@
+name: silent-mode
+description: "No announcements"
+category: coordination
+sections:
+  "020-silent":
+    prompt: "Ne fais aucune annonce."

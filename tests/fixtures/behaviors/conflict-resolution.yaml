@@ -1,0 +1,9 @@
+name: conflict-resolution
+description: "Resolve conflicts via consultation protocol"
+category: coordination
+requires:
+  infrastructure: [mcp-coordinator]
+sections:
+  "025-conflict-check":
+    prompt: "Si conflit détecté, résous-le avant de continuer."
+mcp_tools: [propose_resolution, approve_resolution]

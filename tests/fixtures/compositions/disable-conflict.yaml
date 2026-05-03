@@ -1,0 +1,8 @@
+name: disable-conflict-test
+description: "Test rule that disables conflict-resolution"
+priority: 0
+when:
+  all: [announce-before-write, conflict-resolution]
+  none: [worktree-isolation, sequential-pipeline]
+actions:
+  disable_behaviors: [conflict-resolution]

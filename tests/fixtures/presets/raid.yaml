@@ -1,0 +1,8 @@
+name: raid
+description: "Bug hunting coordonné en parallèle"
+profile: codeur
+behaviors:
+  - worktree-isolation
+  - announce-before-write
+  - conflict-resolution
+  - bug-hunting
