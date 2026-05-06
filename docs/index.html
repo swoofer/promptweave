@@ -1187,8 +1187,8 @@
   </div>
   <button class="hamburger" aria-label="Menu">&#9776;</button>
   <div class="nav-links">
-    <a href="#why" data-i18n="nav.why">Why</a><a href="#bce" data-i18n="nav.bce">Engine</a>
-    <a href="#templates" data-i18n="nav.templates">Examples</a><a href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
+    <a href="#why" data-i18n="nav.why">Why</a><a href="#potential" data-i18n="nav.potential">Power</a><a href="#bce" data-i18n="nav.bce">Engine</a>
+    <a href="#templates" data-i18n="nav.templates">Bundled</a><a href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
     <a href="https://github.com/swoofer/promptweave" target="_blank">GitHub</a>
     <a href="#install" class="btn-sm" data-i18n="nav.getstarted">Get Started</a>
     <div class="lang-switcher">
@@ -1366,6 +1366,52 @@
   </div>
 </section>
 
+<!-- POTENTIAL — what promptweave unlocks at scale -->
+<section id="potential">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title" data-i18n="potential.title">From chaos to composition</h2>
+      <p class="section-sub" data-i18n="potential.subtitle">Compose your behavior catalog once, ship hundreds of agent variants. Without copy-paste, without drift, without vendor lock-in.</p>
+    </div>
+
+    <div class="hero-stats" style="margin: 3rem auto; justify-content: center; gap: 0.75rem;">
+      <div class="stat-pill"><strong style="font-size: 1.5rem;">N</strong> <span data-i18n="potential.stat.behaviors">behaviors</span></div>
+      <div class="stat-pill" style="background: transparent; border: none; color: var(--accent); font-size: 1.5rem; padding: 0.3rem 0.4rem;">&times;</div>
+      <div class="stat-pill"><strong style="font-size: 1.5rem;">M</strong> <span data-i18n="potential.stat.presets">presets</span></div>
+      <div class="stat-pill" style="background: transparent; border: none; color: var(--accent); font-size: 1.5rem; padding: 0.3rem 0.4rem;">&times;</div>
+      <div class="stat-pill"><strong style="font-size: 1.5rem;">K</strong> <span data-i18n="potential.stat.vendors">vendors</span></div>
+      <div class="stat-pill" style="background: transparent; border: none; color: var(--accent); font-size: 1.5rem; padding: 0.3rem 0.4rem;">=</div>
+      <div class="stat-pill" style="background: rgba(74,222,128,0.15); border-color: var(--accent);"><strong style="font-size: 1.5rem; color: var(--accent);">N&times;M&times;K</strong> <span data-i18n="potential.stat.outputs" style="color: var(--text);">prompts assembled</span></div>
+    </div>
+
+    <p class="text-center" style="color: var(--muted); margin-bottom: 3rem; max-width: 720px; margin-left: auto; margin-right: auto; font-size: 0.95rem;" data-i18n="potential.multiplier.caption">All assembled from N YAML files. Add a vendor target &mdash; every preset re-renders. Change a behavior &mdash; all M presets pick it up. Hand-edited prompts cannot do this.</p>
+
+    <div class="cards fade-in">
+      <div class="card">
+        <div class="card-icon">&#x1FAE0;</div>
+        <h3 data-i18n="potential.card1.title">Edit once, propagate everywhere</h3>
+        <p data-i18n="potential.card1.desc">Change a single line in <code style="color:var(--accent);font-size:0.9em;">read-only-mode.yaml</code> &mdash; every preset that includes it re-renders byte-deterministically. No find-and-replace across 50 prompt files. No drift between agents that should say the same thing.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#9889;</div>
+        <h3 data-i18n="potential.card2.title">Conditional logic without branches</h3>
+        <p data-i18n="potential.card2.desc">Composition rules apply mutations declaratively when behaviors meet &mdash; <em>"if A and B both present, rewrite section X"</em>. Replaces dozens of conditional <code style="color:var(--accent);font-size:0.9em;">if/else</code> blocks copy-pasted across role-specific prompts.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#127919;</div>
+        <h3 data-i18n="potential.card3.title">One catalog, every vendor</h3>
+        <p data-i18n="potential.card3.desc">The same N behaviors compose for Claude Code, Cursor, Cline, Aider &mdash; anything consuming prompt + hook + MCP-config triples. Add vendor #5 with one writer plugin; never rewrite a behavior.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#129516;</div>
+        <h3 data-i18n="potential.card4.title">Prompts as first-class code</h3>
+        <p data-i18n="potential.card4.desc">Generated outputs are deterministic. Diff them in PRs. Catch behavior drift in CI before it ships. Onboarding a new agent role &rarr; copy a preset, change one parameter, ship.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- HOW IT WORKS -->
 <section id="how-it-works">
   <div class="container">
@@ -1489,365 +1535,73 @@
   </div>
 </section>
 
-<!-- TEMPLATES — Behavioral Composition -->
+
+<!-- BUNDLED — what actually ships in promptweave -->
 <section id="templates">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-title" data-i18n="examples.title">Example catalogs built on promptweave</h2>
-      <p class="section-sub" data-i18n="examples.subtitle">Twelve pre-composed agent presets, each assembled from reusable YAML behaviors — coordination, workspace, mission, safety.</p>
-      <p class="section-sub" style="font-size: 0.9rem; color: var(--muted); margin-top: 1rem; max-width: 720px; margin-left: auto; margin-right: auto; padding: 0.75rem 1rem; border: 1px solid rgba(96,165,250,0.3); border-radius: 8px; background: rgba(96,165,250,0.05);" data-i18n="examples.callout"><strong>Note &mdash;</strong> these templates illustrate composition variety. Their YAMLs live in <a href="https://github.com/swoofer/essaim">essaim</a> <em>(coming soon)</em>, the reference orchestrator. promptweave bundles only 4 demo behaviors and 2 demo presets &mdash; the rich catalogs shown here are what you build on top.</p>
+      <h2 class="section-title" data-i18n="bundled.title">What ships bundled</h2>
+      <p class="section-sub" data-i18n="bundled.subtitle">promptweave bundles 4 demo behaviors and 2 demo presets &mdash; just enough to show the engine working. Real-world catalogs (32+ behaviors, dozens of presets) live in your project via <code style="color:var(--accent);font-size:0.9em;">--root</code>.</p>
     </div>
 
-    <div class="bce-legend fade-in">
-      <div class="bce-legend-item"><div class="bce-legend-dot" style="background:var(--muted)"></div> Foundation</div>
-      <div class="bce-legend-item"><div class="bce-legend-dot" style="background:var(--blue)"></div> Coordination</div>
-      <div class="bce-legend-item"><div class="bce-legend-dot" style="background:var(--accent)"></div> Mission</div>
-      <div class="bce-legend-item"><div class="bce-legend-dot" style="background:var(--yellow)"></div> Safety</div>
+    <div class="text-center" style="margin-top: 2.5rem;">
+      <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;" data-i18n="bundled.behaviors.title">4 demo behaviors</h3>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem;" data-i18n="bundled.behaviors.sub">One YAML per behavior. Each contributes one or more numbered sections to the assembled prompt.</p>
     </div>
 
-    <div class="tmpl-grid fade-in">
-
-      <!-- RAID -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon parallel">&#x1F41B;</div>
-          <div class="tmpl-name">Le Raid</div>
-        </div>
-        <div class="tmpl-desc">N chasseurs traquent les bugs en parallele. Chacun annonce avant d'ecrire un test pour eviter les doublons.</div>
-        <div class="tmpl-flow"><span class="fl-blue">Chasseur 1</span>    <span class="fl-blue">Chasseur 2</span>    <span class="fl-blue">Chasseur 3</span>
-    <span class="fl-dim">|</span>               <span class="fl-dim">|</span>               <span class="fl-dim">|</span>
-    <span class="fl-green">announce</span>         <span class="fl-green">announce</span>         <span class="fl-green">announce</span>
-    <span class="fl-dim">|</span>               <span class="fl-dim">|</span>               <span class="fl-dim">|</span>
-    hunt bugs        hunt bugs        hunt bugs
-    write test       write test       write test
-    <span class="fl-dim">|</span>               <span class="fl-dim">|</span>               <span class="fl-dim">|</span>
-    <span class="fl-dim">+-------</span><span class="fl-yellow">conflict?</span><span class="fl-dim">-------+</span>
-                <span class="fl-yellow">resolve</span></div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">2-3 agents</span>
-          <span class="tmpl-tag tag-mode">parallel</span>
-          <span class="tmpl-tag tag-profile">codeur</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">worktree &middot; announce &middot; conflict-resolution</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>phase-discover</strong> &rarr; <strong>phase-execute</strong> &middot; bug-hunting</div></div>
-        </div>
+    <div class="cards fade-in">
+      <div class="card">
+        <h3><code style="color:var(--accent);font-size:0.95em;">project-context</code></h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem;" data-i18n="bundled.b1.cat">category: coordination &middot; section 000</p>
+        <p data-i18n="bundled.b1.desc">Project identity. Templated parameters for language, test command, and module list. Renders the agent's "where am I?" briefing.</p>
       </div>
-
-      <!-- MELEE -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon parallel">&#x1F9EA;</div>
-          <div class="tmpl-name">La Melee</div>
-        </div>
-        <div class="tmpl-desc">N agents ecrivent des tests en free-for-all. Coordination pour eviter les doublons sur les memes fichiers.</div>
-        <div class="tmpl-flow"><span class="fl-blue">Agent A</span>   <span class="fl-blue">Agent B</span>   <span class="fl-blue">Agent C</span>   <span class="fl-blue">Agent D</span>
-   <span class="fl-dim">|</span>          <span class="fl-dim">|</span>          <span class="fl-dim">|</span>          <span class="fl-dim">|</span>
-   <span class="fl-green">announce</span>   <span class="fl-green">announce</span>   <span class="fl-green">announce</span>   <span class="fl-green">announce</span>
-   <span class="fl-dim">|</span>          <span class="fl-dim">|</span>          <span class="fl-dim">|</span>          <span class="fl-dim">|</span>
-   write      write      write      write
-   tests      tests      tests      tests
-   <span class="fl-dim">+---------+-</span><span class="fl-yellow">dedup</span><span class="fl-dim">-+---------+</span></div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">2-6 agents</span>
-          <span class="tmpl-tag tag-mode">parallel</span>
-          <span class="tmpl-tag tag-profile">codeur</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">worktree &middot; announce &middot; conflict-resolution</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>phase-discover</strong> &rarr; <strong>phase-execute</strong> &middot; test-writing</div></div>
-        </div>
+      <div class="card">
+        <h3><code style="color:var(--accent);font-size:0.95em;">worktree-isolation</code></h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem;" data-i18n="bundled.b2.cat">category: workspace &middot; sections 010 + 055 &middot; hooks: session-start, session-stop</p>
+        <p data-i18n="bundled.b2.desc">Isolate the agent in a dedicated git worktree branch. Ships hook scripts that set up and tear down the worktree. Conflicts with <code style="color:var(--accent);font-size:0.9em;">shared-workspace</code>.</p>
       </div>
-
-      <!-- ESSAIM -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon parallel">&#x1F9F9;</div>
-          <div class="tmpl-name">L'Essaim</div>
-        </div>
-        <div class="tmpl-desc">N agents refactorisent des tranches de fichiers en parallele. Revert automatique si les tests echouent.</div>
-        <div class="tmpl-flow"><span class="fl-dim">files:</span> <span class="fl-blue">[a b c]</span>   <span class="fl-blue">[d e f]</span>   <span class="fl-blue">[g h i]</span>
-        Ref.1       Ref.2       Ref.3
-         <span class="fl-dim">|</span>           <span class="fl-dim">|</span>           <span class="fl-dim">|</span>
-        rename     extract    simplify
-        cleanup    functions  conditions
-         <span class="fl-dim">|</span>           <span class="fl-dim">|</span>           <span class="fl-dim">|</span>
-        <span class="fl-green">test OK</span>    <span class="fl-green">test OK</span>    <span class="fl-red">test FAIL</span>
-                                <span class="fl-red">revert</span></div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">3-6 agents</span>
-          <span class="tmpl-tag tag-mode">parallel</span>
-          <span class="tmpl-tag tag-profile">codeur</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">worktree &middot; announce &middot; conflict-resolution</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>phase-discover</strong> &rarr; <strong>phase-execute</strong> &middot; parallel-refactoring</div></div>
-        </div>
+      <div class="card">
+        <h3><code style="color:var(--accent);font-size:0.95em;">shared-workspace</code></h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem;" data-i18n="bundled.b3.cat">category: workspace &middot; section 010</p>
+        <p data-i18n="bundled.b3.desc">All agents work in the same directory. Typically paired with <code style="color:var(--accent);font-size:0.9em;">read-only-mode</code> for analysis-only flows. Conflicts with <code style="color:var(--accent);font-size:0.9em;">worktree-isolation</code>.</p>
       </div>
-
-      <!-- CHAINE -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon sequential">&#x26D3;</div>
-          <div class="tmpl-name">La Chaine</div>
-        </div>
-        <div class="tmpl-desc">Pipeline sequentiel: implementeur, reviewer, testeur. Chaque etape attend la precedente.</div>
-        <div class="tmpl-flow"><span class="fl-blue">Implementeur</span> <span class="fl-dim">---></span> <span class="fl-yellow">Reviewer</span> <span class="fl-dim">---></span> <span class="fl-blue">Testeur</span>
-  <span class="fl-dim">(codeur)</span>         <span class="fl-dim">(read-only)</span>     <span class="fl-dim">(codeur)</span>
-     <span class="fl-dim">|</span>                  <span class="fl-dim">|</span>               <span class="fl-dim">|</span>
-  analyse           attends          attends
-  implemente        lit code         lance tests
-  propose           observe          ajoute tests
-                    approve?         verifie pass</div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">3 agents</span>
-          <span class="tmpl-tag tag-mode">sequential</span>
-          <span class="tmpl-tag tag-profile">mixed</span>
-          <span class="tmpl-tag tag-rule">sequential-then-announce</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">worktree &middot; sequential-wait &middot; announce</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>implement</strong> &middot; <strong>review</strong> &middot; <strong>test</strong></div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar safety"></div><div class="tmpl-layer-text">read-only-mode <span style="color:var(--muted);font-size:0.7rem">(reviewer)</span></div></div>
-        </div>
+      <div class="card">
+        <h3><code style="color:var(--accent);font-size:0.95em;">read-only-mode</code></h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem;" data-i18n="bundled.b4.cat">category: safety &middot; section 090</p>
+        <p data-i18n="bundled.b4.desc">Agent cannot modify files. Analyzes, communicates, reports. Useful for code-review or audit roles.</p>
       </div>
+    </div>
 
-      <!-- RELAIS -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon sequential">&#x1F3C3;</div>
-          <div class="tmpl-name">Le Relais</div>
+    <div class="text-center" style="margin-top: 3rem;">
+      <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;" data-i18n="bundled.presets.title">2 demo presets</h3>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem;" data-i18n="bundled.presets.sub">A preset is a named list of behaviors. The engine resolves, validates, composes, and assembles them into ready-to-ship outputs.</p>
+    </div>
+
+    <div class="score-grid fade-in">
+      <div class="score-row">
+        <div class="score-label">
+          <strong><code style="color:var(--accent);font-size:0.95em;">dev</code></strong> &mdash;
+          <span data-i18n="bundled.preset.dev.desc">Solo development session in an isolated worktree.</span>
+          <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted);"><span data-i18n="bundled.preset.composes">Composes:</span> <code style="font-size:0.9em;">project-context</code> + <code style="font-size:0.9em;">worktree-isolation</code></div>
         </div>
-        <div class="tmpl-desc">3 coureurs se relaient. Chacun documente son travail pour le suivant. Amelioration cumulative.</div>
-        <div class="tmpl-flow"><span class="fl-blue">C1 Nettoyage</span> <span class="fl-dim">---></span> <span class="fl-blue">C2 Archi.</span> <span class="fl-dim">---></span> <span class="fl-blue">C3 Finition</span>
-    <span class="fl-dim">|</span>                 <span class="fl-dim">|</span>                <span class="fl-dim">|</span>
- duplication       extraire fns     coherence
- noms clairs       separation       docs
- imports morts     complexite       edge cases
-    <span class="fl-dim">|</span>                 <span class="fl-dim">|</span>                <span class="fl-dim">|</span>
- <span class="fl-green">notes pour C2</span>    <span class="fl-green">notes pour C3</span>   <span class="fl-green">bilan final</span></div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">3 agents</span>
-          <span class="tmpl-tag tag-mode">sequential</span>
-          <span class="tmpl-tag tag-profile">codeur</span>
-          <span class="tmpl-tag tag-rule">sequential-then-announce</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">worktree &middot; sequential-wait &middot; announce &middot; conflict-resolution</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>relay-runner</strong> <span style="color:var(--muted);font-size:0.7rem">(step 1/2/3)</span></div></div>
-        </div>
+        <div class="score-tag tag-green" data-i18n="bundled.preset.dev.tag">2 behaviors</div>
       </div>
-
-      <!-- REVUE -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon parallel">&#x1F50D;</div>
-          <div class="tmpl-name">La Revue</div>
+      <div class="score-row">
+        <div class="score-label">
+          <strong><code style="color:var(--accent);font-size:0.95em;">inspect</code></strong> &mdash;
+          <span data-i18n="bundled.preset.inspect.desc">Read-only project inspection in an isolated worktree.</span>
+          <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted);"><span data-i18n="bundled.preset.composes">Composes:</span> <code style="font-size:0.9em;">project-context</code> + <code style="font-size:0.9em;">worktree-isolation</code> + <code style="font-size:0.9em;">read-only-mode</code></div>
         </div>
-        <div class="tmpl-desc">N auteurs + N reviewers en assignation croisee. Reviewer i review le module de Auteur (i+1) % N.</div>
-        <div class="tmpl-flow"><span class="fl-blue">Auteur A</span>  <span class="fl-dim">---review---></span>  <span class="fl-yellow">Reviewer B</span>
- module: auth              review: auth
-                           approve / contest
-
-<span class="fl-blue">Auteur B</span>  <span class="fl-dim">---review---></span>  <span class="fl-yellow">Reviewer A</span>
- module: users             review: users</div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">2-4 pairs</span>
-          <span class="tmpl-tag tag-mode">parallel</span>
-          <span class="tmpl-tag tag-profile">mixed</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">worktree &middot; announce</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>code-review-author</strong> &middot; <strong>code-review-reviewer</strong></div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar safety"></div><div class="tmpl-layer-text">read-only-mode <span style="color:var(--muted);font-size:0.7rem">(reviewer)</span></div></div>
-        </div>
+        <div class="score-tag tag-yellow" data-i18n="bundled.preset.inspect.tag">3 behaviors</div>
       </div>
+    </div>
 
-      <!-- MAITRE -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon hierarchy">&#x1F451;</div>
-          <div class="tmpl-name">Le Maitre</div>
-        </div>
-        <div class="tmpl-desc">1 tech lead analyse et distribue. N workers executent les taches assignees en parallele.</div>
-        <div class="tmpl-flow">            <span class="fl-yellow">Tech Lead</span>
-           <span class="fl-dim">(communicant)</span>
-          analyse projet
-         identifie taches
-       <span class="fl-dim">+------+------+</span>
-       <span class="fl-dim">|</span>      <span class="fl-dim">|</span>      <span class="fl-dim">|</span>
-    <span class="fl-blue">Worker</span>  <span class="fl-blue">Worker</span>  <span class="fl-blue">Worker</span>
-    attend   attend   attend
-    execute  execute  execute
-       <span class="fl-dim">+------+------+</span>
-         <span class="fl-green">lead: resume</span></div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">1 + 2-4</span>
-          <span class="tmpl-tag tag-mode">hierarchy</span>
-          <span class="tmpl-tag tag-profile">mixed</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">worktree <span style="color:var(--muted);font-size:0.7rem">(workers)</span> &middot; shared <span style="color:var(--muted);font-size:0.7rem">(lead)</span> &middot; announce</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>task-distribution</strong> &middot; <strong>task-execution</strong></div></div>
-        </div>
-      </div>
-
-      <!-- GARDIEN -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon readonly">&#x1F6E1;</div>
-          <div class="tmpl-name">Le Gardien</div>
-        </div>
-        <div class="tmpl-desc">1 agent analyse la qualite du projet en 6 categories. Read-only, aucune modification.</div>
-        <div class="tmpl-flow">         <span class="fl-yellow">Le Gardien</span>
-        <span class="fl-dim">(communicant)</span>
-              <span class="fl-dim">|</span>
-    <span class="fl-dim">+-----+-----+</span>
-    <span class="fl-dim">|</span>     <span class="fl-dim">|</span>     <span class="fl-dim">|</span>
- Structure  Conv.  Complexite
-    <span class="fl-dim">|</span>     <span class="fl-dim">|</span>     <span class="fl-dim">|</span>
- Dette   Tests   Docs
-    <span class="fl-dim">+-----+-----+</span>
-    <span class="fl-green">Rapport global</span></div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">1 agent</span>
-          <span class="tmpl-tag tag-mode">shared</span>
-          <span class="tmpl-tag tag-profile">communicant</span>
-          <span class="tmpl-tag tag-rule">announce-readonly</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">shared-workspace &middot; announce</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>quality-audit</strong></div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar safety"></div><div class="tmpl-layer-text">read-only-mode</div></div>
-        </div>
-      </div>
-
-      <!-- DEBAT -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon readonly">&#x1F4AC;</div>
-          <div class="tmpl-name">Le Debat</div>
-        </div>
-        <div class="tmpl-desc">3 agents debattent comment restructurer du code. Aucun code produit — consensus uniquement.</div>
-        <div class="tmpl-flow"><span class="fl-yellow">Separation</span>  <span class="fl-yellow">Strategy</span>  <span class="fl-yellow">Minimal</span>
-     <span class="fl-dim">|</span>           <span class="fl-dim">|</span>          <span class="fl-dim">|</span>
-  propose     propose    propose
-     <span class="fl-dim">+--------</span><span class="fl-green">debate</span><span class="fl-dim">--------+</span>
-           arguments
-           reponses
-           <span class="fl-green">consensus</span>
-     <span class="fl-dim">(aucun code produit)</span></div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">3 agents</span>
-          <span class="tmpl-tag tag-mode">shared</span>
-          <span class="tmpl-tag tag-profile">communicant</span>
-          <span class="tmpl-tag tag-rule">announce-readonly</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">shared-workspace &middot; announce</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>debate-position</strong> <span style="color:var(--muted);font-size:0.7rem">(param: position)</span></div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar safety"></div><div class="tmpl-layer-text">read-only-mode</div></div>
-        </div>
-      </div>
-
-      <!-- BABEL -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon sequential">&#x1F310;</div>
-          <div class="tmpl-name">Babel</div>
-        </div>
-        <div class="tmpl-desc">Traducteur + reviseur sequentiel. Preserve la structure Markdown, ne traduit pas le code.</div>
-        <div class="tmpl-flow"><span class="fl-yellow">Traducteur</span> <span class="fl-dim">--------></span> <span class="fl-yellow">Reviseur</span>
-
- lit *.md            lit original
- traduit             + traduction
- preserve MD         fidelite?
- pas le code         naturalite?
- <span class="fl-green">propose</span>             terminologie?</div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">2 agents</span>
-          <span class="tmpl-tag tag-mode">sequential</span>
-          <span class="tmpl-tag tag-profile">communicant</span>
-          <span class="tmpl-tag tag-rule">sequential-then-announce</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">worktree &middot; sequential-wait &middot; announce</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>translation</strong> &middot; <strong>translation-review</strong></div></div>
-        </div>
-      </div>
-
-      <!-- ARENE -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon readonly">&#x1F3AE;</div>
-          <div class="tmpl-name">L'Arene</div>
-        </div>
-        <div class="tmpl-desc">Quiz competitif sur la base de code. Le quizmaster pose, les joueurs repondent en citant le code.</div>
-        <div class="tmpl-flow">       <span class="fl-yellow">Quizmaster</span>
-       lit 5+ fichiers
-       pose 5 questions
-       <span class="fl-dim">+----------+</span>
-       <span class="fl-dim">|</span>          <span class="fl-dim">|</span>
-    <span class="fl-yellow">Joueur A</span>  <span class="fl-yellow">Joueur B</span>
-    repond     repond
-    cite code  cite code
-       <span class="fl-dim">+----------+</span>
-       <span class="fl-green">juge + score</span></div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">3 agents</span>
-          <span class="tmpl-tag tag-mode">shared</span>
-          <span class="tmpl-tag tag-profile">communicant</span>
-          <span class="tmpl-tag tag-rule">announce-readonly</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">shared-workspace &middot; announce</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>quiz-master</strong> &middot; <strong>quiz-player</strong></div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar safety"></div><div class="tmpl-layer-text">read-only-mode</div></div>
-        </div>
-      </div>
-
-      <!-- CARREFOUR -->
-      <div class="tmpl-card">
-        <div class="tmpl-header">
-          <div class="tmpl-icon parallel">&#x26A0;</div>
-          <div class="tmpl-name">Le Carrefour</div>
-        </div>
-        <div class="tmpl-desc">Test de detection de conflits. Agents travaillent sur les memes fichiers volontairement.</div>
-        <div class="tmpl-flow"><span class="fl-dim">shared files:</span> <span class="fl-blue">[a.ts  b.ts  c.ts]</span>
-      <span class="fl-dim">|          |         |</span>
-   <span class="fl-blue">Alpha</span>     <span class="fl-blue">Bravo</span>    <span class="fl-blue">Charlie</span>
-   lisibilite perf.    robustesse
-      <span class="fl-dim">+----------+---------+</span>
-              <span class="fl-red">CONFLIT!</span>
-              <span class="fl-yellow">consultation</span>
-              <span class="fl-green">consensus</span>
-           implement AFTER</div>
-        <div class="tmpl-meta">
-          <span class="tmpl-tag tag-agents">2-3 agents</span>
-          <span class="tmpl-tag tag-mode">parallel</span>
-          <span class="tmpl-tag tag-profile">codeur</span>
-        </div>
-        <div class="tmpl-behaviors">
-          <div class="tmpl-layer"><div class="tmpl-layer-bar foundation"></div><div class="tmpl-layer-text">project-context &middot; coordinator-rules</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar pattern"></div><div class="tmpl-layer-text">worktree &middot; announce &middot; conflict-resolution</div></div>
-          <div class="tmpl-layer"><div class="tmpl-layer-bar mission"></div><div class="tmpl-layer-text"><strong>conflict-test</strong></div></div>
-        </div>
-      </div>
-
+    <div class="text-center" style="margin-top: 2.5rem; padding: 1rem; border: 1px solid rgba(96,165,250,0.3); border-radius: 8px; background: rgba(96,165,250,0.05); max-width: 720px; margin-left: auto; margin-right: auto;">
+      <p style="font-size: 0.9rem; color: var(--muted);" data-i18n="bundled.callout"><strong>Looking for richer catalogs?</strong> The reference orchestrator <a href="https://github.com/swoofer/essaim">essaim</a> <em>(coming soon)</em> ships 32+ behaviors, 20+ presets, and 12 pre-composed templates (bug-hunt, parallel-tests, code-review, etc.) &mdash; all assembled by promptweave at runtime.</p>
     </div>
   </div>
 </section>
+
 
 <!-- ROADMAP -->
 <section id="roadmap">
@@ -2009,7 +1763,7 @@
     en: {
       "nav.why": "Why",
       "nav.bce": "Engine",
-      "nav.templates": "Examples",
+      "nav.templates": "Bundled",
       "nav.roadmap": "Roadmap",
       "nav.getstarted": "Get Started",
       "hero.eyebrow": "Open Source &middot; MIT License &middot; v0.1.x",
@@ -2167,11 +1921,83 @@
 
       "examples.callout": "<strong>Note &mdash;</strong> these templates illustrate composition variety. Their YAMLs live in <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(coming soon)</em>, the reference orchestrator. promptweave bundles only 4 demo behaviors and 2 demo presets &mdash; the rich catalogs shown here are what you build on top.",
 
+      "bundled.title": "What ships bundled",
+
+      "bundled.subtitle": "promptweave bundles 4 demo behaviors and 2 demo presets — just enough to show the engine working. Real-world catalogs (32+ behaviors, dozens of presets) live in your project via <code style=\"color:var(--accent);font-size:0.9em;\">--root</code>.",
+
+      "bundled.behaviors.title": "4 demo behaviors",
+
+      "bundled.behaviors.sub": "One YAML per behavior. Each contributes one or more numbered sections to the assembled prompt.",
+
+      "bundled.b1.cat": "category: coordination &middot; section 000",
+
+      "bundled.b1.desc": "Project identity. Templated parameters for language, test command, and module list. Renders the agent's \"where am I?\" briefing.",
+
+      "bundled.b2.cat": "category: workspace &middot; sections 010 + 055 &middot; hooks: session-start, session-stop",
+
+      "bundled.b2.desc": "Isolate the agent in a dedicated git worktree branch. Ships hook scripts that set up and tear down the worktree. Conflicts with <code style=\"color:var(--accent);font-size:0.9em;\">shared-workspace</code>.",
+
+      "bundled.b3.cat": "category: workspace &middot; section 010",
+
+      "bundled.b3.desc": "All agents work in the same directory. Typically paired with <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode</code> for analysis-only flows. Conflicts with <code style=\"color:var(--accent);font-size:0.9em;\">worktree-isolation</code>.",
+
+      "bundled.b4.cat": "category: safety &middot; section 090",
+
+      "bundled.b4.desc": "Agent cannot modify files. Analyzes, communicates, reports. Useful for code-review or audit roles.",
+
+      "bundled.presets.title": "2 demo presets",
+
+      "bundled.presets.sub": "A preset is a named list of behaviors. The engine resolves, validates, composes, and assembles them into ready-to-ship outputs.",
+
+      "bundled.preset.dev.desc": "Solo development session in an isolated worktree.",
+
+      "bundled.preset.inspect.desc": "Read-only project inspection in an isolated worktree.",
+
+      "bundled.preset.composes": "Composes:",
+
+      "bundled.preset.dev.tag": "2 behaviors",
+
+      "bundled.preset.inspect.tag": "3 behaviors",
+
+      "bundled.callout": "<strong>Looking for richer catalogs?</strong> The reference orchestrator <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(coming soon)</em> ships 32+ behaviors, 20+ presets, and 12 pre-composed templates (bug-hunt, parallel-tests, code-review, etc.) — all assembled by promptweave at runtime.",
+
+      "potential.title": "From chaos to composition",
+
+      "potential.subtitle": "Compose your behavior catalog once, ship hundreds of agent variants. Without copy-paste, without drift, without vendor lock-in.",
+
+      "potential.stat.behaviors": "behaviors",
+
+      "potential.stat.presets": "presets",
+
+      "potential.stat.vendors": "vendors",
+
+      "potential.stat.outputs": "prompts assembled",
+
+      "potential.multiplier.caption": "All assembled from N YAML files. Add a vendor target — every preset re-renders. Change a behavior — all M presets pick it up. Hand-edited prompts cannot do this.",
+
+      "potential.card1.title": "Edit once, propagate everywhere",
+
+      "potential.card1.desc": "Change a single line in <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode.yaml</code> — every preset that includes it re-renders byte-deterministically. No find-and-replace across 50 prompt files. No drift between agents that should say the same thing.",
+
+      "potential.card2.title": "Conditional logic without branches",
+
+      "potential.card2.desc": "Composition rules apply mutations declaratively when behaviors meet — <em>\"if A and B both present, rewrite section X\"</em>. Replaces dozens of conditional <code style=\"color:var(--accent);font-size:0.9em;\">if/else</code> blocks copy-pasted across role-specific prompts.",
+
+      "potential.card3.title": "One catalog, every vendor",
+
+      "potential.card3.desc": "The same N behaviors compose for Claude Code, Cursor, Cline, Aider — anything consuming prompt + hook + MCP-config triples. Add vendor #5 with one writer plugin; never rewrite a behavior.",
+
+      "potential.card4.title": "Prompts as first-class code",
+
+      "potential.card4.desc": "Generated outputs are deterministic. Diff them in PRs. Catch behavior drift in CI before it ships. Onboarding a new agent role → copy a preset, change one parameter, ship.",
+
+      "nav.potential": "Power",
+
     },
     fr: {
       "nav.why": "Pourquoi",
       "nav.bce": "Moteur",
-      "nav.templates": "Exemples",
+      "nav.templates": "Inclus",
       "nav.roadmap": "Feuille de route",
       "nav.getstarted": "Commencer",
       "hero.eyebrow": "Open Source &middot; Licence MIT &middot; v0.1.x",
@@ -2329,11 +2155,83 @@
 
       "examples.callout": "<strong>Note &mdash;</strong> ces templates illustrent la variété de compositions possibles. Leurs YAMLs vivent dans <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(à venir)</em>, l'orchestrateur de référence. promptweave inclut seulement 4 behaviors de démo et 2 presets de démo &mdash; les catalogues riches montrés ici sont ce que vous construisez par-dessus.",
 
+      "bundled.title": "Ce qui est inclus",
+
+      "bundled.subtitle": "promptweave inclut 4 behaviors de démo et 2 presets de démo — juste assez pour montrer le moteur en action. Les catalogues réels (32+ behaviors, des dizaines de presets) vivent dans votre projet via <code style=\"color:var(--accent);font-size:0.9em;\">--root</code>.",
+
+      "bundled.behaviors.title": "4 behaviors de démo",
+
+      "bundled.behaviors.sub": "Un YAML par behavior. Chacun contribue une ou plusieurs sections numérotées au prompt assemblé.",
+
+      "bundled.b1.cat": "catégorie : coordination &middot; section 000",
+
+      "bundled.b1.desc": "Identité du projet. Paramètres templatés pour le langage, la commande de test et la liste des modules. Rend le briefing « où suis-je ? » de l'agent.",
+
+      "bundled.b2.cat": "catégorie : workspace &middot; sections 010 + 055 &middot; hooks : session-start, session-stop",
+
+      "bundled.b2.desc": "Isole l'agent dans une branche git worktree dédiée. Inclut des scripts de hooks qui montent et démontent le worktree. Conflit avec <code style=\"color:var(--accent);font-size:0.9em;\">shared-workspace</code>.",
+
+      "bundled.b3.cat": "catégorie : workspace &middot; section 010",
+
+      "bundled.b3.desc": "Tous les agents travaillent dans le même répertoire. Typiquement combiné à <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode</code> pour les flux d'analyse seulement. Conflit avec <code style=\"color:var(--accent);font-size:0.9em;\">worktree-isolation</code>.",
+
+      "bundled.b4.cat": "catégorie : safety &middot; section 090",
+
+      "bundled.b4.desc": "L'agent ne peut pas modifier de fichiers. Il analyse, communique, rapporte. Utile pour les rôles de code-review ou d'audit.",
+
+      "bundled.presets.title": "2 presets de démo",
+
+      "bundled.presets.sub": "Un preset est une liste nommée de behaviors. Le moteur les résout, valide, compose et assemble en sorties prêtes à livrer.",
+
+      "bundled.preset.dev.desc": "Session de développement solo dans un worktree isolé.",
+
+      "bundled.preset.inspect.desc": "Inspection de projet en lecture seule dans un worktree isolé.",
+
+      "bundled.preset.composes": "Compose :",
+
+      "bundled.preset.dev.tag": "2 behaviors",
+
+      "bundled.preset.inspect.tag": "3 behaviors",
+
+      "bundled.callout": "<strong>Vous cherchez des catalogues plus riches ?</strong> L'orchestrateur de référence <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(à venir)</em> embarque 32+ behaviors, 20+ presets et 12 templates pré-composés (chasse aux bugs, tests parallèles, revue de code, etc.) — tous assemblés par promptweave au runtime.",
+
+      "potential.title": "Du chaos à la composition",
+
+      "potential.subtitle": "Composez votre catalogue de behaviors une fois, livrez des centaines de variantes d'agents. Sans copier-coller, sans dérive, sans vendor lock-in.",
+
+      "potential.stat.behaviors": "behaviors",
+
+      "potential.stat.presets": "presets",
+
+      "potential.stat.vendors": "vendors",
+
+      "potential.stat.outputs": "prompts assemblés",
+
+      "potential.multiplier.caption": "Tous assemblés à partir de N fichiers YAML. Ajoutez une cible vendor — chaque preset est régénéré. Modifiez un behavior — tous les M presets le récupèrent. Les prompts édités à la main ne peuvent pas faire cela.",
+
+      "potential.card1.title": "Modifiez une fois, propagez partout",
+
+      "potential.card1.desc": "Modifiez une seule ligne dans <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode.yaml</code> — chaque preset qui l'inclut est régénéré au byte près. Pas de chercher-remplacer sur 50 fichiers de prompts. Pas de dérive entre les agents qui devraient dire la même chose.",
+
+      "potential.card2.title": "Logique conditionnelle sans branches",
+
+      "potential.card2.desc": "Les règles de composition appliquent des mutations de manière déclarative quand des behaviors se rencontrent — <em>« si A et B sont présents, réécris la section X »</em>. Remplace des dizaines de blocs <code style=\"color:var(--accent);font-size:0.9em;\">if/else</code> conditionnels copiés-collés dans les prompts spécifiques aux rôles.",
+
+      "potential.card3.title": "Un catalogue, tous les vendors",
+
+      "potential.card3.desc": "Les mêmes N behaviors se composent pour Claude Code, Cursor, Cline, Aider — tout ce qui consomme des triplets prompt + hook + config MCP. Ajoutez un 5e vendor avec un seul plugin writer ; ne réécrivez jamais un behavior.",
+
+      "potential.card4.title": "Les prompts comme code de premier ordre",
+
+      "potential.card4.desc": "Les sorties générées sont déterministes. Diffez-les dans les PR. Attrapez la dérive de behavior en CI avant la livraison. Onboarder un nouveau rôle d'agent → copiez un preset, changez un paramètre, livrez.",
+
+      "nav.potential": "Atouts",
+
     },
     es: {
       "nav.why": "Por qu&eacute;",
       "nav.bce": "Motor",
-      "nav.templates": "Ejemplos",
+      "nav.templates": "Incluido",
       "nav.roadmap": "Hoja de ruta",
       "nav.getstarted": "Empezar",
       "hero.eyebrow": "Código Abierto &middot; Licencia MIT &middot; v0.1.x",
@@ -2491,11 +2389,83 @@
 
       "examples.callout": "<strong>Nota &mdash;</strong> estas plantillas ilustran la variedad de composición. Sus YAMLs viven en <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(próximamente)</em>, el orchestrador de referencia. promptweave incluye solo 4 behaviors demo y 2 presets demo &mdash; los catálogos ricos mostrados aquí son lo que usted construye encima.",
 
+      "bundled.title": "Lo que viene incluido",
+
+      "bundled.subtitle": "promptweave incluye 4 behaviors demo y 2 presets demo — lo suficiente para mostrar el motor en acción. Los catálogos reales (32+ behaviors, decenas de presets) viven en su proyecto vía <code style=\"color:var(--accent);font-size:0.9em;\">--root</code>.",
+
+      "bundled.behaviors.title": "4 behaviors demo",
+
+      "bundled.behaviors.sub": "Un YAML por behavior. Cada uno contribuye con una o más secciones numeradas al prompt ensamblado.",
+
+      "bundled.b1.cat": "categoría: coordinación &middot; sección 000",
+
+      "bundled.b1.desc": "Identidad del proyecto. Parámetros con plantillas para lenguaje, comando de pruebas y lista de módulos. Renderiza el briefing «¿dónde estoy?» del agent.",
+
+      "bundled.b2.cat": "categoría: workspace &middot; secciones 010 + 055 &middot; hooks: session-start, session-stop",
+
+      "bundled.b2.desc": "Aísla el agent en una rama git worktree dedicada. Incluye scripts hook que montan y desmontan el worktree. Conflicto con <code style=\"color:var(--accent);font-size:0.9em;\">shared-workspace</code>.",
+
+      "bundled.b3.cat": "categoría: workspace &middot; sección 010",
+
+      "bundled.b3.desc": "Todos los agents trabajan en el mismo directorio. Típicamente combinado con <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode</code> para flujos solo de análisis. Conflicto con <code style=\"color:var(--accent);font-size:0.9em;\">worktree-isolation</code>.",
+
+      "bundled.b4.cat": "categoría: safety &middot; sección 090",
+
+      "bundled.b4.desc": "El agent no puede modificar archivos. Analiza, comunica, reporta. Útil para roles de revisión de código o auditoría.",
+
+      "bundled.presets.title": "2 presets demo",
+
+      "bundled.presets.sub": "Un preset es una lista nombrada de behaviors. El motor los resuelve, valida, compone y ensambla en salidas listas para publicar.",
+
+      "bundled.preset.dev.desc": "Sesión de desarrollo en solitario en un worktree aislado.",
+
+      "bundled.preset.inspect.desc": "Inspección de proyecto en solo lectura en un worktree aislado.",
+
+      "bundled.preset.composes": "Compone:",
+
+      "bundled.preset.dev.tag": "2 behaviors",
+
+      "bundled.preset.inspect.tag": "3 behaviors",
+
+      "bundled.callout": "<strong>¿Busca catálogos más ricos?</strong> El orchestrador de referencia <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(próximamente)</em> incluye 32+ behaviors, 20+ presets y 12 templates pre-compuestos (caza de bugs, tests paralelos, revisión de código, etc.) — todos ensamblados por promptweave en runtime.",
+
+      "potential.title": "Del caos a la composición",
+
+      "potential.subtitle": "Componga su catálogo de behaviors una vez, entregue cientos de variantes de agent. Sin copiar-pegar, sin desviación, sin vendor lock-in.",
+
+      "potential.stat.behaviors": "behaviors",
+
+      "potential.stat.presets": "presets",
+
+      "potential.stat.vendors": "vendors",
+
+      "potential.stat.outputs": "prompts ensamblados",
+
+      "potential.multiplier.caption": "Todos ensamblados a partir de N archivos YAML. Agregue un objetivo vendor — cada preset se re-renderiza. Cambie un behavior — los M presets lo recogen. Los prompts editados a mano no pueden hacer esto.",
+
+      "potential.card1.title": "Edite una vez, propague en todas partes",
+
+      "potential.card1.desc": "Cambie una sola línea en <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode.yaml</code> — cada preset que lo incluye se re-renderiza byte-determinista. Sin buscar-y-reemplazar en 50 archivos de prompts. Sin desviación entre agents que deben decir lo mismo.",
+
+      "potential.card2.title": "Lógica condicional sin ramificaciones",
+
+      "potential.card2.desc": "Las reglas de composición aplican mutaciones declarativamente cuando los behaviors se encuentran — <em>«si A y B están ambos presentes, reescribir la sección X»</em>. Reemplaza decenas de bloques <code style=\"color:var(--accent);font-size:0.9em;\">if/else</code> condicionales copiados-pegados entre prompts específicos de rol.",
+
+      "potential.card3.title": "Un catálogo, todos los vendors",
+
+      "potential.card3.desc": "Los mismos N behaviors se componen para Claude Code, Cursor, Cline, Aider — cualquier cosa que consuma tripletes prompt + hook + config MCP. Agregue el vendor #5 con un solo plugin writer; nunca reescriba un behavior.",
+
+      "potential.card4.title": "Prompts como código de primera clase",
+
+      "potential.card4.desc": "Las salidas generadas son deterministas. Hágales diff en PRs. Atrape la desviación de behavior en CI antes de publicar. Incorporar un nuevo rol de agent → copie un preset, cambie un parámetro, publique.",
+
+      "nav.potential": "Potencia",
+
     },
     de: {
       "nav.why": "Warum",
       "nav.bce": "Engine",
-      "nav.templates": "Beispiele",
+      "nav.templates": "Mitgeliefert",
       "nav.roadmap": "Roadmap",
       "nav.getstarted": "Loslegen",
       "hero.eyebrow": "Open Source &middot; MIT-Lizenz &middot; v0.1.x",
@@ -2653,11 +2623,83 @@
 
       "examples.callout": "<strong>Hinweis &mdash;</strong> diese Templates illustrieren die Vielfalt der Komposition. Ihre YAMLs leben in <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(in Kürze)</em>, dem Referenz-Orchestrator. promptweave bündelt nur 4 Demo-Behaviors und 2 Demo-Presets &mdash; die reichen Kataloge hier sind, was Sie darauf aufbauen.",
 
+      "bundled.title": "Was mitgeliefert wird",
+
+      "bundled.subtitle": "promptweave liefert 4 Demo-Behaviors und 2 Demo-Presets mit — genug, um die Engine in Aktion zu zeigen. Reale Kataloge (32+ Behaviors, Dutzende von Presets) leben in Ihrem Projekt über <code style=\"color:var(--accent);font-size:0.9em;\">--root</code>.",
+
+      "bundled.behaviors.title": "4 Demo-Behaviors",
+
+      "bundled.behaviors.sub": "Eine YAML pro Behavior. Jedes trägt einen oder mehrere nummerierte Abschnitte zum zusammengesetzten Prompt bei.",
+
+      "bundled.b1.cat": "Kategorie: Koordination &middot; Abschnitt 000",
+
+      "bundled.b1.desc": "Projektidentität. Templated-Parameter für Sprache, Test-Befehl und Modulliste. Rendert das „wo bin ich?\"-Briefing des Agents.",
+
+      "bundled.b2.cat": "Kategorie: Workspace &middot; Abschnitte 010 + 055 &middot; Hooks: session-start, session-stop",
+
+      "bundled.b2.desc": "Isoliert den Agent in einem dedizierten Git-Worktree-Branch. Bringt Hook-Skripte mit, die den Worktree aufbauen und abbauen. Konflikt mit <code style=\"color:var(--accent);font-size:0.9em;\">shared-workspace</code>.",
+
+      "bundled.b3.cat": "Kategorie: Workspace &middot; Abschnitt 010",
+
+      "bundled.b3.desc": "Alle Agents arbeiten im selben Verzeichnis. Typischerweise mit <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode</code> kombiniert für reine Analyse-Flows. Konflikt mit <code style=\"color:var(--accent);font-size:0.9em;\">worktree-isolation</code>.",
+
+      "bundled.b4.cat": "Kategorie: Safety &middot; Abschnitt 090",
+
+      "bundled.b4.desc": "Der Agent kann keine Dateien ändern. Er analysiert, kommuniziert, berichtet. Nützlich für Code-Review- oder Audit-Rollen.",
+
+      "bundled.presets.title": "2 Demo-Presets",
+
+      "bundled.presets.sub": "Ein Preset ist eine benannte Liste von Behaviors. Die Engine löst sie auf, validiert, komponiert und assembliert sie zu auslieferungsbereiten Ausgaben.",
+
+      "bundled.preset.dev.desc": "Solo-Entwicklungssitzung in einem isolierten Worktree.",
+
+      "bundled.preset.inspect.desc": "Read-Only-Projektinspektion in einem isolierten Worktree.",
+
+      "bundled.preset.composes": "Komponiert:",
+
+      "bundled.preset.dev.tag": "2 Behaviors",
+
+      "bundled.preset.inspect.tag": "3 Behaviors",
+
+      "bundled.callout": "<strong>Auf der Suche nach reicheren Katalogen?</strong> Der Referenz-Orchestrator <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(in Kürze)</em> bringt 32+ Behaviors, 20+ Presets und 12 vorkomponierte Templates mit (Bug-Hunt, parallele Tests, Code-Review usw.) — alle von promptweave zur Laufzeit assembliert.",
+
+      "potential.title": "Vom Chaos zur Komposition",
+
+      "potential.subtitle": "Komponieren Sie Ihren Behavior-Katalog einmal, liefern Sie hunderte Agent-Varianten aus. Ohne Copy-Paste, ohne Drift, ohne Vendor-Lock-in.",
+
+      "potential.stat.behaviors": "Behaviors",
+
+      "potential.stat.presets": "Presets",
+
+      "potential.stat.vendors": "Vendors",
+
+      "potential.stat.outputs": "Prompts assembliert",
+
+      "potential.multiplier.caption": "Alle aus N YAML-Dateien zusammengesetzt. Fügen Sie ein Vendor-Ziel hinzu — jedes Preset wird neu gerendert. Ändern Sie ein Behavior — alle M Presets übernehmen es. Handgeschriebene Prompts können das nicht.",
+
+      "potential.card1.title": "Einmal bearbeiten, überall verbreiten",
+
+      "potential.card1.desc": "Ändern Sie eine einzige Zeile in <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode.yaml</code> — jedes Preset, das es enthält, wird byte-deterministisch neu gerendert. Kein Find-and-Replace über 50 Prompt-Dateien. Kein Drift zwischen Agents, die dasselbe sagen sollen.",
+
+      "potential.card2.title": "Bedingte Logik ohne Verzweigungen",
+
+      "potential.card2.desc": "Kompositionsregeln wenden Mutationen deklarativ an, wenn Behaviors zusammentreffen — <em>„wenn A und B beide vorhanden, schreibe Abschnitt X um\"</em>. Ersetzt Dutzende bedingter <code style=\"color:var(--accent);font-size:0.9em;\">if/else</code>-Blöcke, die über rollenspezifische Prompts kopiert wurden.",
+
+      "potential.card3.title": "Ein Katalog, jeder Vendor",
+
+      "potential.card3.desc": "Dieselben N Behaviors komponieren für Claude Code, Cursor, Cline, Aider — alles, was Prompt + Hook + MCP-Config-Tripel konsumiert. Fügen Sie Vendor #5 mit einem einzigen Writer-Plugin hinzu; schreiben Sie nie ein Behavior um.",
+
+      "potential.card4.title": "Prompts als First-Class-Code",
+
+      "potential.card4.desc": "Generierte Ausgaben sind deterministisch. Diffen Sie sie in PRs. Fangen Sie Behavior-Drift in der CI ab, bevor er ausgeliefert wird. Einen neuen Agent-Rolle einarbeiten → Preset kopieren, einen Parameter ändern, ausliefern.",
+
+      "nav.potential": "Power",
+
     },
     zh: {
       "nav.why": "为什么",
       "nav.bce": "引擎",
-      "nav.templates": "示例",
+      "nav.templates": "捆绑",
       "nav.roadmap": "路线图",
       "nav.getstarted": "开始使用",
       "hero.eyebrow": "开源 &middot; MIT 许可证 &middot; v0.1.x",
@@ -2815,11 +2857,83 @@
 
       "examples.callout": "<strong>注意 &mdash;</strong> 这些模板展示了组合的多样性。它们的 YAML 存放在 <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>（即将推出）</em>，即参考 orchestrator。promptweave 只捆绑了 4 个示例 behavior 和 2 个示例 preset —— 此处展示的丰富目录是您在其之上构建的内容。",
 
+      "bundled.title": "捆绑包含的内容",
+
+      "bundled.subtitle": "promptweave 捆绑了 4 个示例 behavior 和 2 个示例 preset —— 刚好足以展示引擎的工作方式。真实目录（32+ 个 behavior、几十个 preset）通过 <code style=\"color:var(--accent);font-size:0.9em;\">--root</code> 存放在您的项目中。",
+
+      "bundled.behaviors.title": "4 个示例 behavior",
+
+      "bundled.behaviors.sub": "每个 behavior 一个 YAML。每个 behavior 向组装好的 prompt 贡献一个或多个编号节。",
+
+      "bundled.b1.cat": "类别：coordination &middot; 节 000",
+
+      "bundled.b1.desc": "项目身份。使用模板化参数：语言、测试命令、模块列表。渲染 agent 的「我在哪里？」简报。",
+
+      "bundled.b2.cat": "类别：workspace &middot; 节 010 + 055 &middot; hooks：session-start、session-stop",
+
+      "bundled.b2.desc": "将 agent 隔离到专用的 git worktree 分支中。附带创建和清理 worktree 的 hook 脚本。与 <code style=\"color:var(--accent);font-size:0.9em;\">shared-workspace</code> 冲突。",
+
+      "bundled.b3.cat": "类别：workspace &middot; 节 010",
+
+      "bundled.b3.desc": "所有 agent 在同一目录中工作。通常与 <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode</code> 配对用于纯分析流程。与 <code style=\"color:var(--accent);font-size:0.9em;\">worktree-isolation</code> 冲突。",
+
+      "bundled.b4.cat": "类别：safety &middot; 节 090",
+
+      "bundled.b4.desc": "agent 不能修改文件。它进行分析、沟通、报告。适用于代码评审或审计角色。",
+
+      "bundled.presets.title": "2 个示例 preset",
+
+      "bundled.presets.sub": "preset 是 behavior 的具名列表。引擎对其进行解析、校验、组合，并组装成可发布的输出。",
+
+      "bundled.preset.dev.desc": "在隔离的 worktree 中进行单人开发会话。",
+
+      "bundled.preset.inspect.desc": "在隔离的 worktree 中以只读模式进行项目检查。",
+
+      "bundled.preset.composes": "组合：",
+
+      "bundled.preset.dev.tag": "2 个 behavior",
+
+      "bundled.preset.inspect.tag": "3 个 behavior",
+
+      "bundled.callout": "<strong>需要更丰富的目录？</strong>参考 orchestrator <a href=\"https://github.com/swoofer/essaim\">essaim</a><em>（即将推出）</em>提供 32+ 个 behavior、20+ 个 preset 和 12 个预组合 template（猎 bug、并行测试、代码评审等）—— 全部由 promptweave 在运行时组装。",
+
+      "potential.title": "从混乱到组合",
+
+      "potential.subtitle": "组合您的 behavior 目录一次，交付数百个 agent 变体。无需复制粘贴，无漂移，无 vendor 锁定。",
+
+      "potential.stat.behaviors": "behavior",
+
+      "potential.stat.presets": "preset",
+
+      "potential.stat.vendors": "vendor",
+
+      "potential.stat.outputs": "组装好的 prompt",
+
+      "potential.multiplier.caption": "全部从 N 个 YAML 文件组装而成。增加一个 vendor 目标 —— 每个 preset 重新渲染。修改一个 behavior —— 所有 M 个 preset 都会跟进。手写 prompt 做不到这一点。",
+
+      "potential.card1.title": "改一次，处处生效",
+
+      "potential.card1.desc": "修改 <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode.yaml</code> 中的一行 —— 引用它的每个 preset 都会以字节级确定的方式重新渲染。无需在 50 个 prompt 文件中查找替换。表达相同约束的 agent 之间不会出现漂移。",
+
+      "potential.card2.title": "无分支的条件逻辑",
+
+      "potential.card2.desc": "当 behavior 相遇时，组合规则以声明方式应用变换 —— <em>「若 A 和 B 同时存在，重写节 X」</em>。取代了在角色特定 prompt 中复制粘贴的几十个条件 <code style=\"color:var(--accent);font-size:0.9em;\">if/else</code> 块。",
+
+      "potential.card3.title": "一份目录，覆盖所有 vendor",
+
+      "potential.card3.desc": "同样 N 个 behavior 可为 Claude Code、Cursor、Cline、Aider 等任何消费 prompt + hook + MCP 配置三元组的工具进行组合。通过单个 writer 插件添加第 5 个 vendor；永远不需要重写 behavior。",
+
+      "potential.card4.title": "prompt 作为一等公民的代码",
+
+      "potential.card4.desc": "生成的输出是确定性的。在 PR 中 diff。在 CI 中捕获 behavior 漂移，在发布前发现。引入新的 agent 角色 → 复制 preset、修改一个参数、发布。",
+
+      "nav.potential": "能力",
+
     },
     ja: {
       "nav.why": "なぜ",
       "nav.bce": "エンジン",
-      "nav.templates": "例",
+      "nav.templates": "同梱",
       "nav.roadmap": "ロードマップ",
       "nav.getstarted": "始める",
       "hero.eyebrow": "オープンソース &middot; MIT ライセンス &middot; v0.1.x",
@@ -2976,6 +3090,78 @@
       "examples.subtitle": "事前合成された 12 の agent preset。それぞれ再利用可能な YAML behavior から組み立てられています —— 協調・workspace・ミッション・安全。",
 
       "examples.callout": "<strong>注意 &mdash;</strong> これらのテンプレートはコンポジションのバリエーションを示しています。その YAML は参照オーケストレーターである <a href=\"https://github.com/swoofer/essaim\">essaim</a><em>（近日公開）</em> にあります。promptweave に同梱されているのはデモ behavior 4 つとデモ preset 2 つのみで、ここに示される豊かなカタログはその上に構築するものです。",
+
+      "bundled.title": "同梱されるもの",
+
+      "bundled.subtitle": "promptweave にはデモ behavior 4 つとデモ preset 2 つが同梱されています —— エンジンの動作を示すのに十分です。実用的なカタログ（32 以上の behavior、数十の preset）は <code style=\"color:var(--accent);font-size:0.9em;\">--root</code> でプロジェクト内に置きます。",
+
+      "bundled.behaviors.title": "デモ behavior 4 つ",
+
+      "bundled.behaviors.sub": "1 つの behavior につき 1 つの YAML。各 behavior は組み立てられたプロンプトに番号付きセクションを 1 つ以上提供します。",
+
+      "bundled.b1.cat": "カテゴリ：coordination &middot; セクション 000",
+
+      "bundled.b1.desc": "プロジェクトの身元。言語・テストコマンド・モジュール一覧などのテンプレート化パラメータ。agent の「自分はどこにいるか」ブリーフィングをレンダリング。",
+
+      "bundled.b2.cat": "カテゴリ：workspace &middot; セクション 010 + 055 &middot; フック：session-start、session-stop",
+
+      "bundled.b2.desc": "専用の git worktree ブランチで agent を分離。worktree のセットアップと撤去を行うフックスクリプトを同梱。<code style=\"color:var(--accent);font-size:0.9em;\">shared-workspace</code> と競合します。",
+
+      "bundled.b3.cat": "カテゴリ：workspace &middot; セクション 010",
+
+      "bundled.b3.desc": "すべての agent が同じディレクトリで作業。分析専用フロー向けに通常 <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode</code> と組み合わせて使います。<code style=\"color:var(--accent);font-size:0.9em;\">worktree-isolation</code> と競合します。",
+
+      "bundled.b4.cat": "カテゴリ：safety &middot; セクション 090",
+
+      "bundled.b4.desc": "agent はファイルを変更できません。分析・コミュニケーション・報告を行います。コードレビューや監査のロールに適しています。",
+
+      "bundled.presets.title": "デモ preset 2 つ",
+
+      "bundled.presets.sub": "preset は behavior の名前付きリストです。エンジンが解決・検証・合成・組立を行い、出荷可能な出力にまとめます。",
+
+      "bundled.preset.dev.desc": "分離された worktree でのソロ開発セッション。",
+
+      "bundled.preset.inspect.desc": "分離された worktree での読み取り専用プロジェクト検査。",
+
+      "bundled.preset.composes": "構成：",
+
+      "bundled.preset.dev.tag": "behavior 2 つ",
+
+      "bundled.preset.inspect.tag": "behavior 3 つ",
+
+      "bundled.callout": "<strong>より豊かなカタログをお探しですか？</strong>参照オーケストレーター <a href=\"https://github.com/swoofer/essaim\">essaim</a><em>（近日公開）</em>には 32 以上の behavior、20 以上の preset、12 の事前合成テンプレート（バグハント、並列テスト、コードレビューなど）が含まれます —— すべて promptweave が実行時に組み立てます。",
+
+      "potential.title": "混乱からコンポジションへ",
+
+      "potential.subtitle": "behavior カタログを一度コンポーズすれば、数百もの agent バリアントを出荷できます。コピペなし、ドリフトなし、vendor ロックインなし。",
+
+      "potential.stat.behaviors": "behavior",
+
+      "potential.stat.presets": "preset",
+
+      "potential.stat.vendors": "vendor",
+
+      "potential.stat.outputs": "組み立てられたプロンプト",
+
+      "potential.multiplier.caption": "すべて N 個の YAML ファイルから組み立てられます。vendor ターゲットを追加 —— 全 preset が再レンダリング。behavior を変更 —— M 個すべての preset が反映します。手書きのプロンプトではこれは不可能です。",
+
+      "potential.card1.title": "1 度の編集で全てに反映",
+
+      "potential.card1.desc": "<code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode.yaml</code> の 1 行を変更 —— それを含むすべての preset がバイト単位で決定的に再レンダリングされます。50 のプロンプトファイルで検索置換する必要なし。同じ制約を述べるべき agent 間でのドリフトもありません。",
+
+      "potential.card2.title": "分岐なしの条件ロジック",
+
+      "potential.card2.desc": "コンポジションルールは behavior が組み合わさったときに変更を宣言的に適用します —— <em>「A と B が両方存在すれば、セクション X を書き換える」</em>。ロール固有のプロンプトに複製された数十の条件付き <code style=\"color:var(--accent);font-size:0.9em;\">if/else</code> ブロックを置き換えます。",
+
+      "potential.card3.title": "1 つのカタログ、すべての vendor",
+
+      "potential.card3.desc": "同じ N 個の behavior が Claude Code、Cursor、Cline、Aider など、prompt + hook + MCP 設定の三組を消費する任意のツール向けに組み合わさります。1 つの writer プラグインで 5 つ目の vendor を追加可能 —— behavior の書き直しは一切不要。",
+
+      "potential.card4.title": "ファーストクラスのコードとしてのプロンプト",
+
+      "potential.card4.desc": "生成された出力は決定的。PR で diff。リリース前に CI で behavior のドリフトを捕捉。新しい agent ロールのオンボーディング → preset をコピー、パラメータを 1 つ変更、出荷。",
+
+      "nav.potential": "パワー",
 
     }
   };
