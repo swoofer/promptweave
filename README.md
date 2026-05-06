@@ -225,7 +225,18 @@ The pipeline is a pure function over the registry plus an agent identifier — e
 ## Related projects
 
 - **[mcp-coordinator](https://github.com/swoofer/mcp-coordinator)** — embedded MQTT broker + MCP server for multi-agent coordination. Pairs with `promptweave`-built agents that announce their work over MQTT.
-- **[essaim](https://github.com/swoofer/essaim)** *(coming soon)* — end-to-end orchestrator that spawns N coordinated Claude Code agents using `promptweave` + `mcp-coordinator`. Ships the curated behavior catalog (announce-before-write, work-stealing phases, etc.) that the engine here only demonstrates with 4 minimal behaviors.
+- **[essaim](https://github.com/swoofer/essaim)** — end-to-end orchestrator that spawns N coordinated Claude Code agents using `promptweave` + `mcp-coordinator`. Ships the curated behavior catalog (announce-before-write, work-stealing phases, etc.) that the engine here only demonstrates with 4 minimal behaviors.
+
+---
+
+## Support
+
+Solo maintainer. If this project saves you time, consider supporting development:
+
+- [GitHub Sponsors](https://github.com/sponsors/swoofer)
+- [Buy Me A Coffee](https://buymeacoffee.com/swoofer)
+
+A star on the repo also helps surface the project to other developers.
 
 ---
 
