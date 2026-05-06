@@ -1233,7 +1233,7 @@
   </div>
 </section>
 
-<!-- WHY MCP COORDINATOR -->
+<!-- WHY PROMPTWEAVE -->
 <section id="why">
   <div class="container">
     <div class="text-center">
@@ -1242,97 +1242,89 @@
     </div>
     <div class="features">
 
-      <!-- Block 1: Scale your agents -->
+      <!-- Block 1: YAML, not copy-paste -->
       <div class="feature-block fade-in">
         <div class="feature-text">
-          <h3 data-i18n="why.block1.title">Multiple agents, one aligned process</h3>
-          <p data-i18n="why.block1.desc">Run several agents per developer on different tasks. Several developers with their own agents on the same repo. Specialize by role &mdash; one codes, one reviews, one tests. Effort profiles auto-pick Haiku / Sonnet / Opus per phase so you don't waste Opus tokens on coordination chatter.</p>
+          <h3 data-i18n="why.block1.title">YAML, not copy-paste</h3>
+          <p data-i18n="why.block1.desc">Define agent identity, capabilities, and constraints in version-controlled YAML. Diff your prompts in code review like any other change.</p>
+        </div>
+        <div class="feature-terminal">
+          <div><span class="t-dim">$</span> <span class="t-green">git</span> diff behaviors/read-only-mode.yaml</div>
+          <div><span class="t-dim">--- a/behaviors/read-only-mode.yaml</span></div>
+          <div><span class="t-dim">+++ b/behaviors/read-only-mode.yaml</span></div>
+          <div><span class="t-yellow">@@ section 090-safety-readonly @@</span></div>
+          <div><span class="t-red">- You are in read-only mode.</span></div>
+          <div><span class="t-green">+ You are in read-only mode. Analyze, communicate, report.</span></div>
+          <div><span class="t-dim">&rarr; rerenders 12 presets across 4 vendors</span></div>
+        </div>
+      </div>
+
+      <!-- Block 2: Vendor-agnostic (reversed) -->
+      <div class="feature-block reverse fade-in">
+        <div class="feature-text">
+          <h3 data-i18n="why.block2.title">Vendor-agnostic</h3>
+          <p data-i18n="why.block2.desc">The same behavior catalog renders prompts, hooks, and MCP configs for Claude Code, Cursor, Cline, Aider &mdash; anything that consumes prompt + hook + MCP-config triples.</p>
         </div>
         <div class="agent-grid">
           <div class="agent-card">
-            <div class="agent-name">&#128187; Dev A</div>
-            <div class="agent-model">agent-loop</div>
-            <div class="agent-role">phase: execute</div>
-            <div class="agent-scope">src/auth</div>
+            <div class="agent-name">Claude Code</div>
+            <div class="agent-model">prompt + hooks + .mcp.json</div>
           </div>
           <div class="agent-card">
-            <div class="agent-name">&#128187; Dev B</div>
-            <div class="agent-model">agent-loop</div>
-            <div class="agent-role">phase: discover</div>
-            <div class="agent-scope">src/api</div>
+            <div class="agent-name">Cursor</div>
+            <div class="agent-model">.cursorrules + MCP</div>
           </div>
           <div class="agent-card">
-            <div class="agent-name">&#129514; Tester</div>
-            <div class="agent-model">Sonnet (mid)</div>
+            <div class="agent-name">Cline / Aider</div>
+            <div class="agent-model">prompt + tools</div>
           </div>
           <div class="agent-card">
-            <div class="agent-name">&#128221; Reviewer</div>
-            <div class="agent-model">Haiku (low)</div>
+            <div class="agent-name">Your CLI</div>
+            <div class="agent-model">custom writer plugin</div>
           </div>
         </div>
       </div>
 
-      <!-- Block 2: Automatic coordination (reversed) -->
-      <div class="feature-block reverse fade-in">
-        <div class="feature-text">
-          <h3 data-i18n="why.block2.title">Agents hear each other through MQTT &mdash; no sidecar</h3>
-          <p data-i18n="why.block2.desc">The agent-loop subscribes to the embedded MQTT broker once. Conflicts, messages, claims and resolutions arrive in real-time and are drained between turns. No separate liaison process, no polling, no extra tokens burned on coordination chatter.</p>
-        </div>
-        <div class="feature-terminal">
-          <div><span class="t-blue">Worker Alpha</span> <span class="t-dim">&rarr;</span> announce_work(<span class="t-green">"Refactor auth"</span>)</div>
-          <div><span class="t-dim">mqtt</span> <span class="t-blue">coordinator/consultations/new</span> <span class="t-yellow">score 100</span></div>
-          <div><span class="t-dim">push &rarr; Beta's loop queue</span></div>
-          <div><span class="t-green">Agent Beta</span> <span class="t-dim">&rarr;</span> post_to_thread(<span class="t-green">"compatible, will rebase"</span>)</div>
-          <div><span class="t-green">&#9989; propose_resolution</span> <span class="t-dim">&rarr; approved in 38s</span></div>
-        </div>
-      </div>
-
-      <!-- Block 3: Simulate real scenarios -->
+      <!-- Block 3: Composition over duplication -->
       <div class="feature-block fade-in">
         <div class="feature-text">
-          <h3 data-i18n="why.block3.title">Dogfood everything</h3>
-          <p data-i18n="why.block3.desc">6 agents coordinated via work-stealing phases to rewrite the coordinator's own unit tests from scratch. Another raid found and patched 11 real bugs in the coordinator itself. Zero duplicated work, zero merge conflicts &mdash; all via the coordinator's own announce/MQTT/consensus loop.</p>
+          <h3 data-i18n="why.block3.title">Composition over duplication</h3>
+          <p data-i18n="why.block3.desc">Behaviors compose. A read-only-mode overlay rewrites the agent's instructions automatically when paired with announce-before-write, instead of duplicating prompt text across roles.</p>
         </div>
         <div class="results-card">
-          <h4 data-i18n="why.dogfood.title">La M&ecirc;l&eacute;e run</h4>
-          <div class="result-line"><span data-i18n="why.dogfood.agents">Agents</span><span>6 (agent-loop)</span></div>
-          <div class="result-line"><span data-i18n="why.dogfood.phases">Phases</span><span>discover &rarr; execute</span></div>
-          <div class="result-line"><span data-i18n="why.dogfood.threads">Threads opened</span><span>8</span></div>
-          <div class="result-line"><span data-i18n="why.dogfood.messages">MQTT messages exchanged</span><span>25</span></div>
-          <div class="result-line highlight"><span data-i18n="why.dogfood.consensus">Consensus</span><span data-i18n="why.dogfood.consensusval">7 reached &middot; 0 duplicates</span></div>
-          <div class="result-line"><span data-i18n="why.dogfood.tests">Tests produced</span><span>~2 400 lines</span></div>
-          <div class="result-line"><span data-i18n="why.dogfood.total">Total tests (suite)</span><span>652</span></div>
+          <h4 data-i18n="why.compose.title">Composition rule fires</h4>
+          <div class="result-line"><span data-i18n="why.compose.preset">preset</span><span><code style="color:var(--accent);font-size:0.9em;">inspect</code></span></div>
+          <div class="result-line"><span data-i18n="why.compose.behaviors">behaviors</span><span>project-context, worktree-isolation, read-only-mode</span></div>
+          <div class="result-line"><span data-i18n="why.compose.rule">rule matched</span><span><code style="color:var(--accent);font-size:0.9em;">announce-readonly-adaptation</code></span></div>
+          <div class="result-line highlight"><span data-i18n="why.compose.action">action</span><span data-i18n="why.compose.actionval">section 020 rewritten &middot; "before your analysis"</span></div>
+          <div class="result-line"><span data-i18n="why.compose.outcome">outcome</span><span data-i18n="why.compose.outcomeval">no copy-paste &middot; no drift</span></div>
         </div>
       </div>
 
-      <!-- Block 4: Real-time visibility (reversed) -->
+      <!-- Block 4: Numbered sections, deterministic (reversed) -->
       <div class="feature-block reverse fade-in">
         <div class="feature-text">
-          <h3 data-i18n="why.block4.title">See everything, miss nothing</h3>
-          <p data-i18n="why.block4.desc">A live SSE dashboard shows every decision in real-time. Who's working on what, which conflicts were detected, how they were resolved. Per-agent token gauge, Anthropic quota widget, scoring-layer breakdown. Complete traceability &mdash; every coordination decision is logged.</p>
+          <h3 data-i18n="why.block4.title">Numbered sections, deterministic output</h3>
+          <p data-i18n="why.block4.desc">Every behavior contributes numbered sections. The assembler sorts them, dedups, and produces byte-identical output for identical inputs &mdash; perfect for CI.</p>
         </div>
         <div class="mini-dash">
-          <div class="mini-dash-agents">
-            <div class="mini-dash-agent"><span class="dot dot-blue"></span> Alpha</div>
-            <div class="mini-dash-agent"><span class="dot dot-green"></span> Beta</div>
-            <div class="mini-dash-agent"><span class="dot dot-yellow"></span> Gamma</div>
-            <div class="mini-dash-agent"><span class="dot dot-red"></span> Delta</div>
-          </div>
           <div class="mini-dash-timeline">
-            <div><span class="tl-time">09:41</span> <span class="tl-blue">Alpha</span> announced &rarr; types.ts</div>
-            <div><span class="tl-time">09:41</span> <span class="tl-yellow">&#9889; Conflict scored 100</span></div>
-            <div><span class="tl-time">09:42</span> <span class="tl-green">&#9989; Consensus reached</span></div>
+            <div><span class="tl-time">000</span> <span class="tl-blue">project-context</span> &rarr; identity</div>
+            <div><span class="tl-time">010</span> <span class="tl-blue">worktree-isolation</span> &rarr; setup</div>
+            <div><span class="tl-time">020</span> <span class="tl-yellow">announce-before-write</span> &rarr; collab</div>
+            <div><span class="tl-time">055</span> <span class="tl-blue">worktree-isolation</span> &rarr; teardown</div>
+            <div><span class="tl-time">090</span> <span class="tl-green">read-only-mode</span> &rarr; safety</div>
           </div>
           <div class="mini-dash-metrics">
-            <strong>2</strong> consultations &nbsp;&middot;&nbsp; <strong>1</strong> conflict &nbsp;&middot;&nbsp; <strong>45s</strong> avg
+            <strong>5</strong> sections &nbsp;&middot;&nbsp; <strong>3</strong> behaviors &nbsp;&middot;&nbsp; <strong>byte-identical</strong>
           </div>
         </div>
       </div>
 
-      <!-- Block 5: Zero conflicts — full width -->
+      <!-- Block 5: Pair with a runtime -->
       <div class="feature-highlight fade-in">
-        <h3 data-i18n="why.block5.title">Zero conflicts. Everyone aligned.</h3>
-        <p data-i18n="why.block5.desc">Intent detection before code is written. Impact scoring across 4 layers. Automatic consultation when scores exceed thresholds. The coordinator doesn't replace developers &mdash; it eliminates the chaos when multiple agents work in parallel. Your agents, your repo, your rules &mdash; just without the collisions.</p>
+        <h3 data-i18n="why.block5.title">Pair with a runtime</h3>
+        <p data-i18n="why.block5.desc">Generated agents pair with <a href="https://github.com/swoofer/mcp-coordinator">mcp-coordinator</a> for runtime announce/conflict/quota; see <a href="https://github.com/swoofer/essaim">essaim</a> for an end-to-end example.</p>
       </div>
 
     </div>
@@ -1343,24 +1335,24 @@
 <section id="problem">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-title" data-i18n="problem.title">The coordination problem</h2>
-      <p class="section-sub" data-i18n="problem.subtitle">AI coding agents accelerate individual work — but create new team-level problems when running in parallel.</p>
+      <h2 class="section-title" data-i18n="problem.title">The prompt-engineering problem</h2>
+      <p class="section-sub" data-i18n="problem.subtitle">Hand-written agent prompts don't scale. Once you have 5+ roles across 2+ vendors, the catalog becomes unmaintainable.</p>
     </div>
     <div class="cards fade-in">
       <div class="card">
-        <div class="card-icon">&#128165;</div>
-        <h3 data-i18n="problem.card1.title">Regressions</h3>
-        <p data-i18n="problem.card1.desc">Two agents touch the same file simultaneously. One's changes silently overwrite the other's. The bug only shows up in review — or production.</p>
+        <div class="card-icon">&#128203;</div>
+        <h3 data-i18n="problem.card1.title">Copy-pasted prompts</h3>
+        <p data-i18n="problem.card1.desc">Every new agent role starts as a copy of an existing prompt. Drift sets in. The team's many agents say slightly different things about the same constraints.</p>
       </div>
       <div class="card">
-        <div class="card-icon">&#128257;</div>
-        <h3 data-i18n="problem.card2.title">Duplicated effort</h3>
-        <p data-i18n="problem.card2.desc">Without visibility into each other's intent, two agents implement the same feature with different APIs, different schemas, different assumptions.</p>
+        <div class="card-icon">&#128196;</div>
+        <h3 data-i18n="problem.card2.title">No version control discipline</h3>
+        <p data-i18n="problem.card2.desc">Prompts live in scattered files, copy-paste blocks in chat windows, or commits from days ago that nobody can reconstruct. Reviewing a prompt change is harder than reviewing code.</p>
       </div>
       <div class="card">
-        <div class="card-icon">&#127787;&#65039;</div>
-        <h3 data-i18n="problem.card3.title">No visibility</h3>
-        <p data-i18n="problem.card3.desc">Nobody knows what the other agents are doing. Plans stay local, decisions are invisible. Misalignment compounds silently until it explodes.</p>
+        <div class="card-icon">&#128279;</div>
+        <h3 data-i18n="problem.card3.title">Cross-vendor incompatibility</h3>
+        <p data-i18n="problem.card3.desc">Switching from Claude Code to Cursor or Aider means rewriting prompts, hooks, and MCP configs by hand. The same behavior &mdash; say, "work in read-only mode" &mdash; gets rewritten three times.</p>
       </div>
     </div>
   </div>
@@ -1416,33 +1408,33 @@
 <section id="how-it-works">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-title" data-i18n="how.title">How it works</h2>
-      <p class="section-sub" data-i18n="how.subtitle">A lightweight coordination loop that runs before every coding session, not after.</p>
+      <h2 class="section-title" data-i18n="how.title">How the engine works</h2>
+      <p class="section-sub" data-i18n="how.subtitle">Five passes from a preset to ready-to-ship prompts, hooks, and MCP configs.</p>
     </div>
     <div class="steps fade-in">
       <div class="step">
         <div class="step-num">1</div>
-        <div class="step-icon">&#128226;</div>
-        <h3 data-i18n="how.step1.title">Announce</h3>
-        <p data-i18n="how.step1.desc">Agent declares intent — task description, target files, affected modules — before writing a single line of code.</p>
+        <div class="step-icon">&#128279;</div>
+        <h3 data-i18n="how.step1.title">Resolve</h3>
+        <p data-i18n="how.step1.desc">A preset is resolved into a flat list of behaviors. Shared dependencies are deduplicated automatically.</p>
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <div class="step-icon">&#127919;</div>
-        <h3 data-i18n="how.step2.title">Detect</h3>
-        <p data-i18n="how.step2.desc">The scorer evaluates overlap against all active intents across 4 layers: file, dependency, module, and semantic proximity.</p>
+        <div class="step-icon">&#9989;</div>
+        <h3 data-i18n="how.step2.title">Validate</h3>
+        <p data-i18n="how.step2.desc">Every behavior is checked: required parameters present, references resolve, schema valid. Errors point to the source YAML.</p>
       </div>
       <div class="step">
         <div class="step-num">3</div>
-        <div class="step-icon">&#128172;</div>
-        <h3 data-i18n="how.step3.title">Consult</h3>
-        <p data-i18n="how.step3.desc">The coordinator publishes the new thread on MQTT. Each affected agent-loop drains the event between turns and posts context, constraints, or a resolution proposal — no separate sidecar process.</p>
+        <div class="step-icon">&#129520;</div>
+        <h3 data-i18n="how.step3.title">Compose</h3>
+        <p data-i18n="how.step3.desc">Composition rules apply: when behaviors A and B are both present, override section X, inject section Y, or strip behavior Z.</p>
       </div>
       <div class="step">
         <div class="step-num">4</div>
-        <div class="step-icon">&#9989;</div>
-        <h3 data-i18n="how.step4.title">Resolve</h3>
-        <p data-i18n="how.step4.desc">Proposals are approved, contested, or re-proposed. The thread closes on consensus, or auto-resolves in gray zones. All decisions land on the dashboard timeline.</p>
+        <div class="step-icon">&#128230;</div>
+        <h3 data-i18n="how.step4.title">Assemble</h3>
+        <p data-i18n="how.step4.desc">Sections sort numerically into a single prompt. Hooks consolidate per lifecycle. MCP tools merge into a single .mcp.json. Output is byte-deterministic.</p>
       </div>
     </div>
   </div>
@@ -1510,26 +1502,26 @@
   <div class="container">
     <div class="text-center">
       <h2 class="section-title" data-i18n="install.title">Get started in 3 steps</h2>
-      <p class="section-sub" data-i18n="install.subtitle">Self-hosted, no cloud dependency. Runs locally with Docker.</p>
+      <p class="section-sub" data-i18n="install.subtitle">From npm install to your first assembled prompt in under a minute.</p>
     </div>
     <div class="install-grid fade-in">
       <div class="install-card">
         <div class="install-step" data-i18n="install.step1.label">Step 1</div>
-        <h3 data-i18n="install.step1.title">Start the coordinator</h3>
-        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step1.desc">One binary. MCP server, Aedes MQTT broker and dashboard — all in one process.</p>
-        <div class="code-block">mcp-coordinator server start --daemon</div>
+        <h3 data-i18n="install.step1.title">Install</h3>
+        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step1.desc">Grab the npm package. The CLI is self-contained &mdash; only Node.js 20+ required.</p>
+        <div class="code-block">npm install -g @swoofer/promptweave</div>
       </div>
       <div class="install-card">
         <div class="install-step" data-i18n="install.step2.label">Step 2</div>
-        <h3 data-i18n="install.step2.title">Initialize your project</h3>
-        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step2.desc">Writes BCE-assembled hooks + <code style="color:var(--accent);font-size:0.85em;">.mcp.json</code> into your project. Picks up the coordinator URL + your identity.</p>
-        <div class="code-block">mcp-coordinator init ~/project \<br/>  --url http://localhost:3100 \<br/>  --name "Alice" \<br/>  --modules "src/auth,src/api"</div>
+        <h3 data-i18n="install.step2.title">Inspect what ships</h3>
+        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step2.desc">4 demo behaviors and 2 demo presets ship bundled. Real catalogs live in your repo via <code style="color:var(--accent);font-size:0.85em;">--root</code>.</p>
+        <div class="code-block">promptweave list behaviors<br/>promptweave list presets</div>
       </div>
       <div class="install-card">
         <div class="install-step" data-i18n="install.step3.label">Step 3</div>
-        <h3 data-i18n="install.step3.title">Code or orchestrate</h3>
-        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step3.desc">Launch Claude normally &mdash; the agent-loop is transparent. Or dispatch a template with N coordinated agents.</p>
-        <div class="code-block">cd ~/project && claude<br/><span style="color:var(--muted)"># or</span><br/>mcp-coordinator run raid -p . --agents 3</div>
+        <h3 data-i18n="install.step3.title">Build a preset</h3>
+        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step3.desc">Preview the composition with <code style="color:var(--accent);font-size:0.85em;">--dry-run</code>. Drop the flag to write prompt.md, hooks, and .mcp.json into <code style="color:var(--accent);font-size:0.85em;">./.claude/promptweave/</code>.</p>
+        <div class="code-block">promptweave build inspect --dry-run<br/><span style="color:var(--muted)"># then for real:</span><br/>promptweave build inspect</div>
       </div>
     </div>
   </div>
@@ -1597,7 +1589,7 @@
     </div>
 
     <div class="text-center" style="margin-top: 2.5rem; padding: 1rem; border: 1px solid rgba(96,165,250,0.3); border-radius: 8px; background: rgba(96,165,250,0.05); max-width: 720px; margin-left: auto; margin-right: auto;">
-      <p style="font-size: 0.9rem; color: var(--muted);" data-i18n="bundled.callout"><strong>Looking for richer catalogs?</strong> The reference orchestrator <a href="https://github.com/swoofer/essaim">essaim</a> <em>(coming soon)</em> ships 32+ behaviors, 20+ presets, and 12 pre-composed templates (bug-hunt, parallel-tests, code-review, etc.) &mdash; all assembled by promptweave at runtime.</p>
+      <p style="font-size: 0.9rem; color: var(--muted);" data-i18n="bundled.callout"><strong>Looking for richer catalogs?</strong> The reference orchestrator <a href="https://github.com/swoofer/essaim">essaim</a> ships 32+ behaviors, 20+ presets, and 12 pre-composed templates (bug-hunt, parallel-tests, code-review, etc.) &mdash; all assembled by promptweave at runtime.</p>
     </div>
   </div>
 </section>
@@ -1783,15 +1775,14 @@
       "why.block4.desc": "Every behavior contributes numbered sections. The assembler sorts them, dedups, and produces byte-identical output for identical inputs — perfect for CI.",
       "why.block5.title": "Pair with a runtime",
       "why.block5.desc": "Generated agents pair with <a href=\"https://github.com/swoofer/mcp-coordinator\">mcp-coordinator</a> for runtime announce/conflict/quota; see <a href=\"https://github.com/swoofer/essaim\">essaim</a> for an end-to-end example.",
-      "why.dogfood.title": "La M&ecirc;l&eacute;e run",
-      "why.dogfood.agents": "Agents",
-      "why.dogfood.phases": "Phases",
-      "why.dogfood.threads": "Threads opened",
-      "why.dogfood.messages": "MQTT messages exchanged",
-      "why.dogfood.consensus": "Consensus",
-      "why.dogfood.consensusval": "7 reached &middot; 0 duplicates",
-      "why.dogfood.tests": "Tests produced",
-      "why.dogfood.total": "Total tests (suite)",
+      "why.compose.title": "Composition rule fires",
+      "why.compose.preset": "preset",
+      "why.compose.behaviors": "behaviors",
+      "why.compose.rule": "rule matched",
+      "why.compose.action": "action",
+      "why.compose.actionval": "section 020 rewritten &middot; \"before your analysis\"",
+      "why.compose.outcome": "outcome",
+      "why.compose.outcomeval": "no copy-paste &middot; no drift",
       "problem.title": "The prompt-engineering problem",
       "problem.subtitle": "AI coding agents accelerate individual work &mdash; but create new team-level problems when running in parallel.",
       "problem.card1.title": "Copy-pasted prompts",
@@ -1921,7 +1912,7 @@
 
       "examples.subtitle": "Twelve pre-composed agent presets, each assembled from reusable YAML behaviors — coordination, workspace, mission, safety.",
 
-      "examples.callout": "<strong>Note &mdash;</strong> these templates illustrate composition variety. Their YAMLs live in <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(coming soon)</em>, the reference orchestrator. promptweave bundles only 4 demo behaviors and 2 demo presets &mdash; the rich catalogs shown here are what you build on top.",
+      "examples.callout": "<strong>Note &mdash;</strong> these templates illustrate composition variety. Their YAMLs live in <a href=\"https://github.com/swoofer/essaim\">essaim</a>, the reference orchestrator. promptweave bundles only 4 demo behaviors and 2 demo presets &mdash; the rich catalogs shown here are what you build on top.",
 
       "bundled.title": "What ships bundled",
 
@@ -1961,7 +1952,7 @@
 
       "bundled.preset.inspect.tag": "3 behaviors",
 
-      "bundled.callout": "<strong>Looking for richer catalogs?</strong> The reference orchestrator <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(coming soon)</em> ships 32+ behaviors, 20+ presets, and 12 pre-composed templates (bug-hunt, parallel-tests, code-review, etc.) — all assembled by promptweave at runtime.",
+      "bundled.callout": "<strong>Looking for richer catalogs?</strong> The reference orchestrator <a href=\"https://github.com/swoofer/essaim\">essaim</a> ships 32+ behaviors, 20+ presets, and 12 pre-composed templates (bug-hunt, parallel-tests, code-review, etc.) — all assembled by promptweave at runtime.",
 
       "potential.title": "From chaos to composition",
 
@@ -2017,15 +2008,14 @@
       "why.block4.desc": "Chaque behavior contribue à des sections numérotées. L'assembleur les trie, déduplique et produit une sortie byte-identique pour les mêmes inputs — parfait pour la CI.",
       "why.block5.title": "Combinez avec un runtime",
       "why.block5.desc": "Les agents générés se combinent à <a href=\"https://github.com/swoofer/mcp-coordinator\">mcp-coordinator</a> pour annonce/conflit/quota au runtime ; voir <a href=\"https://github.com/swoofer/essaim\">essaim</a> pour un exemple bout-en-bout.",
-      "why.dogfood.title": "Run La M&ecirc;l&eacute;e",
-      "why.dogfood.agents": "Agents",
-      "why.dogfood.phases": "Phases",
-      "why.dogfood.threads": "Threads ouverts",
-      "why.dogfood.messages": "Messages MQTT &eacute;chang&eacute;s",
-      "why.dogfood.consensus": "Consensus",
-      "why.dogfood.consensusval": "7 atteints &middot; 0 doublons",
-      "why.dogfood.tests": "Tests produits",
-      "why.dogfood.total": "Total des tests (suite)",
+      "why.compose.title": "R&egrave;gle de composition d&eacute;clench&eacute;e",
+      "why.compose.preset": "preset",
+      "why.compose.behaviors": "behaviors",
+      "why.compose.rule": "r&egrave;gle activ&eacute;e",
+      "why.compose.action": "action",
+      "why.compose.actionval": "section 020 r&eacute;&eacute;crite &middot; &laquo;&nbsp;avant votre analyse&nbsp;&raquo;",
+      "why.compose.outcome": "r&eacute;sultat",
+      "why.compose.outcomeval": "aucun copier-coller &middot; aucune d&eacute;rive",
       "problem.title": "Le problème du prompt engineering",
       "problem.subtitle": "Les agents IA acc&eacute;l&egrave;rent le travail individuel &mdash; mais cr&eacute;ent de nouveaux probl&egrave;mes d'&eacute;quipe quand ils tournent en parall&egrave;le.",
       "problem.card1.title": "Prompts copiés-collés",
@@ -2155,7 +2145,7 @@
 
       "examples.subtitle": "Douze presets d'agents pré-composés, chacun assemblé à partir de behaviors YAML réutilisables &mdash; coordination, workspace, mission, safety.",
 
-      "examples.callout": "<strong>Note &mdash;</strong> ces templates illustrent la variété de compositions possibles. Leurs YAMLs vivent dans <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(à venir)</em>, l'orchestrateur de référence. promptweave inclut seulement 4 behaviors de démo et 2 presets de démo &mdash; les catalogues riches montrés ici sont ce que vous construisez par-dessus.",
+      "examples.callout": "<strong>Note &mdash;</strong> ces templates illustrent la variété de compositions possibles. Leurs YAMLs vivent dans <a href=\"https://github.com/swoofer/essaim\">essaim</a>, l'orchestrateur de référence. promptweave inclut seulement 4 behaviors de démo et 2 presets de démo &mdash; les catalogues riches montrés ici sont ce que vous construisez par-dessus.",
 
       "bundled.title": "Ce qui est inclus",
 
@@ -2195,7 +2185,7 @@
 
       "bundled.preset.inspect.tag": "3 behaviors",
 
-      "bundled.callout": "<strong>Vous cherchez des catalogues plus riches ?</strong> L'orchestrateur de référence <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(à venir)</em> embarque 32+ behaviors, 20+ presets et 12 templates pré-composés (chasse aux bugs, tests parallèles, revue de code, etc.) — tous assemblés par promptweave au runtime.",
+      "bundled.callout": "<strong>Vous cherchez des catalogues plus riches ?</strong> L'orchestrateur de référence <a href=\"https://github.com/swoofer/essaim\">essaim</a> embarque 32+ behaviors, 20+ presets et 12 templates pré-composés (chasse aux bugs, tests parallèles, revue de code, etc.) — tous assemblés par promptweave au runtime.",
 
       "potential.title": "Du chaos à la composition",
 
@@ -2251,15 +2241,14 @@
       "why.block4.desc": "Cada behavior contribuye con secciones numeradas. El assembler las ordena, deduplica y produce salida byte-idéntica para inputs idénticos — perfecto para CI.",
       "why.block5.title": "Combine con un runtime",
       "why.block5.desc": "Los agents generados se combinan con <a href=\"https://github.com/swoofer/mcp-coordinator\">mcp-coordinator</a> para anuncio/conflicto/cuota en runtime; vea <a href=\"https://github.com/swoofer/essaim\">essaim</a> para un ejemplo de extremo a extremo.",
-      "why.dogfood.title": "Run La M&ecirc;l&eacute;e",
-      "why.dogfood.agents": "Agentes",
-      "why.dogfood.phases": "Fases",
-      "why.dogfood.threads": "Threads abiertos",
-      "why.dogfood.messages": "Mensajes MQTT intercambiados",
-      "why.dogfood.consensus": "Consenso",
-      "why.dogfood.consensusval": "7 alcanzados &middot; 0 duplicados",
-      "why.dogfood.tests": "Tests producidos",
-      "why.dogfood.total": "Total de tests (suite)",
+      "why.compose.title": "Regla de composici&oacute;n activada",
+      "why.compose.preset": "preset",
+      "why.compose.behaviors": "behaviors",
+      "why.compose.rule": "regla coincidente",
+      "why.compose.action": "acci&oacute;n",
+      "why.compose.actionval": "secci&oacute;n 020 reescrita &middot; \"antes de tu an&aacute;lisis\"",
+      "why.compose.outcome": "resultado",
+      "why.compose.outcomeval": "sin copiar-pegar &middot; sin desviaci&oacute;n",
       "problem.title": "El problema del prompt engineering",
       "problem.subtitle": "Los agentes IA aceleran el trabajo individual &mdash; pero crean nuevos problemas de equipo cuando corren en paralelo.",
       "problem.card1.title": "Prompts copiados",
@@ -2389,7 +2378,7 @@
 
       "examples.subtitle": "Doce presets de agent pre-compuestos, cada uno ensamblado a partir de behaviors YAML reutilizables &mdash; coordinación, workspace, misión, seguridad.",
 
-      "examples.callout": "<strong>Nota &mdash;</strong> estas plantillas ilustran la variedad de composición. Sus YAMLs viven en <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(próximamente)</em>, el orchestrador de referencia. promptweave incluye solo 4 behaviors demo y 2 presets demo &mdash; los catálogos ricos mostrados aquí son lo que usted construye encima.",
+      "examples.callout": "<strong>Nota &mdash;</strong> estas plantillas ilustran la variedad de composición. Sus YAMLs viven en <a href=\"https://github.com/swoofer/essaim\">essaim</a>, el orchestrador de referencia. promptweave incluye solo 4 behaviors demo y 2 presets demo &mdash; los catálogos ricos mostrados aquí son lo que usted construye encima.",
 
       "bundled.title": "Lo que viene incluido",
 
@@ -2429,7 +2418,7 @@
 
       "bundled.preset.inspect.tag": "3 behaviors",
 
-      "bundled.callout": "<strong>¿Busca catálogos más ricos?</strong> El orchestrador de referencia <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(próximamente)</em> incluye 32+ behaviors, 20+ presets y 12 templates pre-compuestos (caza de bugs, tests paralelos, revisión de código, etc.) — todos ensamblados por promptweave en runtime.",
+      "bundled.callout": "<strong>¿Busca catálogos más ricos?</strong> El orchestrador de referencia <a href=\"https://github.com/swoofer/essaim\">essaim</a> incluye 32+ behaviors, 20+ presets y 12 templates pre-compuestos (caza de bugs, tests paralelos, revisión de código, etc.) — todos ensamblados por promptweave en runtime.",
 
       "potential.title": "Del caos a la composición",
 
@@ -2485,15 +2474,14 @@
       "why.block4.desc": "Jedes Behavior trägt nummerierte Abschnitte bei. Der Assembler sortiert, dedupliziert und produziert byte-identische Ausgaben für identische Eingaben — perfekt für CI.",
       "why.block5.title": "Mit einer Runtime kombinieren",
       "why.block5.desc": "Generierte Agents kombinieren sich mit <a href=\"https://github.com/swoofer/mcp-coordinator\">mcp-coordinator</a> für Laufzeit-Announce/Konflikt/Quota; siehe <a href=\"https://github.com/swoofer/essaim\">essaim</a> für ein End-to-End-Beispiel.",
-      "why.dogfood.title": "La M&ecirc;l&eacute;e-Lauf",
-      "why.dogfood.agents": "Agenten",
-      "why.dogfood.phases": "Phasen",
-      "why.dogfood.threads": "Er&ouml;ffnete Threads",
-      "why.dogfood.messages": "MQTT-Nachrichten ausgetauscht",
-      "why.dogfood.consensus": "Konsens",
-      "why.dogfood.consensusval": "7 erreicht &middot; 0 Duplikate",
-      "why.dogfood.tests": "Tests produziert",
-      "why.dogfood.total": "Tests gesamt (Suite)",
+      "why.compose.title": "Kompositionsregel ausgel&ouml;st",
+      "why.compose.preset": "preset",
+      "why.compose.behaviors": "behaviors",
+      "why.compose.rule": "regel angewendet",
+      "why.compose.action": "aktion",
+      "why.compose.actionval": "abschnitt 020 umgeschrieben &middot; &bdquo;vor deiner analyse&ldquo;",
+      "why.compose.outcome": "ergebnis",
+      "why.compose.outcomeval": "kein copy-paste &middot; keine drift",
       "problem.title": "Das Prompt-Engineering-Problem",
       "problem.subtitle": "KI-Coding-Agenten beschleunigen die Einzelarbeit &mdash; erzeugen aber neue Team-Probleme, wenn sie parallel laufen.",
       "problem.card1.title": "Kopierte Prompts",
@@ -2623,7 +2611,7 @@
 
       "examples.subtitle": "Zwölf vorkomponierte Agent-Presets, jedes aus wiederverwendbaren YAML-Behaviors zusammengesetzt &mdash; Koordination, Workspace, Mission, Sicherheit.",
 
-      "examples.callout": "<strong>Hinweis &mdash;</strong> diese Templates illustrieren die Vielfalt der Komposition. Ihre YAMLs leben in <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(in Kürze)</em>, dem Referenz-Orchestrator. promptweave bündelt nur 4 Demo-Behaviors und 2 Demo-Presets &mdash; die reichen Kataloge hier sind, was Sie darauf aufbauen.",
+      "examples.callout": "<strong>Hinweis &mdash;</strong> diese Templates illustrieren die Vielfalt der Komposition. Ihre YAMLs leben in <a href=\"https://github.com/swoofer/essaim\">essaim</a>, dem Referenz-Orchestrator. promptweave bündelt nur 4 Demo-Behaviors und 2 Demo-Presets &mdash; die reichen Kataloge hier sind, was Sie darauf aufbauen.",
 
       "bundled.title": "Was mitgeliefert wird",
 
@@ -2663,7 +2651,7 @@
 
       "bundled.preset.inspect.tag": "3 Behaviors",
 
-      "bundled.callout": "<strong>Auf der Suche nach reicheren Katalogen?</strong> Der Referenz-Orchestrator <a href=\"https://github.com/swoofer/essaim\">essaim</a> <em>(in Kürze)</em> bringt 32+ Behaviors, 20+ Presets und 12 vorkomponierte Templates mit (Bug-Hunt, parallele Tests, Code-Review usw.) — alle von promptweave zur Laufzeit assembliert.",
+      "bundled.callout": "<strong>Auf der Suche nach reicheren Katalogen?</strong> Der Referenz-Orchestrator <a href=\"https://github.com/swoofer/essaim\">essaim</a> bringt 32+ Behaviors, 20+ Presets und 12 vorkomponierte Templates mit (Bug-Hunt, parallele Tests, Code-Review usw.) — alle von promptweave zur Laufzeit assembliert.",
 
       "potential.title": "Vom Chaos zur Komposition",
 
@@ -2719,15 +2707,14 @@
       "why.block4.desc": "每个 behavior 贡献编号节。assembler 对其进行排序、去重，并对相同输入生成字节完全一致的输出 —— 非常适合 CI。",
       "why.block5.title": "搭配运行时使用",
       "why.block5.desc": "生成的 agent 与 <a href=\"https://github.com/swoofer/mcp-coordinator\">mcp-coordinator</a> 配对使用，进行运行时声明/冲突/配额管理；参见 <a href=\"https://github.com/swoofer/essaim\">essaim</a> 获取端到端示例。",
-      "why.dogfood.title": "La M&ecirc;l&eacute;e 运行",
-      "why.dogfood.agents": "智能体",
-      "why.dogfood.phases": "阶段",
-      "why.dogfood.threads": "打开的线程",
-      "why.dogfood.messages": "交换的 MQTT 消息",
-      "why.dogfood.consensus": "共识",
-      "why.dogfood.consensusval": "达成 7 &middot; 0 重复",
-      "why.dogfood.tests": "生成的测试",
-      "why.dogfood.total": "测试总数（套件）",
+      "why.compose.title": "组合规则触发",
+      "why.compose.preset": "preset",
+      "why.compose.behaviors": "behaviors",
+      "why.compose.rule": "命中规则",
+      "why.compose.action": "动作",
+      "why.compose.actionval": "重写第 020 节 &middot; \"在你的分析之前\"",
+      "why.compose.outcome": "结果",
+      "why.compose.outcomeval": "无复制粘贴 &middot; 无漂移",
       "problem.title": "Prompt 工程的问题",
       "problem.subtitle": "AI 编码智能体加速个人工作 &mdash; 但并行运行时在团队层面制造新问题。",
       "problem.card1.title": "复制粘贴的 prompt",
@@ -2897,7 +2884,7 @@
 
       "bundled.preset.inspect.tag": "3 个 behavior",
 
-      "bundled.callout": "<strong>需要更丰富的目录？</strong>参考 orchestrator <a href=\"https://github.com/swoofer/essaim\">essaim</a><em>（即将推出）</em>提供 32+ 个 behavior、20+ 个 preset 和 12 个预组合 template（猎 bug、并行测试、代码评审等）—— 全部由 promptweave 在运行时组装。",
+      "bundled.callout": "<strong>需要更丰富的目录？</strong>参考 orchestrator <a href=\"https://github.com/swoofer/essaim\">essaim</a>提供 32+ 个 behavior、20+ 个 preset 和 12 个预组合 template（猎 bug、并行测试、代码评审等）—— 全部由 promptweave 在运行时组装。",
 
       "potential.title": "从混乱到组合",
 
@@ -2953,15 +2940,14 @@
       "why.block4.desc": "各 behavior は番号付きセクションを提供。assembler は並べ替え・重複除去を行い、同一入力に対してバイト単位で一致する出力を生成 —— CI に最適。",
       "why.block5.title": "ランタイムと組み合わせる",
       "why.block5.desc": "生成された agent はランタイム時のアナウンス／競合／クォータのために <a href=\"https://github.com/swoofer/mcp-coordinator\">mcp-coordinator</a> と組み合わせて使えます。エンド・ツー・エンドの例は <a href=\"https://github.com/swoofer/essaim\">essaim</a> を参照。",
-      "why.dogfood.title": "La M&ecirc;l&eacute;e ラン",
-      "why.dogfood.agents": "エージェント",
-      "why.dogfood.phases": "フェーズ",
-      "why.dogfood.threads": "開いたスレッド",
-      "why.dogfood.messages": "交換された MQTT メッセージ",
-      "why.dogfood.consensus": "コンセンサス",
-      "why.dogfood.consensusval": "7 達成 &middot; 0 重複",
-      "why.dogfood.tests": "生成テスト",
-      "why.dogfood.total": "テスト合計（スイート）",
+      "why.compose.title": "コンポジションルール発火",
+      "why.compose.preset": "preset",
+      "why.compose.behaviors": "behaviors",
+      "why.compose.rule": "ルール一致",
+      "why.compose.action": "アクション",
+      "why.compose.actionval": "セクション 020 が書き換え &middot;「あなたの分析の前に」",
+      "why.compose.outcome": "結果",
+      "why.compose.outcomeval": "コピペなし &middot; ドリフトなし",
       "problem.title": "プロンプトエンジニアリングの問題",
       "problem.subtitle": "AI コーディングエージェントは個人作業を加速する &mdash; が、並列で走るとチームレベルの新しい問題を生む。",
       "problem.card1.title": "コピペされたプロンプト",
@@ -3091,7 +3077,7 @@
 
       "examples.subtitle": "事前合成された 12 の agent preset。それぞれ再利用可能な YAML behavior から組み立てられています —— 協調・workspace・ミッション・安全。",
 
-      "examples.callout": "<strong>注意 &mdash;</strong> これらのテンプレートはコンポジションのバリエーションを示しています。その YAML は参照オーケストレーターである <a href=\"https://github.com/swoofer/essaim\">essaim</a><em>（近日公開）</em> にあります。promptweave に同梱されているのはデモ behavior 4 つとデモ preset 2 つのみで、ここに示される豊かなカタログはその上に構築するものです。",
+      "examples.callout": "<strong>注意 &mdash;</strong> これらのテンプレートはコンポジションのバリエーションを示しています。その YAML は参照オーケストレーターである <a href=\"https://github.com/swoofer/essaim\">essaim</a> にあります。promptweave に同梱されているのはデモ behavior 4 つとデモ preset 2 つのみで、ここに示される豊かなカタログはその上に構築するものです。",
 
       "bundled.title": "同梱されるもの",
 
@@ -3131,7 +3117,7 @@
 
       "bundled.preset.inspect.tag": "behavior 3 つ",
 
-      "bundled.callout": "<strong>より豊かなカタログをお探しですか？</strong>参照オーケストレーター <a href=\"https://github.com/swoofer/essaim\">essaim</a><em>（近日公開）</em>には 32 以上の behavior、20 以上の preset、12 の事前合成テンプレート（バグハント、並列テスト、コードレビューなど）が含まれます —— すべて promptweave が実行時に組み立てます。",
+      "bundled.callout": "<strong>より豊かなカタログをお探しですか？</strong>参照オーケストレーター <a href=\"https://github.com/swoofer/essaim\">essaim</a>には 32 以上の behavior、20 以上の preset、12 の事前合成テンプレート（バグハント、並列テスト、コードレビューなど）が含まれます —— すべて promptweave が実行時に組み立てます。",
 
       "potential.title": "混乱からコンポジションへ",
 
