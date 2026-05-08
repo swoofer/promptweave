@@ -96,4 +96,25 @@ describe('skillRenderer.render', () => {
     const parsed = yaml.load(match![1]) as { description: string };
     expect(parsed.description).toBe('Use when: input has # markers\nor multi-line - prose');
   });
+
+  it('exactly one blank line between frontmatter and body, single trailing newline', () => {
+    const dest = tmpPath('whitespace');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    const output: AssembledOutput = {
+      ...minimalOutput,
+      prompt: '## Mission\nDo the thing.\n\n\n   ',  // trailing whitespace + extra newlines
+    };
+
+    skillRenderer.render(output, dest, { presetName: 'ws', description: 'd' });
+
+    const content = readFileSync(join(dest, 'ws', 'SKILL.md'), 'utf-8');
+    // Closing `---` then exactly one blank line then body
+    expect(content).toMatch(/---\n\n## Mission/);
+    // Body trailing whitespace stripped, single trailing newline at EOF
+    expect(content).toMatch(/Do the thing\.\n$/);
+    expect(content.endsWith('\n')).toBe(true);
+    expect(content.endsWith('\n\n')).toBe(false);
+  });
 });
