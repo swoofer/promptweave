@@ -354,7 +354,7 @@ describe('skillRenderer.render', () => {
       presetName: 'p',
       description: 'd',
       params: [{ name: 'lang', type: 'string', required: false, effectiveDefault: 'fr' }],
-    } as const;
+    };
 
     skillRenderer.render(minimalOutput, dest, args);
     const first = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
