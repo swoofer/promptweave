@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isAbsolute } from 'path';
 
 // --- Section key must match pattern "NNN-name" ---
 const sectionKeyPattern = /^\d{3}-[\w-]+$/;
@@ -59,7 +60,7 @@ export const BehaviorSchema = z.object({
   phase: PhaseSchema.optional(),
   applies_when: AppliesWhenSchema,
   side_car_files: z.record(z.string(), z.string()).optional().default({}).refine(
-    (files) => Object.keys(files).every((p) => !p.startsWith('/') && !p.includes('..') && !p.includes('\\')),
+    (files) => Object.keys(files).every((p) => !isAbsolute(p) && !p.includes('..') && !p.includes('\\')),
     { message: 'side_car_files paths must be relative, forward-slash, and not contain ..' }
   ),
 });

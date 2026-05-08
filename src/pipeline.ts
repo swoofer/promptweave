@@ -96,6 +96,7 @@ export function runPipeline(
   const { sideCarFiles, warnings: sideCarWarnings } = assembleSideCarFiles(
     [...composed.behaviors.values()],
     resolvedParams,
+    agentCtx,
   );
 
   // Step 5: Warnings

@@ -552,6 +552,49 @@ describe('skillRenderer.render', () => {
     expect(readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8')).toBe(firstMode);
   });
 
+  it('side-car file from prior render is intact after step-2 renameSync failure', async () => {
+    const dest = tmpPath('sidecar-step2-fail');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    // First render: creates dest/p/SKILL.md + dest/p/modes/local.md
+    const firstOutput: AssembledOutput = {
+      ...minimalOutput,
+      prompt: 'first version',
+      sideCarFiles: { 'modes/local.md': 'first mode content' },
+    };
+    skillRenderer.render(firstOutput, dest, { presetName: 'p', description: 'd' });
+
+    const firstSkill = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    const firstMode = readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8');
+    expect(firstMode).toBe('first mode content');
+
+    // Arm the mock to fail on the SECOND renameSync call (tmp → dest, after backup created)
+    renameControl.failOnCall = 2;
+    renameControl._callCount = 0;
+
+    const secondOutput: AssembledOutput = {
+      ...minimalOutput,
+      prompt: 'second version',
+      sideCarFiles: { 'modes/local.md': 'second mode content' },
+    };
+
+    expect(() => skillRenderer.render(secondOutput, dest, { presetName: 'p', description: 'd' }))
+      .toThrow();
+
+    // Disarm
+    renameControl.failOnCall = 0;
+
+    // Original SKILL.md AND side-car must be intact (restored from backup)
+    expect(readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8')).toBe(firstSkill);
+    expect(readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8')).toBe(firstMode);
+
+    // No tmp / bak dirs left behind
+    const entries = readdirSync(dest);
+    const stale = entries.filter((e) => e.startsWith('p.tmp.') || e.startsWith('p.bak.'));
+    expect(stale).toEqual([]);
+  });
+
   it('omits side-car directory when sideCarFiles is empty', () => {
     const dest = tmpPath('sidecar-empty');
     cleanup.push(dest);
