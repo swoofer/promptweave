@@ -193,4 +193,56 @@ describe('bundleRenderer.render', () => {
     const leakedTmps = readdirSync(parent).filter((e) => e.startsWith('pw-bundle-test-') && e.includes('write-error') && e.includes('.tmp.'));
     expect(leakedTmps).toEqual([]);
   });
+
+  it('writeOutput shim produces output identical to bundleRenderer.render (characterization)', async () => {
+    const targetA = tmpPath('shim-a');
+    const targetB = tmpPath('shim-b');
+    const projectRootA = tmpPath('shim-root-a');
+    const projectRootB = tmpPath('shim-root-b');
+    cleanupDirs.push(targetA, targetB, projectRootA, projectRootB);
+    mkdirSync(projectRootA, { recursive: true });
+    mkdirSync(projectRootB, { recursive: true });
+
+    const output: AssembledOutput = {
+      prompt: 'shim test',
+      phases: [],
+      hooks: { 'session-start': '#!/bin/bash\necho hi' },
+      mcpTools: ['tool_a'],
+      envVars: { K: 'v' },
+    };
+
+    bundleRenderer.render(output, targetA, { presetName: 'test', projectRoot: projectRootA });
+    const { writeOutput } = await import('../../src/writer.js');
+    writeOutput(targetB, output, projectRootB);
+
+    for (const f of ['generated-prompt.md', 'generated-mcp.json', '.coordinator-env']) {
+      expect(readFileSync(join(targetA, f), 'utf-8')).toBe(readFileSync(join(targetB, f), 'utf-8'));
+    }
+    expect(readFileSync(join(targetA, 'generated-hooks', 'session-start.sh'), 'utf-8'))
+      .toBe(readFileSync(join(targetB, 'generated-hooks', 'session-start.sh'), 'utf-8'));
+    expect(readFileSync(join(projectRootA, '.mcp.json'), 'utf-8'))
+      .toBe(readFileSync(join(projectRootB, '.mcp.json'), 'utf-8'));
+  });
+
+  it('produces byte-for-byte identical output across consecutive renders (characterization)', () => {
+    const target = tmpPath('idempotence');
+    cleanupDirs.push(target);
+
+    const output: AssembledOutput = {
+      ...minimalOutput,
+      hooks: { 'session-start': 'echo a' },
+      envVars: { A: '1', B: '2' },
+    };
+
+    bundleRenderer.render(output, target, { presetName: 'test' });
+    const first = readFileSync(join(target, 'generated-prompt.md'), 'utf-8');
+    const firstEnv = readFileSync(join(target, '.coordinator-env'), 'utf-8');
+
+    bundleRenderer.render(output, target, { presetName: 'test' });
+    const second = readFileSync(join(target, 'generated-prompt.md'), 'utf-8');
+    const secondEnv = readFileSync(join(target, '.coordinator-env'), 'utf-8');
+
+    expect(first).toBe(second);
+    expect(firstEnv).toBe(secondEnv);
+  });
 });
