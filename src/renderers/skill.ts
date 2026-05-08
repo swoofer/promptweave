@@ -48,6 +48,10 @@ export const skillRenderer: Renderer = {
       warnings.push(`[render] skill target ignores envVars declared by behaviors: ${envKeys.join(', ')}`);
     }
 
+    if (output.prompt.startsWith('---\n')) {
+      warnings.push('[render] composed prompt starts with frontmatter delimiter; rendered SKILL.md may have ambiguous frontmatter parsing');
+    }
+
     const description = ctx.description ?? '';
     const frontmatter = buildFrontmatter(ctx.presetName, description);
 

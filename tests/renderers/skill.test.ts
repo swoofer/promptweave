@@ -174,4 +174,16 @@ describe('skillRenderer.render', () => {
     const result = skillRenderer.render(output, dest, { presetName: 'p', description: 'd' });
     expect(result.warnings).toContain('[render] skill target ignores envVars declared by behaviors: FOO');
   });
+
+  it('warns when output.prompt starts with frontmatter delimiter', () => {
+    const dest = tmpPath('prompt-collision');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    const output: AssembledOutput = { ...minimalOutput, prompt: '---\nweird: value\n---\nactual content' };
+
+    const result = skillRenderer.render(output, dest, { presetName: 'p', description: 'd' });
+    expect(result.warnings).toContain('[render] composed prompt starts with frontmatter delimiter; rendered SKILL.md may have ambiguous frontmatter parsing');
+    expect(existsSync(join(dest, 'p', 'SKILL.md'))).toBe(true);
+  });
 });
