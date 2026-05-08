@@ -8,4 +8,6 @@ export { assemblePrompt, assembleHooks, assembleMcpTools, assembleEnvVars } from
 export { generateWarnings } from './warnings.js';
 export { runPipeline } from './pipeline.js';
 export { writeOutput } from './writer.js';
+export { bundleRenderer, registry } from './renderers/index.js';
+export type { Renderer, RenderContext, RenderResult, RenderedParam } from './renderers/index.js';
 export type * from './types.js';
