@@ -33,12 +33,20 @@ export const bundleRenderer: Renderer = {
         .join('\n');
       writeFileSync(join(tmpDir, '.coordinator-env'), envContent, 'utf-8');
 
-      // TODO atomicity: same rmSync→renameSync gap as the original skill renderer had —
-      // if renameSync throws here, destDir is already gone. Apply the backup-swap pattern
-      // from skill.ts (rename existing to .bak, then rename tmp into place, restore on fail).
-      // Pre-existing in writer.ts; tracked separately from skill-export PR.
-      if (existsSync(destDir)) rmSync(destDir, { recursive: true });
-      renameSync(tmpDir, destDir);
+      // Atomically swap: rename existing dir to backup, then rename tmp into place.
+      // If renameSync fails after backup, restore original so no data is lost.
+      const backupDir = `${destDir}.bak.${Date.now()}`;
+      const hadExisting = existsSync(destDir);
+      if (hadExisting) renameSync(destDir, backupDir);
+      try {
+        renameSync(tmpDir, destDir);
+      } catch (swapErr) {
+        // The swap failed — restore original from backup so no data is lost.
+        if (hadExisting && existsSync(backupDir)) renameSync(backupDir, destDir);
+        throw swapErr;
+      }
+      // Swap succeeded — remove backup (tmp is already renamed into place).
+      if (existsSync(backupDir)) rmSync(backupDir, { recursive: true });
 
       if (ctx.projectRoot) {
         const mcpJsonPath = join(ctx.projectRoot, '.mcp.json');
