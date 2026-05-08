@@ -1,7 +1,7 @@
 // tests/renderers/skill.test.ts
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { join, resolve } from 'path';
-import { mkdirSync, readFileSync, rmSync, existsSync, readdirSync } from 'fs';
+import { mkdirSync, readFileSync, rmSync, existsSync, readdirSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import yaml from 'js-yaml';
 import { skillRenderer } from '../../src/renderers/skill.js';
@@ -70,6 +70,7 @@ describe('skillRenderer.render', () => {
     hooks: {},
     mcpTools: [],
     envVars: {},
+    sideCarFiles: {},
   };
 
   it('writes SKILL.md with frontmatter using preset name and description', () => {
@@ -438,5 +439,169 @@ describe('skillRenderer.render', () => {
     const parsed = yaml.load(match![1]) as { name: string; description: string };
     expect(parsed.name).toBe('rt');
     expect(parsed.description).toBe('Use when you need to test round-trip');
+  });
+
+  it('merges extraFrontmatter into the YAML frontmatter', () => {
+    const dest = tmpPath('extra-frontmatter');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'p',
+      description: 'd',
+      extraFrontmatter: {
+        'argument-hint': '1-5 | step-name',
+        'allowed-tools': ['Read', 'Edit'],
+        'disable-model-invocation': true,
+      },
+    });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    const match = content.match(/^---\n([\s\S]+?)\n---\n/);
+    expect(match).not.toBeNull();
+    const parsed = yaml.load(match![1]) as Record<string, unknown>;
+
+    expect(parsed.name).toBe('p');
+    expect(parsed.description).toBe('d');
+    expect(parsed['argument-hint']).toBe('1-5 | step-name');
+    expect(parsed['allowed-tools']).toEqual(['Read', 'Edit']);
+    expect(parsed['disable-model-invocation']).toBe(true);
+  });
+
+  it('preset name and description always win over conflicting extraFrontmatter keys', () => {
+    const dest = tmpPath('extra-conflict');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'real-name',
+      description: 'real description',
+      extraFrontmatter: {
+        name: 'fake-name',
+        description: 'fake description',
+        'argument-hint': 'hint',
+      },
+    });
+
+    const content = readFileSync(join(dest, 'real-name', 'SKILL.md'), 'utf-8');
+    const match = content.match(/^---\n([\s\S]+?)\n---\n/);
+    const parsed = yaml.load(match![1]) as Record<string, string>;
+
+    expect(parsed.name).toBe('real-name');
+    expect(parsed.description).toBe('real description');
+    expect(parsed['argument-hint']).toBe('hint');
+  });
+
+  it('omits extra frontmatter when preset declares none', () => {
+    const dest = tmpPath('extra-none');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, { presetName: 'p', description: 'd' });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    const match = content.match(/^---\n([\s\S]+?)\n---\n/);
+    const parsed = yaml.load(match![1]) as Record<string, unknown>;
+
+    // Only name and description, nothing else
+    expect(Object.keys(parsed).sort()).toEqual(['description', 'name']);
+  });
+
+  it('writes side-car files alongside SKILL.md', () => {
+    const dest = tmpPath('sidecar-basic');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    const output: AssembledOutput = {
+      ...minimalOutput,
+      sideCarFiles: {
+        'modes/local.md': 'local mode content',
+        'references/std.md': 'standards content',
+      },
+    };
+
+    skillRenderer.render(output, dest, { presetName: 'p', description: 'd' });
+
+    expect(readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8')).toContain('Mission');
+    expect(readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8')).toBe('local mode content');
+    expect(readFileSync(join(dest, 'p', 'references', 'std.md'), 'utf-8')).toBe('standards content');
+  });
+
+  it('side-car file write is included in atomic swap (cleanup on failure)', async () => {
+    const dest = tmpPath('sidecar-atomic');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    // First successful render
+    const goodOutput: AssembledOutput = {
+      ...minimalOutput,
+      prompt: 'first',
+      sideCarFiles: { 'modes/local.md': 'first mode' },
+    };
+    skillRenderer.render(goodOutput, dest, { presetName: 'p', description: 'd' });
+    const firstSkill = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    const firstMode = readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8');
+    expect(firstMode).toBe('first mode');
+
+    // Second render fails on slug check (validation throws before any write)
+    expect(() => skillRenderer.render(goodOutput, dest, { presetName: 'BAD NAME', description: 'd' }))
+      .toThrow();
+
+    // Original folder + side-car intact
+    expect(readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8')).toBe(firstSkill);
+    expect(readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8')).toBe(firstMode);
+  });
+
+  it('side-car file from prior render is intact after step-2 renameSync failure', async () => {
+    const dest = tmpPath('sidecar-step2-fail');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    // First render: creates dest/p/SKILL.md + dest/p/modes/local.md
+    const firstOutput: AssembledOutput = {
+      ...minimalOutput,
+      prompt: 'first version',
+      sideCarFiles: { 'modes/local.md': 'first mode content' },
+    };
+    skillRenderer.render(firstOutput, dest, { presetName: 'p', description: 'd' });
+
+    const firstSkill = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    const firstMode = readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8');
+    expect(firstMode).toBe('first mode content');
+
+    // Arm the mock to fail on the SECOND renameSync call (tmp → dest, after backup created)
+    renameControl.failOnCall = 2;
+    renameControl._callCount = 0;
+
+    const secondOutput: AssembledOutput = {
+      ...minimalOutput,
+      prompt: 'second version',
+      sideCarFiles: { 'modes/local.md': 'second mode content' },
+    };
+
+    expect(() => skillRenderer.render(secondOutput, dest, { presetName: 'p', description: 'd' }))
+      .toThrow();
+
+    // Disarm
+    renameControl.failOnCall = 0;
+
+    // Original SKILL.md AND side-car must be intact (restored from backup)
+    expect(readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8')).toBe(firstSkill);
+    expect(readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8')).toBe(firstMode);
+
+    // No tmp / bak dirs left behind
+    const entries = readdirSync(dest);
+    const stale = entries.filter((e) => e.startsWith('p.tmp.') || e.startsWith('p.bak.'));
+    expect(stale).toEqual([]);
+  });
+
+  it('omits side-car directory when sideCarFiles is empty', () => {
+    const dest = tmpPath('sidecar-empty');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, { presetName: 'p', description: 'd' });
+
+    expect(existsSync(join(dest, 'p', 'modes'))).toBe(false);
   });
 });

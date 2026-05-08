@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isAbsolute } from 'path';
 
 // --- Section key must match pattern "NNN-name" ---
 const sectionKeyPattern = /^\d{3}-[\w-]+$/;
@@ -58,6 +59,10 @@ export const BehaviorSchema = z.object({
   mcp_tools: z.array(z.string()).optional().default([]),
   phase: PhaseSchema.optional(),
   applies_when: AppliesWhenSchema,
+  side_car_files: z.record(z.string(), z.string()).optional().default({}).refine(
+    (files) => Object.keys(files).every((p) => !isAbsolute(p) && !p.includes('..') && !p.includes('\\')),
+    { message: 'side_car_files paths must be relative, forward-slash, and not contain ..' }
+  ),
 });
 
 export const PresetSchema = z.object({
@@ -67,6 +72,7 @@ export const PresetSchema = z.object({
   model: z.string().optional(),
   behaviors: z.array(z.string()).min(1),
   params: z.record(z.string(), z.record(z.string(), z.unknown())).optional().default({}),
+  frontmatter: z.record(z.string(), z.unknown()).optional().default({}),
 });
 
 export const AgentSchema = z.object({
@@ -175,6 +181,7 @@ export interface AssembledOutput {
   hooks: Record<string, string>;   // lifecycle-point → shell script content
   mcpTools: string[];
   envVars: Record<string, string>;
+  sideCarFiles: Record<string, string>;  // relative path → file content
 }
 
 export interface PipelineResult {
