@@ -3,10 +3,11 @@ import { resolve } from "path";
 import { existsSync, readFileSync } from "fs";
 import yaml from "js-yaml";
 import { runPipeline } from "../src/pipeline.js";
-import { writeOutput } from "../src/writer.js";
 import { AgentSchema } from "../src/types.js";
 import { resolveRoot } from "./paths.js";
 import { collect, parseSetParams } from "./params.js";
+import { registry } from "../src/renderers/index.js";
+import type { RenderedParam } from "../src/renderers/index.js";
 
 export function createBuildCommand(): Command {
   return new Command("build")
@@ -16,8 +17,15 @@ export function createBuildCommand(): Command {
     .option("--dry-run", "Print the assembled output to stdout without writing files")
     .option("--set <key=value>", "Parameter override, repeatable (e.g., --set bug-hunting.modules='[\"src/auth\"]')", collect, [])
     .option("--output <dir>", "Output directory (default: .claude/promptweave in cwd)")
-    .action((agentName: string, opts: { root?: string; dryRun?: boolean; set: string[]; output?: string }) => {
+    .option("--target <type>", "Output target: 'bundle' (default) or 'skill'", "bundle")
+    .action((agentName: string, opts: { root?: string; dryRun?: boolean; set: string[]; output?: string; target: string }) => {
       const root = resolveRoot(opts.root);
+      const target = opts.target;
+      const renderer = registry[target];
+      if (!renderer) {
+        console.error(`Unknown target '${target}'. Valid: ${Object.keys(registry).join(', ')}`);
+        process.exit(1);
+      }
       const agentPath = resolve(root, "agents", `${agentName}.yaml`);
 
       let agent;
@@ -74,12 +82,20 @@ export function createBuildCommand(): Command {
           }
         }
       } else {
-        const outputDir = opts.output ?? resolve(process.cwd(), ".claude", "promptweave");
-        writeOutput(outputDir, result.output);
+        const defaultOutput = target === 'skill'
+          ? resolve(process.cwd(), '.claude', 'skills')
+          : resolve(process.cwd(), '.claude', 'promptweave');
+        const outputDir = opts.output ?? defaultOutput;
+
+        const renderResult = renderer.render(result.output, outputDir, {
+          presetName: agent.preset ?? agent.name,
+          projectRoot: process.cwd(),
+        });
+
         console.log(`OK Output written to ${outputDir}`);
-        if (result.warnings.length > 0) {
-          for (const w of result.warnings) console.log(`  ! ${w}`);
-        }
+
+        for (const w of result.warnings) console.log(`  ! [pipeline] ${w}`);
+        for (const w of renderResult.warnings) console.log(`  ${w}`); // already prefixed with [render]
       }
     });
 }
