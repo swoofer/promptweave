@@ -35,3 +35,7 @@ export const registry: Record<string, Renderer> = {};
 import { bundleRenderer } from './bundle.js';
 registry.bundle = bundleRenderer;
 export { bundleRenderer };
+
+import { skillRenderer } from './skill.js';
+registry.skill = skillRenderer;
+export { skillRenderer };
