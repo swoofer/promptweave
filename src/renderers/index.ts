@@ -31,3 +31,7 @@ export interface Renderer {
 
 // Registry populated as renderers land. After Task 2 + 8 it contains 'bundle' and 'skill'.
 export const registry: Record<string, Renderer> = {};
+
+import { bundleRenderer } from './bundle.js';
+registry.bundle = bundleRenderer;
+export { bundleRenderer };
