@@ -30,6 +30,11 @@ export const skillRenderer: Renderer = {
       );
     }
 
+    const hookKeys = Object.keys(output.hooks);
+    if (hookKeys.length > 0) {
+      warnings.push(`[render] skill target ignores hooks declared by behaviors: ${hookKeys.join(', ')}`);
+    }
+
     const description = ctx.description ?? '';
     const frontmatter = buildFrontmatter(ctx.presetName, description);
 

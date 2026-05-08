@@ -117,4 +117,23 @@ describe('skillRenderer.render', () => {
     expect(content.endsWith('\n')).toBe(true);
     expect(content.endsWith('\n\n')).toBe(false);
   });
+
+  it('warns and drops hooks declared by composing behaviors', () => {
+    const dest = tmpPath('drop-hooks');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    const output: AssembledOutput = {
+      ...minimalOutput,
+      hooks: { 'session-start': '#!/bin/bash\necho start' },
+    };
+
+    const result = skillRenderer.render(output, dest, { presetName: 'p', description: 'd' });
+    expect(result.warnings).toEqual([
+      '[render] skill target ignores hooks declared by behaviors: session-start',
+    ]);
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(content).not.toContain('echo start');
+  });
 });
