@@ -149,4 +149,18 @@ describe('skillRenderer.render', () => {
       '[render] skill target ignores mcp_tools declared by behaviors: some_tool',
     ]);
   });
+
+  it('warns when phases are declared', () => {
+    const dest = tmpPath('drop-phases');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    const output: AssembledOutput = {
+      ...minimalOutput,
+      phases: [{ name: 'discover', prompt: 'p', toolsMode: 'read_only', loop: false }],
+    };
+
+    const result = skillRenderer.render(output, dest, { presetName: 'p', description: 'd' });
+    expect(result.warnings).toContain('[render] skill target ignores phases declared by behaviors: discover');
+  });
 });

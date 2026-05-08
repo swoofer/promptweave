@@ -39,6 +39,10 @@ export const skillRenderer: Renderer = {
       warnings.push(`[render] skill target ignores mcp_tools declared by behaviors: ${output.mcpTools.join(', ')}`);
     }
 
+    if (output.phases.length > 0) {
+      warnings.push(`[render] skill target ignores phases declared by behaviors: ${output.phases.map((p) => p.name).join(', ')}`);
+    }
+
     const description = ctx.description ?? '';
     const frontmatter = buildFrontmatter(ctx.presetName, description);
 
