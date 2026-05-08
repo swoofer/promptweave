@@ -7,19 +7,30 @@ import yaml from 'js-yaml';
 import { skillRenderer } from '../../src/renderers/skill.js';
 import type { AssembledOutput } from '../../src/types.js';
 
-// vi.hoisted ensures this flag is initialised before vi.mock factories run.
-// The mock factory closes over the returned object so the test can arm the
-// one-shot renameSync failure simply by setting renameControl.fail = true.
-const renameControl = vi.hoisted(() => ({ fail: false }));
+// vi.hoisted ensures this object is initialised before vi.mock factories run.
+// The mock factory closes over the returned object so tests can arm failures:
+//   renameControl.fail = true          → fail on the very next renameSync call (one-shot)
+//   renameControl.failOnCall = N (> 0) → fail on the N-th renameSync call in this render (one-shot, resets after trigger)
+const renameControl = vi.hoisted(() => ({ fail: false, failOnCall: 0, _callCount: 0 }));
 
 vi.mock('fs', async () => {
   const actual = await vi.importActual<typeof import('fs')>('fs');
   return {
     ...actual,
     renameSync: (oldPath: string, newPath: string) => {
+      // Step-1 one-shot: fail immediately on next call
       if (renameControl.fail) {
         renameControl.fail = false;
         throw new Error('simulated rename failure');
+      }
+      // Step-N one-shot: count calls, fail on the N-th
+      if (renameControl.failOnCall > 0) {
+        renameControl._callCount++;
+        if (renameControl._callCount >= renameControl.failOnCall) {
+          renameControl.failOnCall = 0;
+          renameControl._callCount = 0;
+          throw new Error('simulated step-2 rename failure');
+        }
       }
       actual.renameSync(oldPath, newPath);
     },
@@ -313,6 +324,41 @@ describe('skillRenderer.render', () => {
     const entries = readdirSync(dest);
     const tmpEntries = entries.filter((e) => e.startsWith('p.tmp.'));
     expect(tmpEntries).toEqual([]);
+  });
+
+  it('restores backup when renameSync fails AFTER backup was created (step 2 failure)', () => {
+    const dest = tmpPath('atomicity-step2');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    // First render succeeds — creates dest/p/SKILL.md
+    skillRenderer.render({ ...minimalOutput, prompt: 'first version' }, dest, {
+      presetName: 'p',
+      description: 'd',
+    });
+    const firstContent = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(firstContent).toContain('first version');
+
+    // Arm: fail on the SECOND renameSync call within the next render
+    // (first call: skillFolder → backupFolder succeeds; second call: tmp → skillFolder fails)
+    renameControl.failOnCall = 2;
+    renameControl._callCount = 0;
+
+    // Second render should attempt step 1 (success), then step 2 (fail), then restore backup
+    expect(() =>
+      skillRenderer.render({ ...minimalOutput, prompt: 'second version' }, dest, {
+        presetName: 'p',
+        description: 'd',
+      }),
+    ).toThrow(/step-2 rename failure/);
+
+    // Original folder content must be intact (restored from backup)
+    expect(readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8')).toBe(firstContent);
+
+    // No tmp dir, no .bak dir left behind
+    const entries = readdirSync(dest);
+    const stale = entries.filter((e) => e.startsWith('p.tmp.') || e.startsWith('p.bak.'));
+    expect(stale).toEqual([]);
   });
 
   it('writes file with UTF-8 encoding (BOM-free, valid for non-ASCII content)', () => {
