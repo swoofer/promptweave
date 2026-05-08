@@ -18,8 +18,11 @@ describe('bundleRenderer.render', () => {
       try { if (existsSync(dir)) rmSync(dir, { recursive: true, force: true }); } catch { /* ignore EBUSY on Windows */ }
     }
     // Sweep only OUR test prefix's tmp siblings, never the entire os.tmpdir().
-    for (const dir of [...cleanupDirs]) {
+    const parentsSeen = new Set<string>();
+    for (const dir of cleanupDirs) {
       const parent = resolve(dir, '..');
+      if (parentsSeen.has(parent)) continue;
+      parentsSeen.add(parent);
       try {
         const entries = readdirSync(parent);
         for (const e of entries) {
@@ -183,5 +186,11 @@ describe('bundleRenderer.render', () => {
     };
 
     expect(() => bundleRenderer.render(output, targetDir, { presetName: 'test' })).toThrow();
+
+    // Verify the tmp dir created during the failed render was cleaned up.
+    // The tmp dir name is `${targetDir}.tmp.<timestamp>`, so we scan the parent for any leftovers.
+    const parent = resolve(targetDir, '..');
+    const leakedTmps = readdirSync(parent).filter((e) => e.startsWith('pw-bundle-test-') && e.includes('write-error') && e.includes('.tmp.'));
+    expect(leakedTmps).toEqual([]);
   });
 });
