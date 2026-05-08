@@ -163,4 +163,15 @@ describe('skillRenderer.render', () => {
     const result = skillRenderer.render(output, dest, { presetName: 'p', description: 'd' });
     expect(result.warnings).toContain('[render] skill target ignores phases declared by behaviors: discover');
   });
+
+  it('warns when envVars are declared', () => {
+    const dest = tmpPath('drop-env');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    const output: AssembledOutput = { ...minimalOutput, envVars: { FOO: 'bar' } };
+
+    const result = skillRenderer.render(output, dest, { presetName: 'p', description: 'd' });
+    expect(result.warnings).toContain('[render] skill target ignores envVars declared by behaviors: FOO');
+  });
 });
