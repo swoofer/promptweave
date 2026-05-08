@@ -1,0 +1,5 @@
+name: inspector
+description: "Use when inspecting projects (includes hooks for testing warnings)"
+behaviors:
+  - no-params
+  - with-hooks

@@ -1,0 +1,7 @@
+name: translator
+description: "Use when translating text from one language to another"
+behaviors:
+  - translation
+params:
+  translation:
+    tone: "neutral"
