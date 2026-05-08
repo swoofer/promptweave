@@ -35,6 +35,10 @@ export const skillRenderer: Renderer = {
       warnings.push(`[render] skill target ignores hooks declared by behaviors: ${hookKeys.join(', ')}`);
     }
 
+    if (output.mcpTools.length > 0) {
+      warnings.push(`[render] skill target ignores mcp_tools declared by behaviors: ${output.mcpTools.join(', ')}`);
+    }
+
     const description = ctx.description ?? '';
     const frontmatter = buildFrontmatter(ctx.presetName, description);
 
