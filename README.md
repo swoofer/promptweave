@@ -10,14 +10,12 @@
 
 ## What it does
 
-You write small YAML behaviors (one rule each: "wait for upstream agent", "announce target files before writing", "use read-only mode"). You declare a preset (a list of behaviors), and `promptweave` assembles them into:
+You write small YAML behaviors (one rule each: "wait for upstream agent", "announce target files before writing", "use read-only mode"). You declare a preset (a list of behaviors), and `promptweave` assembles them into one of two output formats:
 
-- a **prompt** (sections sorted by number, deduped, composed)
-- **hook scripts** (per lifecycle: SessionStart, PreToolUse, etc.)
-- a **`.mcp.json`** with declared MCP tools
-- **environment variables** for the agent's runtime
+- **Bundle** (`--target bundle`, default): a **prompt** + **hook scripts** + a **`.mcp.json`** + **environment variables** — a complete agent runtime profile.
+- **Skill** (`--target skill`): a single Anthropic-standard **`SKILL.md`** with frontmatter and an auto-generated `## Parameters` section — ready to publish to a Claude Code skill catalog.
 
-The same behavior catalog can target Claude Code, Cursor, Aider, or any agent framework that consumes prompts + hooks + MCP configs.
+The same behavior catalog can target Claude Code (as a runtime bundle or a published skill), Cursor, Aider, or any agent framework that consumes prompts + hooks + MCP configs.
 
 ---
 
@@ -42,7 +40,9 @@ The same behavior catalog can target Claude Code, Cursor, Aider, or any agent fr
                                 │
               ┌─────────────────┼─────────────────┐
               ▼                 ▼                 ▼
-        prompt.md         hooks/*.sh         .mcp.json
+        prompt.md         hooks/*.sh         .mcp.json     ──── --target bundle (default)
+                                  or
+                              SKILL.md                     ──── --target skill
 ```
 
 Each step is a discrete pass over the in-memory registry. The engine is deterministic — same inputs produce identical outputs, so generated prompts/hooks are diffable in version control.
@@ -53,11 +53,12 @@ Each step is a discrete pass over the in-memory registry. The engine is determin
 
 ```bash
 npm install -g @swoofer/promptweave
-promptweave list behaviors                     # 4 generic behaviors ship bundled
-promptweave list presets                        # 2 demo presets: dev, inspect
-promptweave build inspect --dry-run             # preview a preset
-promptweave build inspect                       # write to ./.claude/promptweave/
-promptweave build inspect --root ./my-prompts   # use your own behaviors/presets/compositions/
+promptweave list behaviors                              # 4 generic behaviors ship bundled
+promptweave list presets                                 # 2 demo presets: dev, inspect
+promptweave build inspect --dry-run                      # preview a preset (bundle)
+promptweave build inspect                                # write bundle to ./.claude/promptweave/
+promptweave build inspect --target skill                 # write SKILL.md to ./.claude/skills/inspect/
+promptweave build inspect --root ./my-prompts            # use your own behaviors/presets/compositions/
 ```
 
 ---
