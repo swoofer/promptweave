@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { resolve } from "path";
+import { resolve, join } from "path";
 import { existsSync, readFileSync } from "fs";
 import yaml from "js-yaml";
 import { runPipeline } from "../src/pipeline.js";
@@ -54,7 +54,7 @@ export function createBuildCommand(): Command {
     .option("--set <key=value>", "Parameter override, repeatable (e.g., --set bug-hunting.modules='[\"src/auth\"]')", collect, [])
     .option("--output <dir>", "Output directory (default: .claude/promptweave in cwd)")
     .option("--target <type>", "Output target: 'bundle' (default) or 'skill'", "bundle")
-    .action((agentName: string, opts: { root?: string; dryRun?: boolean; set: string[]; output?: string; target: string }) => {
+    .action(async (agentName: string, opts: { root?: string; dryRun?: boolean; set: string[]; output?: string; target: string }) => {
       const root = resolveRoot(opts.root);
       const target = opts.target;
       const renderer = registry[target];
@@ -87,6 +87,41 @@ export function createBuildCommand(): Command {
           for (const r of result.compositionRulesApplied) console.log(`  + ${r}`);
         }
 
+        if (target === 'skill') {
+          // Render to a tmp dir so we can read the produced SKILL.md and print it
+          const { tmpdir } = await import("os");
+          const { rmSync, readFileSync, mkdirSync } = await import("fs");
+          const tmpDest = join(tmpdir(), `pw-dryrun-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+          mkdirSync(tmpDest, { recursive: true });
+
+          const registryInstance = Registry.load(root);
+          const { description, params } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
+          let renderResult;
+          try {
+            renderResult = renderer.render(result.output, tmpDest, {
+              presetName: agent.preset ?? agent.name,
+              description,
+              params,
+            });
+
+            console.log("\n=== Warnings ===");
+            const all = [
+              ...result.warnings.map((w) => `  ! [pipeline] ${w}`),
+              ...renderResult.warnings.map((w) => `  ${w}`),
+            ];
+            if (all.length === 0) console.log("  (none)");
+            else for (const w of all) console.log(w);
+
+            console.log("\n=== SKILL.md ===");
+            const skillContent = readFileSync(join(tmpDest, agent.preset ?? agent.name, "SKILL.md"), "utf-8");
+            console.log(skillContent);
+          } finally {
+            try { rmSync(tmpDest, { recursive: true, force: true }); } catch { /* ignore */ }
+          }
+          return;
+        }
+
+        // Bundle dry-run: preserve existing behavior verbatim.
         console.log("\n=== Warnings ===");
         if (result.warnings.length === 0) {
           console.log("  (none)");
