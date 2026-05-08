@@ -43,6 +43,11 @@ export const skillRenderer: Renderer = {
       warnings.push(`[render] skill target ignores phases declared by behaviors: ${output.phases.map((p) => p.name).join(', ')}`);
     }
 
+    const envKeys = Object.keys(output.envVars);
+    if (envKeys.length > 0) {
+      warnings.push(`[render] skill target ignores envVars declared by behaviors: ${envKeys.join(', ')}`);
+    }
+
     const description = ctx.description ?? '';
     const frontmatter = buildFrontmatter(ctx.presetName, description);
 
