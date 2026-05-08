@@ -33,6 +33,10 @@ export const bundleRenderer: Renderer = {
         .join('\n');
       writeFileSync(join(tmpDir, '.coordinator-env'), envContent, 'utf-8');
 
+      // TODO atomicity: same rmSync→renameSync gap as the original skill renderer had —
+      // if renameSync throws here, destDir is already gone. Apply the backup-swap pattern
+      // from skill.ts (rename existing to .bak, then rename tmp into place, restore on fail).
+      // Pre-existing in writer.ts; tracked separately from skill-export PR.
       if (existsSync(destDir)) rmSync(destDir, { recursive: true });
       renameSync(tmpDir, destDir);
 
