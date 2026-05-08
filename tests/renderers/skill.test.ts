@@ -136,4 +136,17 @@ describe('skillRenderer.render', () => {
     const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
     expect(content).not.toContain('echo start');
   });
+
+  it('warns and drops mcpTools declared by composing behaviors', () => {
+    const dest = tmpPath('drop-mcp');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    const output: AssembledOutput = { ...minimalOutput, mcpTools: ['some_tool'] };
+
+    const result = skillRenderer.render(output, dest, { presetName: 'p', description: 'd' });
+    expect(result.warnings).toEqual([
+      '[render] skill target ignores mcp_tools declared by behaviors: some_tool',
+    ]);
+  });
 });
