@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>promptweave — YAML composer for prompts, hooks, and MCP configs</title>
 
-  <meta name="description" content="YAML composer for assembling agent prompts, hooks, and MCP configs from reusable behaviors. Vendor-agnostic — works with Claude Code, Cursor, Aider. Deterministic output, MIT-licensed." />
-  <meta name="keywords" content="claude code, mcp, model context protocol, anthropic, prompt engineering, ai agents, yaml, prompt composer, multi-agent, llm tooling, cursor, aider" />
+  <meta name="description" content="YAML composer for agent prompts, hooks, MCP configs, and Claude Code skills (SKILL.md) from reusable behaviors. Vendor-agnostic. Deterministic output, MIT-licensed." />
+  <meta name="keywords" content="claude code, claude code skill, SKILL.md, skill catalog, mcp, model context protocol, anthropic, prompt engineering, ai agents, yaml, prompt composer, multi-agent, llm tooling, cursor, aider" />
   <meta name="author" content="Maxime Gagnon (swoofer)" />
   <link rel="canonical" href="https://swoofer.github.io/promptweave/" />
 
@@ -14,14 +14,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://swoofer.github.io/promptweave/" />
   <meta property="og:title" content="promptweave — YAML composer for AI agent prompts" />
-  <meta property="og:description" content="Compose agent prompts, hooks, and MCP configs from reusable YAML behaviors. Vendor-agnostic, deterministic, MIT-licensed." />
+  <meta property="og:description" content="YAML composer for agent prompts, hooks, MCP configs, and Claude Code skills (SKILL.md) from reusable behaviors. Vendor-agnostic. Deterministic output, MIT-licensed." />
   <meta property="og:site_name" content="promptweave" />
   <meta property="og:image" content="https://opengraph.githubassets.com/1/swoofer/promptweave" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="promptweave — YAML composer for AI agent prompts" />
-  <meta name="twitter:description" content="Compose agent prompts, hooks, and MCP configs from reusable YAML behaviors. Vendor-agnostic, deterministic, MIT-licensed." />
+  <meta name="twitter:description" content="YAML composer for agent prompts, hooks, MCP configs, and Claude Code skills (SKILL.md) from reusable behaviors. Vendor-agnostic. Deterministic output, MIT-licensed." />
   <meta name="twitter:image" content="https://opengraph.githubassets.com/1/swoofer/promptweave" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1430,7 +1430,7 @@
       <div class="hero-term-line"><span class="t-dim">$</span> <span class="t-green">promptweave</span> build inspect <span class="t-yellow">--dry-run</span></div>
       <div class="hero-term-line"><span class="t-dim">resolve</span> <span class="t-blue">inspect</span> <span class="t-dim">&rarr;</span> [project-context, worktree-isolation, read-only-mode]</div>
       <div class="hero-term-line"><span class="t-dim">validate</span> <span class="t-green">3/3 ok</span> <span class="t-dim">&middot;</span> <span class="t-dim">compose</span> <span class="t-green">1 rule applied (announce-readonly)</span></div>
-      <div class="hero-term-line"><span class="t-green">&#9989; assemble</span> <span class="t-dim">&rarr;</span> prompt.md <span class="t-dim">+</span> hooks/*.sh <span class="t-dim">+</span> .mcp.json <span class="t-dim">&mdash; deterministic, diffable</span></div>
+      <div class="hero-term-line"><span class="t-green">&#9989; assemble</span> <span class="t-dim">&rarr;</span> prompt.md <span class="t-dim">+</span> hooks/*.sh <span class="t-dim">+</span> .mcp.json <span class="t-dim">|</span> SKILL.md <span class="t-dim">&mdash; deterministic, diffable</span></div>
     </div>
 
     <div class="hero-cta">
@@ -1846,8 +1846,8 @@
       <div class="install-card">
         <div class="install-step" data-i18n="install.step3.label">Step 3</div>
         <h3 data-i18n="install.step3.title">Build a preset</h3>
-        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step3.desc">Preview the composition with <code style="color:var(--accent);font-size:0.85em;">--dry-run</code>. Drop the flag to write prompt.md, hooks, and .mcp.json into <code style="color:var(--accent);font-size:0.85em;">./.claude/promptweave/</code>.</p>
-        <div class="code-block">promptweave build inspect --dry-run<br/><span style="color:var(--muted)"># then for real:</span><br/>promptweave build inspect</div>
+        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step3.desc">Preview the composition with <code style="color:var(--accent);font-size:0.85em;">--dry-run</code>. Drop the flag to write a bundle (prompt.md + hooks + .mcp.json) into <code style="color:var(--accent);font-size:0.85em;">./.claude/promptweave/</code>, or pass <code style="color:var(--accent);font-size:0.85em;">--target skill</code> to write a Claude Code <code style="color:var(--accent);font-size:0.85em;">SKILL.md</code> instead.</p>
+        <div class="code-block">promptweave build inspect --dry-run<br/><span style="color:var(--muted)"># bundle (default):</span><br/>promptweave build inspect<br/><span style="color:var(--muted)"># or as a Claude Code skill:</span><br/>promptweave build inspect --target skill</div>
       </div>
     </div>
   </div>
@@ -2192,7 +2192,7 @@
       "install.step2.desc": "4 demo behaviors and 2 demo presets ship bundled. Real-world catalogs live in your repo via --root.",
       "install.step3.label": "Step 3",
       "install.step3.title": "Build a preset",
-      "install.step3.desc": "Preview a composition with --dry-run, then drop the flag to write prompt.md, hooks, and .mcp.json into ./.claude/promptweave/.",
+      "install.step3.desc": "Preview the composition with <code>--dry-run</code>. Drop the flag to write a bundle (prompt.md + hooks + .mcp.json) into <code>./.claude/promptweave/</code>, or pass <code>--target skill</code> to write a Claude Code <code>SKILL.md</code> instead.",
       "roadmap.title": "Roadmap",
       "roadmap.subtitle": "Where the engine is going next.",
       "roadmap.badge.done": "Done",
@@ -2445,7 +2445,7 @@
       "install.step2.desc": "4 behaviors de démo et 2 presets de démo sont inclus. Les catalogues réels vivent dans votre repo via --root.",
       "install.step3.label": "Étape 3",
       "install.step3.title": "Buildez un preset",
-      "install.step3.desc": "Prévisualisez une composition avec --dry-run, puis retirez le flag pour écrire prompt.md, les hooks et .mcp.json dans ./.claude/promptweave/.",
+      "install.step3.desc": "Prévisualise la composition avec <code>--dry-run</code>. Sans le flag, écrit un bundle (prompt.md + hooks + .mcp.json) dans <code>./.claude/promptweave/</code>, ou passe <code>--target skill</code> pour écrire un <code>SKILL.md</code> Claude Code à la place.",
       "roadmap.title": "Feuille de route",
       "roadmap.subtitle": "Où le moteur va ensuite.",
       "roadmap.badge.done": "Fait",
@@ -2698,7 +2698,7 @@
       "install.step2.desc": "Se incluyen 4 behaviors demo y 2 presets demo. Los catálogos reales viven en su repo vía --root.",
       "install.step3.label": "Paso 3",
       "install.step3.title": "Compile un preset",
-      "install.step3.desc": "Previsualice una composición con --dry-run, luego quite el flag para escribir prompt.md, hooks y .mcp.json en ./.claude/promptweave/.",
+      "install.step3.desc": "Previsualiza la composición con <code>--dry-run</code>. Sin el flag, escribe un bundle (prompt.md + hooks + .mcp.json) en <code>./.claude/promptweave/</code>, o pasa <code>--target skill</code> para escribir un <code>SKILL.md</code> de Claude Code en su lugar.",
       "roadmap.title": "Hoja de ruta",
       "roadmap.subtitle": "Adónde va el motor a continuación.",
       "roadmap.badge.done": "Hecho",
@@ -2951,7 +2951,7 @@
       "install.step2.desc": "4 Demo-Behaviors und 2 Demo-Presets werden mitgeliefert. Reale Kataloge leben in Ihrem Repo über --root.",
       "install.step3.label": "Schritt 3",
       "install.step3.title": "Bauen Sie ein Preset",
-      "install.step3.desc": "Mit --dry-run eine Komposition vorab anzeigen, dann das Flag weglassen, um prompt.md, Hooks und .mcp.json in ./.claude/promptweave/ zu schreiben.",
+      "install.step3.desc": "Vorschau der Komposition mit <code>--dry-run</code>. Ohne das Flag wird ein Bundle (prompt.md + hooks + .mcp.json) in <code>./.claude/promptweave/</code> geschrieben, oder mit <code>--target skill</code> wird stattdessen eine Claude Code <code>SKILL.md</code> erzeugt.",
       "roadmap.title": "Roadmap",
       "roadmap.subtitle": "Wohin sich die Engine als nächstes entwickelt.",
       "roadmap.badge.done": "Erledigt",
@@ -3204,7 +3204,7 @@
       "install.step2.desc": "捆绑了 4 个示例 behavior 和 2 个示例 preset。真实目录通过 --root 放在您的 repo 中。",
       "install.step3.label": "第 3 步",
       "install.step3.title": "构建一个 preset",
-      "install.step3.desc": "使用 --dry-run 预览一次组合，然后去掉该标志将 prompt.md、hooks 和 .mcp.json 写入 ./.claude/promptweave/。",
+      "install.step3.desc": "使用 <code>--dry-run</code> 预览组装结果。去掉该标志会将 bundle（prompt.md + hooks + .mcp.json）写入 <code>./.claude/promptweave/</code>，或使用 <code>--target skill</code> 改为生成 Claude Code 的 <code>SKILL.md</code>。",
       "roadmap.title": "路线图",
       "roadmap.subtitle": "引擎下一步的方向。",
       "roadmap.badge.done": "已完成",
@@ -3457,7 +3457,7 @@
       "install.step2.desc": "デモ behavior 4 つとデモ preset 2 つが同梱されています。実用的なカタログは --root で自分のリポジトリ内に置きます。",
       "install.step3.label": "ステップ 3",
       "install.step3.title": "preset をビルド",
-      "install.step3.desc": "--dry-run でコンポジションをプレビューし、フラグを外すと prompt.md、フック、.mcp.json が ./.claude/promptweave/ に書き出されます。",
+      "install.step3.desc": "<code>--dry-run</code> でコンポジションをプレビュー。フラグを外すと bundle (prompt.md + hooks + .mcp.json) を <code>./.claude/promptweave/</code> に書き出し、<code>--target skill</code> を渡すと代わりに Claude Code の <code>SKILL.md</code> を出力します。",
       "roadmap.title": "ロードマップ",
       "roadmap.subtitle": "エンジンの次の方向性。",
       "roadmap.badge.done": "完了",
