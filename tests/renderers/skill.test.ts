@@ -314,4 +314,83 @@ describe('skillRenderer.render', () => {
     const tmpEntries = entries.filter((e) => e.startsWith('p.tmp.'));
     expect(tmpEntries).toEqual([]);
   });
+
+  it('writes file with UTF-8 encoding (BOM-free, valid for non-ASCII content)', () => {
+    const dest = tmpPath('encoding');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render({ ...minimalOutput, prompt: 'Bonjour — ça va? 中文' }, dest, {
+      presetName: 'enc', description: 'desc with é and 中',
+    });
+
+    const buf = readFileSync(join(dest, 'enc', 'SKILL.md'));
+    // No UTF-8 BOM (EF BB BF)
+    expect(buf[0]).not.toBe(0xEF);
+    // Round-trip via utf-8 yields the original prose
+    const text = buf.toString('utf-8');
+    expect(text).toContain('Bonjour — ça va? 中文');
+  });
+
+  it('uses LF line endings on all platforms (no CRLF in written content)', () => {
+    const dest = tmpPath('lf');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render({ ...minimalOutput, prompt: 'line1\nline2\nline3' }, dest, {
+      presetName: 'lf', description: 'd',
+    });
+
+    const buf = readFileSync(join(dest, 'lf', 'SKILL.md'));
+    expect(buf.includes(0x0D)).toBe(false); // no carriage returns
+  });
+
+  it('produces byte-for-byte identical SKILL.md across consecutive renders', () => {
+    const dest = tmpPath('skill-idempotence');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    const args = {
+      presetName: 'p',
+      description: 'd',
+      params: [{ name: 'lang', type: 'string', required: false, effectiveDefault: 'fr' }],
+    } as const;
+
+    skillRenderer.render(minimalOutput, dest, args);
+    const first = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+
+    skillRenderer.render(minimalOutput, dest, args);
+    const second = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+
+    expect(first).toBe(second);
+  });
+
+  it('writes SKILL.md to <destDir>/<presetName>/SKILL.md', () => {
+    const dest = tmpPath('output-dir');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, { presetName: 'my-skill', description: 'd' });
+
+    expect(existsSync(join(dest, 'my-skill', 'SKILL.md'))).toBe(true);
+  });
+
+  it('produces valid YAML frontmatter that round-trips via js-yaml.load', () => {
+    const dest = tmpPath('roundtrip');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'rt',
+      description: 'Use when you need to test round-trip',
+    });
+
+    const content = readFileSync(join(dest, 'rt', 'SKILL.md'), 'utf-8');
+    const match = content.match(/^---\n([\s\S]+?)\n---\n/);
+    expect(match).not.toBeNull();
+
+    const parsed = yaml.load(match![1]) as { name: string; description: string };
+    expect(parsed.name).toBe('rt');
+    expect(parsed.description).toBe('Use when you need to test round-trip');
+  });
 });
