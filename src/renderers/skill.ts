@@ -21,9 +21,11 @@ function renderParamsSection(params: RenderedParam[]): string {
   return `## Parameters\n\n${params.map(renderParam).join('\n')}`;
 }
 
-function buildFrontmatter(name: string, description: string): string {
+function buildFrontmatter(name: string, description: string, extra: Record<string, unknown> = {}): string {
   // Use yaml.dump for safe serialization — handles ':' '#' '\n' '-' in values automatically.
-  const dumped = yaml.dump({ name, description }, { lineWidth: -1, noRefs: true }).trimEnd();
+  // name and description always win, even if extra declares them.
+  const merged = { ...extra, name, description };
+  const dumped = yaml.dump(merged, { lineWidth: -1, noRefs: true }).trimEnd();
   return `---\n${dumped}\n---`;
 }
 
@@ -67,7 +69,7 @@ export const skillRenderer: Renderer = {
     }
 
     const description = ctx.description ?? '';
-    const frontmatter = buildFrontmatter(ctx.presetName, description);
+    const frontmatter = buildFrontmatter(ctx.presetName, description, ctx.extraFrontmatter);
 
     const stripped = output.prompt.replace(/\s+$/, '');
     const paramsSection = (ctx.params && ctx.params.length > 0) ? renderParamsSection(ctx.params) : null;

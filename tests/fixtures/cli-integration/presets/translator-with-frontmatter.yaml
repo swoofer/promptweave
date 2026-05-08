@@ -1,0 +1,10 @@
+name: translator-with-frontmatter
+description: "Translator with extra frontmatter for testing"
+behaviors:
+  - translation
+params:
+  translation:
+    tone: "neutral"
+frontmatter:
+  argument-hint: "lang | tone"
+  disable-model-invocation: true

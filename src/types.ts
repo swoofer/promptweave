@@ -67,6 +67,7 @@ export const PresetSchema = z.object({
   model: z.string().optional(),
   behaviors: z.array(z.string()).min(1),
   params: z.record(z.string(), z.record(z.string(), z.unknown())).optional().default({}),
+  frontmatter: z.record(z.string(), z.unknown()).optional().default({}),
 });
 
 export const AgentSchema = z.object({

@@ -18,6 +18,8 @@ export interface RenderContext {
   params?: RenderedParam[];
   /** Bundle uses to merge `.mcp.json` at the project root. Skill ignores. */
   projectRoot?: string;
+  /** Additional frontmatter fields to merge into the skill's YAML frontmatter. Bundle ignores. */
+  extraFrontmatter?: Record<string, unknown>;
 }
 
 export interface RenderResult {
