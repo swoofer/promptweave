@@ -1,0 +1,9 @@
+name: no-params
+description: "Behavior with no params for skill export tests"
+category: mission
+
+sections:
+  "040-instructions":
+    prompt: |
+      ## Instructions
+      Follow the user's request precisely.

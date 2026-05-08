@@ -1,0 +1,15 @@
+name: with-hooks
+description: "Behavior with hooks for skill warning tests"
+category: workspace
+
+sections:
+  "010-setup":
+    prompt: |
+      ## Workspace
+      Initialize workspace.
+
+hooks:
+  session-start:
+    script: setup.sh
+    blocking: true
+    order: 10
