@@ -4,10 +4,46 @@ import { existsSync, readFileSync } from "fs";
 import yaml from "js-yaml";
 import { runPipeline } from "../src/pipeline.js";
 import { AgentSchema } from "../src/types.js";
+import type { Behavior } from "../src/types.js";
 import { resolveRoot } from "./paths.js";
 import { collect, parseSetParams } from "./params.js";
 import { registry } from "../src/renderers/index.js";
 import type { RenderedParam } from "../src/renderers/index.js";
+import { Registry } from "../src/registry.js";
+import { resolveParams } from "../src/resolve.js";
+
+function buildSkillContext(
+  agent: { name: string; preset?: string; params?: Record<string, Record<string, unknown>> },
+  behaviors: Behavior[],
+  registryInstance: Registry,
+  launchParams: Record<string, Record<string, unknown>>,
+): { description?: string; params: RenderedParam[] } {
+  const presetSlug = agent.preset ?? agent.name;
+  const preset = registryInstance.presets.get(presetSlug);
+  const description = preset?.description;
+
+  const behaviorNames = behaviors.map((b) => b.name);
+  const presetParams = preset?.params ?? {};
+  const agentParams = agent.params ?? {};
+
+  // Resolve params with full precedence: behavior default → preset override → agent override → launchParams
+  const resolvedParams = resolveParams(behaviorNames, registryInstance, presetParams, agentParams, launchParams);
+
+  const params: RenderedParam[] = [];
+  for (const b of behaviors) {
+    for (const [pname, pdef] of Object.entries(b.params ?? {})) {
+      const effectiveDefault = resolvedParams[b.name]?.[pname] ?? pdef.default;
+      params.push({
+        name: pname,
+        type: pdef.type,
+        description: pdef.description,
+        required: pdef.required ?? false,
+        effectiveDefault,
+      });
+    }
+  }
+  return { description, params };
+}
 
 export function createBuildCommand(): Command {
   return new Command("build")
@@ -87,10 +123,23 @@ export function createBuildCommand(): Command {
           : resolve(process.cwd(), '.claude', 'promptweave');
         const outputDir = opts.output ?? defaultOutput;
 
-        const renderResult = renderer.render(result.output, outputDir, {
-          presetName: agent.preset ?? agent.name,
-          projectRoot: process.cwd(),
-        });
+        let ctx: import("../src/renderers/index.js").RenderContext;
+        if (target === 'skill') {
+          const registryInstance = Registry.load(root);
+          const { description, params } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
+          ctx = {
+            presetName: agent.preset ?? agent.name,
+            description,
+            params,
+          };
+        } else {
+          ctx = {
+            presetName: agent.preset ?? agent.name,
+            projectRoot: process.cwd(),
+          };
+        }
+
+        const renderResult = renderer.render(result.output, outputDir, ctx);
 
         console.log(`OK Output written to ${outputDir}`);
 
