@@ -204,4 +204,62 @@ describe('skillRenderer.render', () => {
     expect(content).toContain('## Parameters');
     expect(content).toContain('- `target_language` (string, default: `"français"`): Language to translate into');
   });
+
+  it('renders required param without default as (type, required)', () => {
+    const dest = tmpPath('params-req');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'p', description: 'd',
+      params: [{ name: 'tone', type: 'string', description: 'Translation register', required: true }],
+    });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(content).toContain('- `tone` (string, required): Translation register');
+  });
+
+  it('omits description when not provided', () => {
+    const dest = tmpPath('params-nodesc');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'p', description: 'd',
+      params: [{ name: 'flag', type: 'boolean', required: false, effectiveDefault: false }],
+    });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(content).toMatch(/- `flag` \(boolean, default: `false`\)\n/);
+  });
+
+  it('omits ## Parameters when no params declared', () => {
+    const dest = tmpPath('params-none');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, { presetName: 'p', description: 'd' });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(content).not.toContain('## Parameters');
+  });
+
+  it('renders params in declared order, not alphabetical', () => {
+    const dest = tmpPath('params-order');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'p', description: 'd',
+      params: [
+        { name: 'zebra', type: 'string', required: false, effectiveDefault: 'z' },
+        { name: 'alpha', type: 'string', required: false, effectiveDefault: 'a' },
+        { name: 'middle', type: 'string', required: false, effectiveDefault: 'm' },
+      ],
+    });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(content.indexOf('`zebra`')).toBeLessThan(content.indexOf('`alpha`'));
+    expect(content.indexOf('`alpha`')).toBeLessThan(content.indexOf('`middle`'));
+  });
 });
