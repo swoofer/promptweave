@@ -3,9 +3,23 @@ import { mkdirSync, writeFileSync, renameSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
 import yaml from 'js-yaml';
 import type { AssembledOutput } from '../types.js';
-import type { Renderer, RenderContext, RenderResult } from './index.js';
+import type { Renderer, RenderContext, RenderResult, RenderedParam } from './index.js';
 
 const SLUG_PATTERN = /^[a-z0-9-]+$/;
+
+function renderParam(p: RenderedParam): string {
+  const namePart = `\`${p.name}\``;
+  const required = p.required && p.effectiveDefault === undefined;
+  const tail = required
+    ? `(${p.type}, required)`
+    : `(${p.type}, default: \`${JSON.stringify(p.effectiveDefault)}\`)`;
+  const desc = p.description ? `: ${p.description}` : '';
+  return `- ${namePart} ${tail}${desc}`;
+}
+
+function renderParamsSection(params: RenderedParam[]): string {
+  return `## Parameters\n\n${params.map(renderParam).join('\n')}`;
+}
 
 function buildFrontmatter(name: string, description: string): string {
   // Use yaml.dump for safe serialization — handles ':' '#' '\n' '-' in values automatically.
@@ -56,7 +70,9 @@ export const skillRenderer: Renderer = {
     const frontmatter = buildFrontmatter(ctx.presetName, description);
 
     const stripped = output.prompt.replace(/\s+$/, '');
-    const content = `${frontmatter}\n\n${stripped}\n`;
+    const paramsSection = (ctx.params && ctx.params.length > 0) ? renderParamsSection(ctx.params) : null;
+    const bodyParts = paramsSection ? [stripped, paramsSection] : [stripped];
+    const content = `${frontmatter}\n\n${bodyParts.join('\n\n')}\n`;
 
     const skillFolder = join(destDir, ctx.presetName);
     const tmpFolder = `${skillFolder}.tmp.${Date.now()}`;

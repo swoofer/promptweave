@@ -186,4 +186,22 @@ describe('skillRenderer.render', () => {
     expect(result.warnings).toContain('[render] composed prompt starts with frontmatter delimiter; rendered SKILL.md may have ambiguous frontmatter parsing');
     expect(existsSync(join(dest, 'p', 'SKILL.md'))).toBe(true);
   });
+
+  it('renders ## Parameters section when params are provided', () => {
+    const dest = tmpPath('params-basic');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'p',
+      description: 'd',
+      params: [
+        { name: 'target_language', type: 'string', description: 'Language to translate into', required: false, effectiveDefault: 'français' },
+      ],
+    });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(content).toContain('## Parameters');
+    expect(content).toContain('- `target_language` (string, default: `"français"`): Language to translate into');
+  });
 });
