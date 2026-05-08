@@ -185,11 +185,32 @@ A preset with no phased behaviors degrades to the simple one-shot mode: a single
 | `promptweave list behaviors [--category C] [--root PATH]` | List behaviors in the registry |
 | `promptweave list presets [--root PATH]` | List presets |
 | `promptweave list compositions [--root PATH]` | List composition rules |
-| `promptweave build <preset> [--root PATH] [--dry-run] [--output DIR] [--set k=v]` | Assemble a preset into output files |
+| `promptweave build <preset> [--root PATH] [--dry-run] [--target TARGET] [--output DIR] [--set k=v]` | Assemble a preset into output files (target: `bundle` default, or `skill`) |
 | `promptweave validate <file.yaml>` | Validate a single YAML file |
 | `promptweave validate --all [--root PATH]` | Validate the entire registry |
 
 `--set k=v` overrides a behavior parameter at build time without modifying the preset (e.g., `--set project-context.modules='["src/auth"]'`).
+
+---
+
+## Skill export
+
+`promptweave` can emit Claude Code skills directly from your presets. Use this when you want to maintain a catalog of skills with shared building blocks: extract recurring patterns into `behaviors/`, group them into one preset per skill, and regenerate `SKILL.md` files reproducibly.
+
+```bash
+promptweave build my-translator --target skill
+# Writes .claude/skills/my-translator/SKILL.md
+```
+
+The `--target skill` flag produces a single `SKILL.md` per preset, with:
+
+- **Frontmatter** — `name` (slug-validated, must match `^[a-z0-9-]+$`) and `description` (verbatim from the preset, YAML-safely escaped).
+- **Body** — the fully composed prompt from your behaviors.
+- **`## Parameters` section** (auto-generated when params are declared) — lists every param declared by composing behaviors with type, effective default (after preset/agent/`--set` overrides), and description.
+
+Fields that don't fit the skill format (hooks, MCP tools, phases, env vars) are dropped with explicit warnings on stdout.
+
+**Caveat:** the output directory is destroyed and rewritten on each build. Manual edits to a generated `SKILL.md` are lost — treat the YAML behaviors and presets as the source of truth.
 
 ---
 
@@ -218,6 +239,7 @@ The pipeline is a pure function over the registry plus an agent identifier — e
 - **Agent profiles in YAML.** Define agent-style profiles for Claude Code subagents in YAML, version-controlled with the codebase. Re-render on every preset/behavior change.
 - **Cross-vendor catalogs.** Build the prompts/hooks/MCP-config bundle for Cursor, Cline, or Aider with a shared catalog of behaviors. The engine doesn't care which client consumes the output.
 - **CI consistency enforcement.** Run `promptweave build` in CI to catch drift — generated prompts diff against the previous render, so behavior changes are reviewable like any code change.
+- **Skill catalog maintenance.** Extract recurring instruction patterns from existing Claude Code skills into reusable behaviors. Compose presets matching each skill, regenerate `SKILL.md` files reproducibly, and propagate fixes from a single behavior file across every skill that includes it.
 - **Multi-agent runtime catalogs.** Pair with a coordination runtime (e.g., [mcp-coordinator](https://github.com/swoofer/mcp-coordinator)) so generated agents announce their work and resolve conflicts at runtime.
 
 ---
