@@ -1,0 +1,19 @@
+name: translation
+description: "Translation behavior for skill export tests"
+category: mission
+
+params:
+  target_language:
+    type: string
+    default: "français"
+    description: "Language to translate into"
+  tone:
+    type: string
+    required: true
+    description: "Translation register"
+
+sections:
+  "030-mission":
+    prompt: |
+      ## Mission
+      Translate input into {{params.target_language}} using a {{params.tone}} tone.

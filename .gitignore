@@ -8,3 +8,5 @@ coverage/
 .env.local
 .vscode/
 .idea/
+.worktrees/
+.mcp.json

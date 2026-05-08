@@ -10,14 +10,12 @@
 
 ## What it does
 
-You write small YAML behaviors (one rule each: "wait for upstream agent", "announce target files before writing", "use read-only mode"). You declare a preset (a list of behaviors), and `promptweave` assembles them into:
+You write small YAML behaviors (one rule each: "wait for upstream agent", "announce target files before writing", "use read-only mode"). You declare a preset (a list of behaviors), and `promptweave` assembles them into one of two output formats:
 
-- a **prompt** (sections sorted by number, deduped, composed)
-- **hook scripts** (per lifecycle: SessionStart, PreToolUse, etc.)
-- a **`.mcp.json`** with declared MCP tools
-- **environment variables** for the agent's runtime
+- **Bundle** (`--target bundle`, default): a **prompt** + **hook scripts** + a **`.mcp.json`** + **environment variables** — a complete agent runtime profile.
+- **Skill** (`--target skill`): a single Anthropic-standard **`SKILL.md`** with frontmatter and an auto-generated `## Parameters` section — ready to publish to a Claude Code skill catalog.
 
-The same behavior catalog can target Claude Code, Cursor, Aider, or any agent framework that consumes prompts + hooks + MCP configs.
+The same behavior catalog can target Claude Code (as a runtime bundle or a published skill), Cursor, Aider, or any agent framework that consumes prompts + hooks + MCP configs.
 
 ---
 
@@ -42,7 +40,9 @@ The same behavior catalog can target Claude Code, Cursor, Aider, or any agent fr
                                 │
               ┌─────────────────┼─────────────────┐
               ▼                 ▼                 ▼
-        prompt.md         hooks/*.sh         .mcp.json
+        prompt.md         hooks/*.sh         .mcp.json     ──── --target bundle (default)
+                                  or
+                              SKILL.md                     ──── --target skill
 ```
 
 Each step is a discrete pass over the in-memory registry. The engine is deterministic — same inputs produce identical outputs, so generated prompts/hooks are diffable in version control.
@@ -53,11 +53,12 @@ Each step is a discrete pass over the in-memory registry. The engine is determin
 
 ```bash
 npm install -g @swoofer/promptweave
-promptweave list behaviors                     # 4 generic behaviors ship bundled
-promptweave list presets                        # 2 demo presets: dev, inspect
-promptweave build inspect --dry-run             # preview a preset
-promptweave build inspect                       # write to ./.claude/promptweave/
-promptweave build inspect --root ./my-prompts   # use your own behaviors/presets/compositions/
+promptweave list behaviors                              # 4 generic behaviors ship bundled
+promptweave list presets                                 # 2 demo presets: dev, inspect
+promptweave build inspect --dry-run                      # preview a preset (bundle)
+promptweave build inspect                                # write bundle to ./.claude/promptweave/
+promptweave build inspect --target skill                 # write SKILL.md to ./.claude/skills/inspect/
+promptweave build inspect --root ./my-prompts            # use your own behaviors/presets/compositions/
 ```
 
 ---
@@ -185,11 +186,32 @@ A preset with no phased behaviors degrades to the simple one-shot mode: a single
 | `promptweave list behaviors [--category C] [--root PATH]` | List behaviors in the registry |
 | `promptweave list presets [--root PATH]` | List presets |
 | `promptweave list compositions [--root PATH]` | List composition rules |
-| `promptweave build <preset> [--root PATH] [--dry-run] [--output DIR] [--set k=v]` | Assemble a preset into output files |
+| `promptweave build <preset> [--root PATH] [--dry-run] [--target TARGET] [--output DIR] [--set k=v]` | Assemble a preset into output files (target: `bundle` default, or `skill`) |
 | `promptweave validate <file.yaml>` | Validate a single YAML file |
 | `promptweave validate --all [--root PATH]` | Validate the entire registry |
 
 `--set k=v` overrides a behavior parameter at build time without modifying the preset (e.g., `--set project-context.modules='["src/auth"]'`).
+
+---
+
+## Skill export
+
+`promptweave` can emit Claude Code skills directly from your presets. Use this when you want to maintain a catalog of skills with shared building blocks: extract recurring patterns into `behaviors/`, group them into one preset per skill, and regenerate `SKILL.md` files reproducibly.
+
+```bash
+promptweave build my-translator --target skill
+# Writes .claude/skills/my-translator/SKILL.md
+```
+
+The `--target skill` flag produces a single `SKILL.md` per preset, with:
+
+- **Frontmatter** — `name` (slug-validated, must match `^[a-z0-9-]+$`) and `description` (verbatim from the preset, YAML-safely escaped).
+- **Body** — the fully composed prompt from your behaviors.
+- **`## Parameters` section** (auto-generated when params are declared) — lists every param declared by composing behaviors with type, effective default (after preset/agent/`--set` overrides), and description.
+
+Fields that don't fit the skill format (hooks, MCP tools, phases, env vars) are dropped with explicit warnings on stdout.
+
+**Caveat:** the output directory is destroyed and rewritten on each build. Manual edits to a generated `SKILL.md` are lost — treat the YAML behaviors and presets as the source of truth.
 
 ---
 
@@ -218,6 +240,7 @@ The pipeline is a pure function over the registry plus an agent identifier — e
 - **Agent profiles in YAML.** Define agent-style profiles for Claude Code subagents in YAML, version-controlled with the codebase. Re-render on every preset/behavior change.
 - **Cross-vendor catalogs.** Build the prompts/hooks/MCP-config bundle for Cursor, Cline, or Aider with a shared catalog of behaviors. The engine doesn't care which client consumes the output.
 - **CI consistency enforcement.** Run `promptweave build` in CI to catch drift — generated prompts diff against the previous render, so behavior changes are reviewable like any code change.
+- **Skill catalog maintenance.** Extract recurring instruction patterns from existing Claude Code skills into reusable behaviors. Compose presets matching each skill, regenerate `SKILL.md` files reproducibly, and propagate fixes from a single behavior file across every skill that includes it.
 - **Multi-agent runtime catalogs.** Pair with a coordination runtime (e.g., [mcp-coordinator](https://github.com/swoofer/mcp-coordinator)) so generated agents announce their work and resolve conflicts at runtime.
 
 ---
