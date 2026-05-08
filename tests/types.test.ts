@@ -118,6 +118,40 @@ describe('BehaviorSchema', () => {
   });
 });
 
+describe('BehaviorSchema side_car_files validation', () => {
+  it('accepts relative forward-slash paths', () => {
+    const result = BehaviorSchema.safeParse({
+      name: 'b', description: 'd', sections: { '010-x': { prompt: 'x' } },
+      side_car_files: { 'references/std.md': 'content' },
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects absolute paths', () => {
+    const result = BehaviorSchema.safeParse({
+      name: 'b', description: 'd', sections: { '010-x': { prompt: 'x' } },
+      side_car_files: { '/etc/passwd': 'evil' },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects paths containing ..', () => {
+    const result = BehaviorSchema.safeParse({
+      name: 'b', description: 'd', sections: { '010-x': { prompt: 'x' } },
+      side_car_files: { '../escape.md': 'evil' },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects backslash paths', () => {
+    const result = BehaviorSchema.safeParse({
+      name: 'b', description: 'd', sections: { '010-x': { prompt: 'x' } },
+      side_car_files: { 'references\\std.md': 'evil' },
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
 describe('PresetSchema', () => {
   it('validates a preset', () => {
     const result = PresetSchema.safeParse({

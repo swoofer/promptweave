@@ -1,7 +1,7 @@
 // tests/renderers/skill.test.ts
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { join, resolve } from 'path';
-import { mkdirSync, readFileSync, rmSync, existsSync, readdirSync } from 'fs';
+import { mkdirSync, readFileSync, rmSync, existsSync, readdirSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import yaml from 'js-yaml';
 import { skillRenderer } from '../../src/renderers/skill.js';
@@ -70,6 +70,7 @@ describe('skillRenderer.render', () => {
     hooks: {},
     mcpTools: [],
     envVars: {},
+    sideCarFiles: {},
   };
 
   it('writes SKILL.md with frontmatter using preset name and description', () => {
@@ -504,5 +505,60 @@ describe('skillRenderer.render', () => {
 
     // Only name and description, nothing else
     expect(Object.keys(parsed).sort()).toEqual(['description', 'name']);
+  });
+
+  it('writes side-car files alongside SKILL.md', () => {
+    const dest = tmpPath('sidecar-basic');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    const output: AssembledOutput = {
+      ...minimalOutput,
+      sideCarFiles: {
+        'modes/local.md': 'local mode content',
+        'references/std.md': 'standards content',
+      },
+    };
+
+    skillRenderer.render(output, dest, { presetName: 'p', description: 'd' });
+
+    expect(readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8')).toContain('Mission');
+    expect(readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8')).toBe('local mode content');
+    expect(readFileSync(join(dest, 'p', 'references', 'std.md'), 'utf-8')).toBe('standards content');
+  });
+
+  it('side-car file write is included in atomic swap (cleanup on failure)', async () => {
+    const dest = tmpPath('sidecar-atomic');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    // First successful render
+    const goodOutput: AssembledOutput = {
+      ...minimalOutput,
+      prompt: 'first',
+      sideCarFiles: { 'modes/local.md': 'first mode' },
+    };
+    skillRenderer.render(goodOutput, dest, { presetName: 'p', description: 'd' });
+    const firstSkill = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    const firstMode = readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8');
+    expect(firstMode).toBe('first mode');
+
+    // Second render fails on slug check (validation throws before any write)
+    expect(() => skillRenderer.render(goodOutput, dest, { presetName: 'BAD NAME', description: 'd' }))
+      .toThrow();
+
+    // Original folder + side-car intact
+    expect(readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8')).toBe(firstSkill);
+    expect(readFileSync(join(dest, 'p', 'modes', 'local.md'), 'utf-8')).toBe(firstMode);
+  });
+
+  it('omits side-car directory when sideCarFiles is empty', () => {
+    const dest = tmpPath('sidecar-empty');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, { presetName: 'p', description: 'd' });
+
+    expect(existsSync(join(dest, 'p', 'modes'))).toBe(false);
   });
 });

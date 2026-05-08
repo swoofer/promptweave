@@ -1,0 +1,14 @@
+name: with-sidecar
+description: "Behavior contributing side-car files"
+category: mission
+
+sections:
+  "050-instructions":
+    prompt: |
+      ## Instructions
+      See `references/standards.md` for project standards.
+
+side_car_files:
+  "references/standards.md": |
+    # Standards
+    Always use snake_case for variables.

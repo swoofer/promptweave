@@ -31,6 +31,7 @@ function makeBehavior(overrides: Partial<Behavior> & { name: string; sections: B
     params: {},
     hooks: {},
     mcp_tools: [],
+    side_car_files: {},
     ...overrides,
   };
 }
