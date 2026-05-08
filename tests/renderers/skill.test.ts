@@ -1,11 +1,30 @@
 // tests/renderers/skill.test.ts
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { join, resolve } from 'path';
 import { mkdirSync, readFileSync, rmSync, existsSync, readdirSync } from 'fs';
 import { tmpdir } from 'os';
 import yaml from 'js-yaml';
 import { skillRenderer } from '../../src/renderers/skill.js';
 import type { AssembledOutput } from '../../src/types.js';
+
+// vi.hoisted ensures this flag is initialised before vi.mock factories run.
+// The mock factory closes over the returned object so the test can arm the
+// one-shot renameSync failure simply by setting renameControl.fail = true.
+const renameControl = vi.hoisted(() => ({ fail: false }));
+
+vi.mock('fs', async () => {
+  const actual = await vi.importActual<typeof import('fs')>('fs');
+  return {
+    ...actual,
+    renameSync: (oldPath: string, newPath: string) => {
+      if (renameControl.fail) {
+        renameControl.fail = false;
+        throw new Error('simulated rename failure');
+      }
+      actual.renameSync(oldPath, newPath);
+    },
+  };
+});
 
 function tmpPath(suffix: string): string {
   return join(tmpdir(), `pw-skill-test-${Date.now()}-${Math.random().toString(36).slice(2)}-${suffix}`);
@@ -261,5 +280,38 @@ describe('skillRenderer.render', () => {
     const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
     expect(content.indexOf('`zebra`')).toBeLessThan(content.indexOf('`alpha`'));
     expect(content.indexOf('`alpha`')).toBeLessThan(content.indexOf('`middle`'));
+  });
+
+  it('preserves prior skill folder when renameSync fails mid-write', () => {
+    const dest = tmpPath('atomicity');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    // First render succeeds — creates dest/p/SKILL.md
+    skillRenderer.render({ ...minimalOutput, prompt: 'first version' }, dest, {
+      presetName: 'p',
+      description: 'd',
+    });
+    const firstContent = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(firstContent).toContain('first version');
+
+    // Arm the one-shot renameSync failure injected via vi.mock factory above
+    renameControl.fail = true;
+
+    // Second render fails mid-write
+    expect(() =>
+      skillRenderer.render({ ...minimalOutput, prompt: 'second version' }, dest, {
+        presetName: 'p',
+        description: 'd',
+      }),
+    ).toThrow(/simulated rename failure/);
+
+    // Original folder content must be intact
+    expect(readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8')).toBe(firstContent);
+
+    // No tmp dir left behind
+    const entries = readdirSync(dest);
+    const tmpEntries = entries.filter((e) => e.startsWith('p.tmp.'));
+    expect(tmpEntries).toEqual([]);
   });
 });

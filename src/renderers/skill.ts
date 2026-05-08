@@ -76,13 +76,25 @@ export const skillRenderer: Renderer = {
 
     const skillFolder = join(destDir, ctx.presetName);
     const tmpFolder = `${skillFolder}.tmp.${Date.now()}`;
+    const backupFolder = `${skillFolder}.bak.${Date.now()}`;
 
     try {
       mkdirSync(tmpFolder, { recursive: true });
       writeFileSync(join(tmpFolder, 'SKILL.md'), content, { encoding: 'utf-8', mode: 0o644 });
 
-      if (existsSync(skillFolder)) rmSync(skillFolder, { recursive: true });
-      renameSync(tmpFolder, skillFolder);
+      // Atomically swap: rename existing folder to backup, then rename tmp into place.
+      // If renameSync fails the original folder is still at backupFolder and is restored below.
+      const hadExisting = existsSync(skillFolder);
+      if (hadExisting) renameSync(skillFolder, backupFolder);
+      try {
+        renameSync(tmpFolder, skillFolder);
+      } catch (swapErr) {
+        // The swap failed — restore original from backup so no data is lost.
+        if (hadExisting && existsSync(backupFolder)) renameSync(backupFolder, skillFolder);
+        throw swapErr;
+      }
+      // Swap succeeded — remove backup and tmp (tmp is already renamed, backup is leftover old data).
+      if (existsSync(backupFolder)) rmSync(backupFolder, { recursive: true });
     } catch (err) {
       if (existsSync(tmpFolder)) rmSync(tmpFolder, { recursive: true });
       throw err;
