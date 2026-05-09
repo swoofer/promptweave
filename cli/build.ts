@@ -17,10 +17,11 @@ function buildSkillContext(
   behaviors: Behavior[],
   registryInstance: Registry,
   launchParams: Record<string, Record<string, unknown>>,
-): { description?: string; params: RenderedParam[] } {
+): { description?: string; params: RenderedParam[]; extraFrontmatter: Record<string, unknown> } {
   const presetSlug = agent.preset ?? agent.name;
   const preset = registryInstance.presets.get(presetSlug);
   const description = preset?.description;
+  const extraFrontmatter = preset?.frontmatter ?? {};
 
   const behaviorNames = behaviors.map((b) => b.name);
   const presetParams = preset?.params ?? {};
@@ -42,7 +43,7 @@ function buildSkillContext(
       });
     }
   }
-  return { description, params };
+  return { description, params, extraFrontmatter };
 }
 
 export function createBuildCommand(): Command {
@@ -95,13 +96,14 @@ export function createBuildCommand(): Command {
           mkdirSync(tmpDest, { recursive: true });
 
           const registryInstance = Registry.load(root);
-          const { description, params } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
+          const { description, params, extraFrontmatter } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
           let renderResult;
           try {
             renderResult = renderer.render(result.output, tmpDest, {
               presetName: agent.preset ?? agent.name,
               description,
               params,
+              extraFrontmatter,
             });
 
             console.log("\n=== Warnings ===");
@@ -161,11 +163,12 @@ export function createBuildCommand(): Command {
         let ctx: import("../src/renderers/index.js").RenderContext;
         if (target === 'skill') {
           const registryInstance = Registry.load(root);
-          const { description, params } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
+          const { description, params, extraFrontmatter } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
           ctx = {
             presetName: agent.preset ?? agent.name,
             description,
             params,
+            extraFrontmatter,
           };
         } else {
           ctx = {

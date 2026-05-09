@@ -123,4 +123,18 @@ describe('cli/build — --target dispatch (fixture-isolated)', () => {
 
     expect(result.stdout).toMatch(/\[render\] skill target ignores hooks/);
   });
+
+  it('--target skill propagates preset.frontmatter to SKILL.md frontmatter', () => {
+    const out = tmpDir('extra-fm-out');
+    const cwd = tmpDir('extra-fm-cwd');
+    cleanup.push(out, cwd);
+    mkdirSync(out, { recursive: true });
+    mkdirSync(cwd, { recursive: true });
+
+    runCli(`build translator-with-frontmatter --target skill --root "${FIXTURE_ROOT}" --output "${out}"`, { cwd });
+
+    const content = readFileSync(join(out, 'translator-with-frontmatter', 'SKILL.md'), 'utf-8');
+    expect(content).toMatch(/argument-hint:/);
+    expect(content).toMatch(/disable-model-invocation: true/);
+  });
 });

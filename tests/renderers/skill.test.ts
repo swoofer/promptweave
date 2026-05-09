@@ -439,4 +439,70 @@ describe('skillRenderer.render', () => {
     expect(parsed.name).toBe('rt');
     expect(parsed.description).toBe('Use when you need to test round-trip');
   });
+
+  it('merges extraFrontmatter into the YAML frontmatter', () => {
+    const dest = tmpPath('extra-frontmatter');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'p',
+      description: 'd',
+      extraFrontmatter: {
+        'argument-hint': '1-5 | step-name',
+        'allowed-tools': ['Read', 'Edit'],
+        'disable-model-invocation': true,
+      },
+    });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    const match = content.match(/^---\n([\s\S]+?)\n---\n/);
+    expect(match).not.toBeNull();
+    const parsed = yaml.load(match![1]) as Record<string, unknown>;
+
+    expect(parsed.name).toBe('p');
+    expect(parsed.description).toBe('d');
+    expect(parsed['argument-hint']).toBe('1-5 | step-name');
+    expect(parsed['allowed-tools']).toEqual(['Read', 'Edit']);
+    expect(parsed['disable-model-invocation']).toBe(true);
+  });
+
+  it('preset name and description always win over conflicting extraFrontmatter keys', () => {
+    const dest = tmpPath('extra-conflict');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'real-name',
+      description: 'real description',
+      extraFrontmatter: {
+        name: 'fake-name',
+        description: 'fake description',
+        'argument-hint': 'hint',
+      },
+    });
+
+    const content = readFileSync(join(dest, 'real-name', 'SKILL.md'), 'utf-8');
+    const match = content.match(/^---\n([\s\S]+?)\n---\n/);
+    const parsed = yaml.load(match![1]) as Record<string, string>;
+
+    expect(parsed.name).toBe('real-name');
+    expect(parsed.description).toBe('real description');
+    expect(parsed['argument-hint']).toBe('hint');
+  });
+
+  it('omits extra frontmatter when preset declares none', () => {
+    const dest = tmpPath('extra-none');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, { presetName: 'p', description: 'd' });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    const match = content.match(/^---\n([\s\S]+?)\n---\n/);
+    const parsed = yaml.load(match![1]) as Record<string, unknown>;
+
+    // Only name and description, nothing else
+    expect(Object.keys(parsed).sort()).toEqual(['description', 'name']);
+  });
 });
