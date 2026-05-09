@@ -41,6 +41,7 @@ describe('bundleRenderer.render', () => {
     hooks: {},
     mcpTools: [],
     envVars: {},
+    sideCarFiles: {},
   };
 
   it('writes prompt, mcp json, and env file to target dir', () => {
@@ -183,6 +184,7 @@ describe('bundleRenderer.render', () => {
       hooks: {},
       mcpTools: circularObj as unknown as string[],
       envVars: {},
+      sideCarFiles: {},
     };
 
     expect(() => bundleRenderer.render(output, targetDir, { presetName: 'test' })).toThrow();
@@ -209,6 +211,7 @@ describe('bundleRenderer.render', () => {
       hooks: { 'session-start': '#!/bin/bash\necho hi' },
       mcpTools: ['tool_a'],
       envVars: { K: 'v' },
+      sideCarFiles: {},
     };
 
     bundleRenderer.render(output, targetA, { presetName: 'test', projectRoot: projectRootA });
@@ -244,5 +247,20 @@ describe('bundleRenderer.render', () => {
 
     expect(first).toBe(second);
     expect(firstEnv).toBe(secondEnv);
+  });
+
+  it('ignores sideCarFiles (skill-target concept)', () => {
+    const targetDir = tmpPath('bundle-ignore-sidecar');
+    cleanupDirs.push(targetDir);
+
+    const output: AssembledOutput = {
+      ...minimalOutput,
+      sideCarFiles: { 'modes/local.md': 'mode content' },
+    };
+
+    bundleRenderer.render(output, targetDir, { presetName: 'test' });
+
+    expect(existsSync(join(targetDir, 'modes'))).toBe(false);
+    expect(existsSync(join(targetDir, 'modes', 'local.md'))).toBe(false);
   });
 });

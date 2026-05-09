@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { resolve } from 'path';
 import { Registry } from '../src/registry.js';
-import { assemblePrompt, assembleHooks, assembleMcpTools, assembleEnvVars } from '../src/assemble.js';
+import { assemblePrompt, assembleHooks, assembleMcpTools, assembleEnvVars, assembleSideCarFiles } from '../src/assemble.js';
 import type { AgentContext, Behavior } from '../src/types.js';
 
 const FIXTURES = resolve(import.meta.dirname, './fixtures');
@@ -118,5 +118,60 @@ describe('assembleEnvVars', () => {
     expect(env['COORDINATOR_AGENT_NAME']).toBe('Chasseur Alpha');
     expect(env['COORDINATOR_AGENT_PROFILE']).toBe('codeur');
     expect(env['COORDINATOR_AGENT_MODEL']).toBe('claude-opus-4-6');
+  });
+});
+
+describe('assembleSideCarFiles', () => {
+  const agent: AgentContext = { id: 'test', displayName: 'Test', profile: 'codeur', model: 'm' };
+
+  it('collects side-car files from all behaviors', () => {
+    const behaviors = [
+      { name: 'a', side_car_files: { 'modes/local.md': 'local mode content' } },
+      { name: 'b', side_car_files: { 'references/std.md': 'standards content' } },
+    ] as never;
+
+    const { sideCarFiles, warnings } = assembleSideCarFiles(behaviors, {}, agent);
+    expect(sideCarFiles).toEqual({
+      'modes/local.md': 'local mode content',
+      'references/std.md': 'standards content',
+    });
+    expect(warnings).toEqual([]);
+  });
+
+  it('warns on conflicting paths and applies last-write-wins', () => {
+    const behaviors = [
+      { name: 'a', side_car_files: { 'shared.md': 'from a' } },
+      { name: 'b', side_car_files: { 'shared.md': 'from b' } },
+    ] as never;
+
+    const { sideCarFiles, warnings } = assembleSideCarFiles(behaviors, {}, agent);
+    expect(sideCarFiles['shared.md']).toBe('from b');
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatch(/shared\.md.*'a' and 'b'.*last write wins/);
+  });
+
+  it('interpolates {{params.x}} in side-car content', () => {
+    const behaviors = [
+      { name: 'a', side_car_files: { 'config.md': 'lang={{params.lang}}' } },
+    ] as never;
+
+    const { sideCarFiles } = assembleSideCarFiles(behaviors, { a: { lang: 'rust' } }, agent);
+    expect(sideCarFiles['config.md']).toBe('lang=rust');
+  });
+
+  it('returns empty when no behaviors declare side_car_files', () => {
+    const behaviors = [{ name: 'a' }, { name: 'b' }] as never;
+    const { sideCarFiles, warnings } = assembleSideCarFiles(behaviors, {}, agent);
+    expect(sideCarFiles).toEqual({});
+    expect(warnings).toEqual([]);
+  });
+
+  it('interpolates {{agent.id}} in side-car content', () => {
+    const behaviors = [
+      { name: 'a', side_car_files: { 'config.md': 'agent={{agent.id}}' } },
+    ] as never;
+
+    const { sideCarFiles } = assembleSideCarFiles(behaviors, {}, agent);
+    expect(sideCarFiles['config.md']).toBe('agent=test');
   });
 });
