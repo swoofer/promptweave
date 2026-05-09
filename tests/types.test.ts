@@ -135,6 +135,14 @@ describe('BehaviorSchema side_car_files validation', () => {
     expect(result.success).toBe(false);
   });
 
+  it('rejects Windows-absolute paths', () => {
+    const result = BehaviorSchema.safeParse({
+      name: 'b', description: 'd', sections: { '010-x': { prompt: 'x' } },
+      side_car_files: { 'C:/evil': 'evil' },
+    });
+    expect(result.success).toBe(false);
+  });
+
   it('rejects paths containing ..', () => {
     const result = BehaviorSchema.safeParse({
       name: 'b', description: 'd', sections: { '010-x': { prompt: 'x' } },
