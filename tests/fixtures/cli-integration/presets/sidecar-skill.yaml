@@ -1,0 +1,4 @@
+name: sidecar-skill
+description: "Skill with a side-car reference file"
+behaviors:
+  - with-sidecar

@@ -8,6 +8,7 @@ import type { Renderer, RenderContext, RenderResult } from './index.js';
 export const bundleRenderer: Renderer = {
   target: 'bundle',
   render(output: AssembledOutput, destDir: string, ctx: RenderContext): RenderResult {
+    // output.sideCarFiles is intentionally ignored — side-car files are a skill-target concept.
     const tmpDir = `${destDir}.tmp.${Date.now()}`;
 
     try {

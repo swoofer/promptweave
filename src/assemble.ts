@@ -1,5 +1,5 @@
 // bce/engine/assemble.ts
-import type { AgentContext, Behavior } from './types.js';
+import type { AgentContext, Behavior, ResolvedParams } from './types.js';
 import { interpolate } from './template.js';
 
 function buildDefaultParams(behavior: Behavior): Record<string, unknown> {
@@ -172,6 +172,32 @@ export function mergeMcpConfig(
   }
 
   return { ...existingMcpJson, mcpServers: servers };
+}
+
+export function assembleSideCarFiles(
+  behaviors: Behavior[],
+  resolvedParams: ResolvedParams,
+): { sideCarFiles: Record<string, string>; warnings: string[] } {
+  const result: Record<string, string> = {};
+  const warnings: string[] = [];
+  const seenIn: Record<string, string> = {}; // path -> behavior name
+
+  for (const behavior of behaviors) {
+    const files = behavior.side_car_files ?? {};
+    const params = resolvedParams[behavior.name] ?? {};
+    for (const [path, content] of Object.entries(files)) {
+      const interpolated = interpolate(content, { params });
+      if (path in result) {
+        warnings.push(
+          `side_car_files path '${path}' contributed by both '${seenIn[path]}' and '${behavior.name}' — last write wins`,
+        );
+      }
+      result[path] = interpolated;
+      seenIn[path] = behavior.name;
+    }
+  }
+
+  return { sideCarFiles: result, warnings };
 }
 
 export function assembleEnvVars(

@@ -3,7 +3,7 @@ import { Registry } from './registry.js';
 import { resolveBehaviors, resolveParams } from './resolve.js';
 import { validateBehaviors } from './validate.js';
 import { applyCompositionRules } from './compose.js';
-import { assemblePrompt, assembleHooks, assembleMcpTools, assembleEnvVars } from './assemble.js';
+import { assemblePrompt, assembleHooks, assembleMcpTools, assembleEnvVars, assembleSideCarFiles } from './assemble.js';
 import { assemblePhases } from './phases.js';
 import { generateWarnings } from './warnings.js';
 import type { Agent, AgentContext, Behavior, PipelineResult } from './types.js';
@@ -93,20 +93,27 @@ export function runPipeline(
   const hooks = assembleHooks(composed.behaviors, agentCtx, resolvedParams);
   const mcpTools = assembleMcpTools(composed.behaviors);
   const envVars = assembleEnvVars(agentCtx, resolvedParams);
+  const { sideCarFiles, warnings: sideCarWarnings } = assembleSideCarFiles(
+    [...composed.behaviors.values()],
+    resolvedParams,
+  );
 
   // Step 5: Warnings
-  const warnings = generateWarnings(
-    composed.behaviors,
-    composed.appliedRules,
-    registry,
-    prompt,
-  );
+  const warnings = [
+    ...generateWarnings(
+      composed.behaviors,
+      composed.appliedRules,
+      registry,
+      prompt,
+    ),
+    ...sideCarWarnings,
+  ];
 
   return {
     agent: agentCtx,
     behaviors: [...composed.behaviors.values()],
     compositionRulesApplied: composed.appliedRules,
-    output: { prompt, phases, hooks, mcpTools, envVars },
+    output: { prompt, phases, hooks, mcpTools, envVars, sideCarFiles },
     warnings,
     sectionTrace,
   };

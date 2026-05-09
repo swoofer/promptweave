@@ -1,6 +1,6 @@
 // src/renderers/skill.ts
 import { mkdirSync, writeFileSync, renameSync, rmSync, existsSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import yaml from 'js-yaml';
 import type { AssembledOutput } from '../types.js';
 import type { Renderer, RenderContext, RenderResult, RenderedParam } from './index.js';
@@ -83,6 +83,13 @@ export const skillRenderer: Renderer = {
     try {
       mkdirSync(tmpFolder, { recursive: true });
       writeFileSync(join(tmpFolder, 'SKILL.md'), content, { encoding: 'utf-8', mode: 0o644 });
+
+      // Write side-car files alongside SKILL.md inside the tmp folder (covered by the atomic swap).
+      for (const [relPath, sideCarContent] of Object.entries(output.sideCarFiles)) {
+        const fullPath = join(tmpFolder, relPath);
+        mkdirSync(dirname(fullPath), { recursive: true });
+        writeFileSync(fullPath, sideCarContent, { encoding: 'utf-8', mode: 0o644 });
+      }
 
       // Atomically swap: rename existing folder to backup, then rename tmp into place.
       // If renameSync fails the original folder is still at backupFolder and is restored below.
