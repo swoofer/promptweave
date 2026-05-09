@@ -3,26 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>promptweave — YAML composer for prompts, hooks, and MCP configs</title>
+  <title>promptweave — YAML composer for AI prompts, hooks, MCP &amp; Claude Code skills</title>
 
-  <meta name="description" content="YAML composer for agent prompts, hooks, MCP configs, and Claude Code skills (SKILL.md) from reusable behaviors. Vendor-agnostic. Deterministic output, MIT-licensed." />
+  <meta name="description" content="Open-source YAML composer to assemble agent prompts, hooks, MCP server configs, and Claude Code skills (SKILL.md) from reusable behaviors. Vendor-agnostic, deterministic output, MIT-licensed npm package." />
   <meta name="keywords" content="claude code, claude code skill, SKILL.md, skill catalog, mcp, model context protocol, anthropic, prompt engineering, ai agents, yaml, prompt composer, multi-agent, llm tooling, cursor, aider" />
   <meta name="author" content="Maxime Gagnon (swoofer)" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="theme-color" content="#4ade80" />
   <link rel="canonical" href="https://swoofer.github.io/promptweave/" />
+
+  <!-- Favicon (inline SVG) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23060b18'/%3E%3Ctext x='32' y='44' font-family='ui-monospace,monospace' font-size='38' font-weight='700' text-anchor='middle' fill='%234ade80'%3Epw%3C/text%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%23060b18'/%3E%3Ctext x='90' y='124' font-family='ui-monospace,monospace' font-size='108' font-weight='700' text-anchor='middle' fill='%234ade80'%3Epw%3C/text%3E%3C/svg%3E" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://swoofer.github.io/promptweave/" />
   <meta property="og:title" content="promptweave — YAML composer for AI agent prompts" />
-  <meta property="og:description" content="YAML composer for agent prompts, hooks, MCP configs, and Claude Code skills (SKILL.md) from reusable behaviors. Vendor-agnostic. Deterministic output, MIT-licensed." />
+  <meta property="og:description" content="Assemble agent prompts, hooks, MCP configs, and Claude Code skills (SKILL.md) from reusable YAML behaviors. Vendor-agnostic, deterministic, MIT-licensed." />
   <meta property="og:site_name" content="promptweave" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:image" content="https://opengraph.githubassets.com/1/swoofer/promptweave" />
+  <meta property="og:image:alt" content="promptweave — YAML composer for AI agent prompts" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="promptweave — YAML composer for AI agent prompts" />
-  <meta name="twitter:description" content="YAML composer for agent prompts, hooks, MCP configs, and Claude Code skills (SKILL.md) from reusable behaviors. Vendor-agnostic. Deterministic output, MIT-licensed." />
+  <meta name="twitter:description" content="Assemble agent prompts, hooks, MCP configs, and Claude Code skills from reusable YAML behaviors. Vendor-agnostic, deterministic, MIT-licensed." />
   <meta name="twitter:image" content="https://opengraph.githubassets.com/1/swoofer/promptweave" />
+  <meta name="twitter:image:alt" content="promptweave — YAML composer for AI agent prompts" />
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://swoofer.github.io/promptweave/#software",
+        "name": "promptweave",
+        "description": "YAML composer for assembling agent prompts, hooks, MCP server configs, and Claude Code skills (SKILL.md) from reusable behaviors.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Cross-platform",
+        "url": "https://swoofer.github.io/promptweave/",
+        "downloadUrl": "https://www.npmjs.com/package/@swoofer/promptweave",
+        "codeRepository": "https://github.com/swoofer/promptweave",
+        "programmingLanguage": "TypeScript",
+        "softwareVersion": "0.1.1",
+        "license": "https://opensource.org/licenses/MIT",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@id": "https://github.com/swoofer#person" },
+        "publisher": { "@id": "https://github.com/swoofer#person" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://github.com/swoofer#person",
+        "name": "Maxime Gagnon",
+        "alternateName": "swoofer",
+        "url": "https://github.com/swoofer"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://swoofer.github.io/promptweave/#website",
+        "url": "https://swoofer.github.io/promptweave/",
+        "name": "promptweave",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://github.com/swoofer#person" }
+      }
+    ]
+  }
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -977,22 +1027,77 @@
     }
 
     .results-card .result-line {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.4rem 0;
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      align-items: baseline;
+      gap: 1.25rem;
+      padding: 0.65rem 0;
       font-size: 0.88rem;
       color: var(--muted);
     }
 
-    .results-card .result-line span:last-child {
-      font-family: monospace;
-      font-weight: 700;
-      color: var(--accent);
+    .results-card .result-line + .result-line {
+      border-top: 1px solid rgba(255,255,255,0.04);
     }
 
-    .results-card .result-line.highlight span:last-child {
+    .results-card .result-line > span:first-child {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .results-card .result-line > span:last-child {
+      font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+      font-weight: 600;
+      color: var(--accent);
+      text-align: right;
+      word-break: break-word;
+      line-height: 1.55;
+      justify-self: end;
+    }
+
+    .results-card .result-line.highlight > span:last-child {
       color: var(--yellow);
+    }
+
+    /* List variant — pills column aligned right under the label baseline */
+    .results-card .result-line .result-pills {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.4rem;
+      justify-self: end;
+    }
+
+    .results-card .result-line .result-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(74,222,128,0.06);
+      border: 1px solid rgba(74,222,128,0.22);
+      color: var(--accent);
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-family: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: border-color 0.2s, transform 0.15s, background 0.2s;
+    }
+
+    .results-card .result-line .result-pill::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(74,222,128,0.6);
+      flex-shrink: 0;
+    }
+
+    .results-card .result-line .result-pill:hover {
+      background: rgba(74,222,128,0.12);
+      border-color: rgba(74,222,128,0.45);
+      transform: translateX(-2px);
     }
 
     /* Mini dashboard mockup */
@@ -1196,9 +1301,35 @@
       border-radius: 2px;
     }
     /* --- Composition cascade — visual case study --- */
+    /* Wider container for content-rich sections */
+    #case-study .container,
+    #composition .container,
+    #anatomy .container,
+    #tutorial .container {
+      max-width: 1200px;
+    }
+
+    /* Long terminal lines wrap gracefully without breaking words mid-token */
+    .feature-terminal {
+      overflow-wrap: break-word;
+    }
+    .feature-terminal > div {
+      word-break: keep-all;
+    }
+
+    /* Tutorial: 2 cards per row so terminals inside have breathing room */
+    #tutorial .steps {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      #tutorial .steps {
+        grid-template-columns: 1fr;
+      }
+    }
     .cascade {
       display: grid;
-      grid-template-columns: 1fr auto 1.2fr auto 1.2fr;
+      grid-template-columns: 1.1fr auto 1.3fr auto 1.3fr;
       gap: 1rem;
       align-items: stretch;
       margin-top: 2.5rem;
@@ -1207,7 +1338,7 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1.25rem;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
     }
@@ -1237,22 +1368,33 @@
     /* Behaviors column — blue */
     .cascade-pill {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.3rem;
       background: rgba(96,165,250,0.07);
       border: 1px solid rgba(96,165,250,0.2);
-      border-radius: 6px;
-      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      padding: 0.55rem 0.8rem;
       font-size: 0.85rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .cascade-pill:hover {
+      border-color: rgba(96,165,250,0.4);
+      background: rgba(96,165,250,0.12);
     }
     .cascade-pill code {
       color: var(--text);
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 0.85rem;
+      word-break: keep-all;
     }
     .cascade-section {
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       color: var(--muted);
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.75;
     }
     /* Rules column — yellow with subtle pulse */
     .cascade-rule {
@@ -1283,25 +1425,28 @@
     }
     .cascade-rule-head {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.35rem;
-      gap: 0.5rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
     }
     .cascade-rule-head code {
       color: var(--yellow);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      word-break: keep-all;
     }
     .cascade-rule-when {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       color: var(--muted);
-      white-space: nowrap;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.75;
     }
     .cascade-rule-action {
       color: var(--text);
-      line-height: 1.4;
-      font-size: 0.78rem;
+      line-height: 1.5;
+      font-size: 0.8rem;
     }
     .cascade-rule-action strong {
       color: var(--yellow);
@@ -1397,8 +1542,8 @@
   </div>
   <button class="hamburger" aria-label="Menu">&#9776;</button>
   <div class="nav-links">
-    <a href="#why" data-i18n="nav.why">Why</a><a href="#potential" data-i18n="nav.potential">Power</a><a href="#bce" data-i18n="nav.bce">Engine</a>
-    <a href="#templates" data-i18n="nav.templates">Bundled</a><a href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
+    <a href="#why" data-i18n="nav.why">Why</a><a href="#install" data-i18n="nav.install">Install</a><a href="#tutorial" data-i18n="nav.tutorial">Tutorial</a><a href="#bce" data-i18n="nav.bce">Engine</a>
+    <a href="#targets" data-i18n="nav.targets">Targets</a><a href="#templates" data-i18n="nav.templates">Bundled</a><a href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
     <a href="https://github.com/swoofer/promptweave" target="_blank">GitHub</a>
     <a href="#install" class="btn-sm" data-i18n="nav.getstarted">Get Started</a>
     <div class="lang-switcher">
@@ -1504,7 +1649,14 @@
         <div class="results-card">
           <h4 data-i18n="why.compose.title">Composition rule fires</h4>
           <div class="result-line"><span data-i18n="why.compose.preset">preset</span><span><code style="color:var(--accent);font-size:0.9em;">inspect</code></span></div>
-          <div class="result-line"><span data-i18n="why.compose.behaviors">behaviors</span><span>project-context, worktree-isolation, read-only-mode</span></div>
+          <div class="result-line list">
+            <span data-i18n="why.compose.behaviors">behaviors</span>
+            <div class="result-pills">
+              <code class="result-pill">project-context</code>
+              <code class="result-pill">worktree-isolation</code>
+              <code class="result-pill">read-only-mode</code>
+            </div>
+          </div>
           <div class="result-line"><span data-i18n="why.compose.rule">rule matched</span><span><code style="color:var(--accent);font-size:0.9em;">announce-readonly-adaptation</code></span></div>
           <div class="result-line highlight"><span data-i18n="why.compose.action">action</span><span data-i18n="why.compose.actionval">section 020 rewritten &middot; "before your analysis"</span></div>
           <div class="result-line"><span data-i18n="why.compose.outcome">outcome</span><span data-i18n="why.compose.outcomeval">no copy-paste &middot; no drift</span></div>
@@ -1767,6 +1919,349 @@
 </section>
 
 
+<!-- ANATOMY -->
+<section id="anatomy">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title" data-i18n="anatomy.title">Anatomy of a behavior</h2>
+      <p class="section-sub" data-i18n="anatomy.subtitle">One YAML file. Every field, optional or required, in one place.</p>
+    </div>
+
+    <div class="feature-terminal fade-in">
+      <div><span class="t-dim"># behaviors/read-only-mode.yaml</span></div>
+      <div><span class="t-blue">name</span>: <span class="t-green">read-only-mode</span> <span class="t-dim"># required &mdash; unique id, kebab-case</span></div>
+      <div><span class="t-blue">description</span>: <span class="t-green">"Analyze without writing"</span> <span class="t-dim"># required &mdash; one-line summary</span></div>
+      <div><span class="t-blue">category</span>: <span class="t-green">safety</span> <span class="t-dim"># optional &mdash; workspace | coordination | mission | safety | tone</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-dim"># &mdash; Dependencies &mdash;</span></div>
+      <div><span class="t-blue">requires</span>:</div>
+      <div>&nbsp;&nbsp;<span class="t-blue">behaviors</span>: [<span class="t-green">project-context</span>] <span class="t-dim"># must compose with these</span></div>
+      <div>&nbsp;&nbsp;<span class="t-blue">infrastructure</span>: [<span class="t-green">git</span>] <span class="t-dim"># tools that must be present</span></div>
+      <div><span class="t-blue">conflicts_with</span>: [<span class="t-green">auto-commit</span>] <span class="t-dim"># cannot coexist</span></div>
+      <div><span class="t-blue">suggests</span>: [<span class="t-green">announce-readonly</span>] <span class="t-dim"># soft hint, not enforced</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-dim"># &mdash; Parameters &mdash;</span></div>
+      <div><span class="t-blue">params</span>:</div>
+      <div>&nbsp;&nbsp;<span class="t-blue">scope</span>:</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">type</span>: <span class="t-green">string</span> <span class="t-dim"># string | number | boolean | string[] | number[]</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">default</span>: <span class="t-green">"workspace"</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">required</span>: <span class="t-green">false</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">description</span>: <span class="t-green">"Where the read-only rule applies"</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-dim"># &mdash; Prompt sections (required, sorted by NNN-key) &mdash;</span></div>
+      <div><span class="t-blue">sections</span>:</div>
+      <div>&nbsp;&nbsp;<span class="t-blue">090-safety-readonly</span>:</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">prompt</span>: <span class="t-green">"You are read-only. Analyze, communicate, report."</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-dim"># &mdash; Lifecycle hooks &mdash;</span></div>
+      <div><span class="t-blue">hooks</span>:</div>
+      <div>&nbsp;&nbsp;<span class="t-blue">pre-tool-use</span>: <span class="t-dim"># session-start | pre-tool-use | post-tool-use | session-stop</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">script</span>: <span class="t-green">hooks/block-writes.sh</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">args</span>: [<span class="t-green">"--strict"</span>]</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">blocking</span>: <span class="t-green">true</span></div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">order</span>: <span class="t-green">10</span></div>
+      <div>&nbsp;</div>
+      <div><span class="t-dim"># &mdash; MCP &amp; phase &mdash;</span></div>
+      <div><span class="t-blue">mcp_tools</span>: [<span class="t-green">filesystem</span>, <span class="t-green">git</span>] <span class="t-dim"># servers this behavior expects</span></div>
+      <div><span class="t-blue">phase</span>:</div>
+      <div>&nbsp;&nbsp;<span class="t-blue">name</span>: <span class="t-green">inspect</span></div>
+      <div>&nbsp;&nbsp;<span class="t-blue">tools_mode</span>: <span class="t-green">read_only</span> <span class="t-dim"># read_only | full | none</span></div>
+      <div>&nbsp;&nbsp;<span class="t-blue">loop</span>: <span class="t-green">false</span></div>
+      <div><span class="t-blue">applies_when</span>:</div>
+      <div>&nbsp;&nbsp;<span class="t-blue">phase_tools_mode</span>: [<span class="t-green">read_only</span>] <span class="t-dim"># gate: only apply in matching modes</span></div>
+    </div>
+
+    <div class="score-grid fade-in" style="margin-top: 2rem;">
+      <div class="score-row">
+        <div class="score-label"><strong><code>name</code></strong> &mdash; <span data-i18n="anatomy.field.name.role">Unique kebab-case identifier used to compose</span></div>
+        <div class="score-badge t-blue">string</div>
+        <div class="score-tag tag-green" data-i18n="anatomy.tag.required">required</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>description</code></strong> &mdash; <span data-i18n="anatomy.field.description.role">One-line summary shown in catalogs and diffs</span></div>
+        <div class="score-badge t-blue">string</div>
+        <div class="score-tag tag-green" data-i18n="anatomy.tag.required">required</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>sections</code></strong> &mdash; <span data-i18n="anatomy.field.sections.role">Prompt fragments keyed by NNN-name, deterministic order</span></div>
+        <div class="score-badge t-blue">map</div>
+        <div class="score-tag tag-green" data-i18n="anatomy.tag.required">required</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>category</code></strong> &mdash; <span data-i18n="anatomy.field.category.role">Taxonomy bucket: workspace, coordination, mission, safety, tone</span></div>
+        <div class="score-badge t-blue">enum</div>
+        <div class="score-tag tag-yellow" data-i18n="anatomy.tag.optional">optional</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>requires</code></strong> &mdash; <span data-i18n="anatomy.field.requires.role">Hard dependencies on other behaviors and infrastructure</span></div>
+        <div class="score-badge t-blue">object</div>
+        <div class="score-tag tag-yellow" data-i18n="anatomy.tag.optional">optional</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>conflicts_with</code></strong> &mdash; <span data-i18n="anatomy.field.conflicts.role">Behaviors that cannot be composed alongside this one</span></div>
+        <div class="score-badge t-blue">string[]</div>
+        <div class="score-tag tag-yellow" data-i18n="anatomy.tag.optional">optional</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>suggests</code></strong> &mdash; <span data-i18n="anatomy.field.suggests.role">Soft hints surfaced to the user, never enforced</span></div>
+        <div class="score-badge t-blue">string[]</div>
+        <div class="score-tag tag-yellow" data-i18n="anatomy.tag.optional">optional</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>params</code></strong> &mdash; <span data-i18n="anatomy.field.params.role">Typed inputs with default, required flag, and description</span></div>
+        <div class="score-badge t-blue">map</div>
+        <div class="score-tag tag-yellow" data-i18n="anatomy.tag.optional">optional</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>hooks</code></strong> &mdash; <span data-i18n="anatomy.field.hooks.role">Lifecycle scripts (script, args, blocking, order) per phase</span></div>
+        <div class="score-badge t-blue">map</div>
+        <div class="score-tag tag-yellow" data-i18n="anatomy.tag.optional">optional</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>mcp_tools</code></strong> &mdash; <span data-i18n="anatomy.field.mcp.role">MCP servers this behavior declares as needed</span></div>
+        <div class="score-badge t-blue">string[]</div>
+        <div class="score-tag tag-yellow" data-i18n="anatomy.tag.optional">optional</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>phase</code></strong> &mdash; <span data-i18n="anatomy.field.phase.role">Declares phase name, tools_mode, and loop</span></div>
+        <div class="score-badge t-blue">object</div>
+        <div class="score-tag tag-yellow" data-i18n="anatomy.tag.optional">optional</div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><strong><code>applies_when</code></strong> &mdash; <span data-i18n="anatomy.field.applies.role">Conditional gate based on the active phase tools_mode</span></div>
+        <div class="score-badge t-blue">object</div>
+        <div class="score-tag tag-yellow" data-i18n="anatomy.tag.optional">optional</div>
+      </div>
+    </div>
+
+    <p class="section-sub text-center fade-in" style="margin-top: 1.75rem;" data-i18n="anatomy.callout">
+      Only <strong class="t-green">name</strong>, <strong class="t-green">description</strong>, and <strong class="t-green">sections</strong> are strictly required. Everything else is opt-in &mdash; declare exactly what your behavior needs, nothing more.
+    </p>
+  </div>
+</section>
+
+
+<!-- COMPOSITION RULES — declarative behavior adaptation -->
+<section id="composition">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title" data-i18n="composition.title">Composition rules: declarative behavior adaptation</h2>
+      <p class="section-sub" data-i18n="composition.subtitle">When two behaviors meet, rewrite or strip sections &mdash; without forcing every behavior to know about every other.</p>
+    </div>
+
+    <div class="features">
+
+      <div class="feature-block fade-in">
+        <div class="feature-text">
+          <h3 data-i18n="composition.when.title">The <code style="color:var(--accent);font-size:0.95em;">when</code> predicate</h3>
+          <p data-i18n="composition.when.desc">A rule fires only when the assembled behavior set matches its predicate. Combine <code style="color:var(--blue);font-size:0.9em;">all</code>, <code style="color:var(--blue);font-size:0.9em;">any</code>, <code style="color:var(--blue);font-size:0.9em;">none</code>, and <code style="color:var(--blue);font-size:0.9em;">params_match</code> to express &laquo; these two together, but not with that third one &raquo; without coupling behavior YAMLs to each other.</p>
+        </div>
+        <div class="feature-terminal">
+          <div><span class="t-dim"># compositions/announce-readonly-adaptation.yaml</span></div>
+          <div><span class="t-blue">name</span>: announce-readonly-adaptation</div>
+          <div><span class="t-blue">priority</span>: <span class="t-yellow">10</span></div>
+          <div><span class="t-blue">when</span>:</div>
+          <div>&nbsp;&nbsp;<span class="t-blue">all</span>: [announce-before-write, read-only-mode]</div>
+          <div>&nbsp;&nbsp;<span class="t-blue">none</span>: [worktree-isolation]</div>
+          <div>&nbsp;&nbsp;<span class="t-blue">params_match</span>:</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-green">read-only-mode</span>: { strict: <span class="t-yellow">true</span> }</div>
+          <div><span class="t-dim"># &rarr; matches preset `inspect`, skips `dev`</span></div>
+        </div>
+      </div>
+
+      <div class="feature-block reverse fade-in">
+        <div class="feature-text">
+          <h3 data-i18n="composition.actions.title">The four actions</h3>
+          <p data-i18n="composition.actions.desc">Once a rule matches, its <code style="color:var(--accent);font-size:0.95em;">actions</code> reshape the assembly. Override an existing section in place, inject a brand-new bridge section, force params on a behavior you don't own, or strip a behavior wholesale &mdash; all declaratively, no JS hooks.</p>
+        </div>
+        <div class="results-card">
+          <h4>actions: { ... }</h4>
+          <div class="result-line"><span>override_sections[]</span><span>rewrite 020 &middot; "before your analysis"</span></div>
+          <div class="result-line"><span>inject_sections{}</span><span>+ 012-bridge &middot; new section</span></div>
+          <div class="result-line"><span>override_params[]</span><span>force quiet: true on announce</span></div>
+          <div class="result-line highlight"><span>disable_behaviors[]</span><span>strip conflict-resolution</span></div>
+          <div class="result-line"><span>outcome</span><span>no behavior knows about the others</span></div>
+        </div>
+      </div>
+
+      <div class="feature-block fade-in">
+        <div class="feature-text">
+          <h3 data-i18n="composition.priority.title">Priority &amp; evaluation order</h3>
+          <p data-i18n="composition.priority.desc">Rules are evaluated in ascending <code style="color:var(--accent);font-size:0.95em;">priority</code> order (default <code style="color:var(--blue);font-size:0.9em;">0</code>), then by registration order. Lower priorities run first &mdash; so a high-priority &laquo; strip &raquo; rule sees the result of every override beneath it. Deterministic. Diffable.</p>
+        </div>
+        <div class="feature-terminal">
+          <div><span class="t-dim">$</span> <span class="t-green">promptweave</span> build inspect <span class="t-yellow">--dry-run</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-yellow">priority 0</span> &nbsp;<span class="t-green">sequential-then-announce</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-dim">when:</span> all=[sequential-pipeline, announce-before-write]</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">+ inject</span> 012-bridge &rarr; "wait &rarr; announce &rarr; code"</div>
+          <div>&nbsp;</div>
+          <div><span class="t-yellow">priority 10</span> <span class="t-green">announce-readonly-adaptation</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-dim">when:</span> all=[announce-before-write, read-only-mode]</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">~ rewrite</span> 020-before-coding &rarr; "before your analysis"</div>
+          <div>&nbsp;</div>
+          <div><span class="t-yellow">priority 20</span> <span class="t-green">solo-mode-strip</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-dim">when:</span> any=[solo-mode] &middot; <span class="t-red">params_match</span> failed</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-red">&times; skipped</span> &mdash; preset is multi-agent</div>
+          <div>&nbsp;</div>
+          <div><span class="t-dim">2 of 3 rules applied &middot; byte-deterministic</span></div>
+        </div>
+      </div>
+
+      <div class="feature-highlight fade-in">
+        <h3 data-i18n="composition.callout.title">Rules live in <code style="font-family:inherit;background:none;-webkit-text-fill-color:initial;color:var(--accent);">compositions/*.yaml</code></h3>
+        <p data-i18n="composition.callout.desc">One file per rule, version-controlled next to your behaviors. The engine auto-loads the directory, evaluates every rule against the resolved behavior set, and emits a <code style="color:var(--accent);font-size:0.9em;">compositionRulesApplied</code> trace in the pipeline result &mdash; so you can audit which rules fired on every render.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- HOOKS LIFECYCLE -->
+<section id="hooks">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title" data-i18n="hooks.title">Hook lifecycle</h2>
+      <p class="section-sub" data-i18n="hooks.subtitle">Bash scripts run at four lifecycle points. Behaviors compose them; the engine merges them per point in declared order.</p>
+    </div>
+
+    <div class="fade-in" style="margin-top: 2.5rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 0.5rem 1rem; overflow-x: auto;">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th data-i18n="hooks.table.point">Lifecycle point</th>
+            <th data-i18n="hooks.table.fires">Fires</th>
+            <th data-i18n="hooks.table.use">Typical use</th>
+            <th data-i18n="hooks.table.example">Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="result-id">session-start</span></td>
+            <td data-i18n="hooks.row1.fires">Once, before agent's first turn</td>
+            <td data-i18n="hooks.row1.use">Setup workspace, env, worktree</td>
+            <td><code style="color:var(--blue);font-size:0.9em;">worktree-isolation</code> creates a branch</td>
+          </tr>
+          <tr>
+            <td><span class="result-id">pre-tool-use</span></td>
+            <td data-i18n="hooks.row2.fires">Before every tool call</td>
+            <td data-i18n="hooks.row2.use">Validate, log, gate</td>
+            <td data-i18n="hooks.row2.example">Custom rules check before file edit</td>
+          </tr>
+          <tr>
+            <td><span class="result-id">post-tool-use</span></td>
+            <td data-i18n="hooks.row3.fires">After every tool call</td>
+            <td data-i18n="hooks.row3.use">Audit, sync, cleanup</td>
+            <td data-i18n="hooks.row3.example">Activity tracking writes to log</td>
+          </tr>
+          <tr>
+            <td><span class="result-id">session-stop</span></td>
+            <td data-i18n="hooks.row4.fires">Once, after agent's last turn</td>
+            <td data-i18n="hooks.row4.use">Teardown, archive</td>
+            <td><code style="color:var(--blue);font-size:0.9em;">worktree-isolation</code> cleans up branch</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center" style="margin-top: 3rem; margin-bottom: 1rem;">
+      <h3 style="font-size: 1.2rem; font-weight: 700;" data-i18n="hooks.declare.title">Declare a hook in a behavior</h3>
+      <p style="color: var(--muted); font-size: 0.9rem; max-width: 640px; margin: 0.5rem auto 0;" data-i18n="hooks.declare.sub">Add a <code style="color:var(--accent);font-size:0.9em;">hooks:</code> block to any behavior YAML. The engine collects entries from every behavior in the preset and writes one merged script per lifecycle point.</p>
+    </div>
+
+    <div class="fade-in" style="max-width: 640px; margin: 0 auto;">
+      <div class="feature-terminal">
+        <div><span class="t-blue">hooks</span><span class="t-dim">:</span></div>
+        <div>&nbsp;&nbsp;<span class="t-blue">session-start</span><span class="t-dim">:</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-yellow">script</span><span class="t-dim">:</span> hooks/setup_worktree.sh</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-yellow">args</span><span class="t-dim">:</span> [<span class="t-green">"--branch"</span>, <span class="t-green">"agent-{{agent.id}}"</span>]</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-yellow">blocking</span><span class="t-dim">:</span> <span class="t-green">true</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-yellow">order</span><span class="t-dim">:</span> <span class="t-green">10</span></div>
+      </div>
+    </div>
+
+    <p class="text-center" style="margin-top: 2rem; color: var(--muted); font-size: 0.9rem; max-width: 720px; margin-left: auto; margin-right: auto;" data-i18n="hooks.note">The engine merges hooks from multiple behaviors by lifecycle point, sorted by <code style="color:var(--accent);font-size:0.9em;">order</code>. The Bundle target writes them as <code style="color:var(--accent);font-size:0.9em;">hooks/&lt;lifecycle&gt;.sh</code>. The Skill target drops them with a warning.</p>
+
+  </div>
+</section>
+
+
+<!-- PHASES & PROFILES -->
+<section id="phases-profiles">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title" data-i18n="phases.title">Phases &amp; profiles</h2>
+      <p class="section-sub" data-i18n="phases.subtitle">Multi-stage workflows out of the box. Tools modes per phase, profiles for intent.</p>
+    </div>
+
+    <div class="fade-in" style="margin-top: 1rem;">
+      <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;" data-i18n="phases.phases.title">Phases &mdash; multi-stage agent workflows</h3>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; max-width: 720px;" data-i18n="phases.phases.lead">A behavior can declare a <code style="color:var(--accent);font-size:0.9em;">phase</code>; presets that include phased behaviors render as a multi-stage workflow, while presets without any phase produce a single one-shot prompt (backward-compat).</p>
+
+      <div class="arch-diagram" style="padding: 0;">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th data-i18n="phases.col.phase">Phase</th>
+              <th data-i18n="phases.col.tools">Tools</th>
+              <th data-i18n="phases.col.loop">Loop</th>
+              <th data-i18n="phases.col.purpose">Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code class="result-id">discover</code></td>
+              <td><span class="score-tag" style="background: rgba(96,165,250,0.1); color: var(--blue); border: 1px solid rgba(96,165,250,0.3);">read_only</span></td>
+              <td><span style="color: var(--muted);">no</span></td>
+              <td data-i18n="phases.row.discover">Scan code, list findings independently.</td>
+            </tr>
+            <tr>
+              <td><code class="result-id">review</code></td>
+              <td><span class="score-tag" style="background: rgba(148,163,184,0.1); color: var(--muted); border: 1px solid rgba(148,163,184,0.3);">none</span></td>
+              <td><span style="color: var(--muted);">no</span></td>
+              <td data-i18n="phases.row.review">Compare findings, dedup pool.</td>
+            </tr>
+            <tr>
+              <td><code class="result-id">execute</code></td>
+              <td><span class="score-tag tag-green">full</span></td>
+              <td><span class="score-tag tag-yellow">yes</span></td>
+              <td data-i18n="phases.row.execute">Atomic claim &rarr; run &rarr; claim next.</td>
+            </tr>
+            <tr>
+              <td><code style="color: var(--muted); font-family: monospace; font-weight: 700;">no-phase</code></td>
+              <td><span style="color: var(--muted); font-size: 0.85rem;">configurable</span></td>
+              <td><span style="color: var(--muted);">no</span></td>
+              <td data-i18n="phases.row.noPhase.purpose">One-shot mode (backward-compat).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="color: var(--muted); font-size: 0.88rem; margin-top: 1.25rem; max-width: 720px;" data-i18n="phases.appliesWhen">A behavior can also declare <code style="color:var(--accent);font-size:0.9em;">applies_when.phase_tools_mode: ["read_only"]</code> to scope itself to phases with a matching tools mode &mdash; included in some stages, filtered out of others.</p>
+    </div>
+
+    <div class="fade-in" style="margin-top: 3rem;">
+      <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;" data-i18n="phases.profiles.title">Profiles &mdash; declare agent intent</h3>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; max-width: 720px;" data-i18n="phases.profiles.lead">A <code style="color:var(--accent);font-size:0.9em;">profile</code> is a shorthand declared on a preset or an agent. It signals what the agent is for; composition rules and templates can read it.</p>
+
+      <div class="cards">
+        <div class="card">
+          <h3><code style="color:var(--accent);font-size:0.95em;">codeur</code></h3>
+          <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem;">profile: codeur</p>
+          <p data-i18n="phases.profile.codeur.desc">Agent that writes code. Defaults to full tool access. Pairs with <code style="color:var(--accent);font-size:0.9em;">worktree-isolation</code> and mission behaviors.</p>
+        </div>
+        <div class="card">
+          <h3><code style="color:var(--blue);font-size:0.95em;">communicant</code></h3>
+          <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem;">profile: communicant</p>
+          <p data-i18n="phases.profile.communicant.desc">Agent that reports, reviews, communicates. Pairs with <code style="color:var(--accent);font-size:0.9em;">read-only-mode</code> for analysis-only flows.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- ENGINE — composition pipeline + behavioral layers -->
 <section id="bce">
   <div class="container">
@@ -1809,7 +2304,7 @@
       </div>
       <div class="score-row">
         <div class="score-label"><strong data-i18n="engine.layer3.title">Mission</strong> &mdash; <span data-i18n="engine.layer3.desc">What the agent actually does</span></div>
-        <div class="score-badge t-green">030&ndash;050</div>
+        <div class="score-badge t-green">030&ndash;049</div>
         <div class="score-tag tag-green" data-i18n="engine.layer3.tag">layer 3</div>
       </div>
       <div class="score-row">
@@ -1827,29 +2322,239 @@
 <section id="install">
   <div class="container">
     <div class="text-center">
-      <h2 class="section-title" data-i18n="install.title">Get started in 3 steps</h2>
-      <p class="section-sub" data-i18n="install.subtitle">From npm install to your first assembled prompt in under a minute.</p>
+      <h2 class="section-title" data-i18n="install.title">Get started in 5 steps</h2>
+      <p class="section-sub" data-i18n="install.subtitle">From npm install to a shipped bundle &mdash; with full control over what lands on disk.</p>
     </div>
     <div class="install-grid fade-in">
       <div class="install-card">
         <div class="install-step" data-i18n="install.step1.label">Step 1</div>
         <h3 data-i18n="install.step1.title">Install</h3>
         <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step1.desc">Grab the npm package. The CLI is self-contained &mdash; only Node.js 20+ required.</p>
-        <div class="code-block">npm install -g @swoofer/promptweave</div>
+        <div class="code-block"><span style="color:var(--muted)"># Node 20+ required</span><br/>npm install -g @swoofer/promptweave<br/>promptweave --version</div>
       </div>
       <div class="install-card">
         <div class="install-step" data-i18n="install.step2.label">Step 2</div>
-        <h3 data-i18n="install.step2.title">Inspect what ships</h3>
-        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step2.desc">4 demo behaviors and 2 demo presets ship bundled. Real catalogs live in your repo via <code style="color:var(--accent);font-size:0.85em;">--root</code>.</p>
-        <div class="code-block">promptweave list behaviors<br/>promptweave list presets</div>
+        <h3 data-i18n="install.step2.title">Inspect bundled demos</h3>
+        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step2.desc">4 demo behaviors and 2 demo presets ship bundled &mdash; just enough to feel the engine. Real catalogs live in your repo via <code style="color:var(--accent);font-size:0.85em;">--root</code>.</p>
+        <div class="code-block"><span style="color:var(--muted)"># list the 4 demo behaviors</span><br/>promptweave list behaviors<br/><span style="color:var(--muted)"># list the 2 demo presets</span><br/>promptweave list presets</div>
       </div>
       <div class="install-card">
         <div class="install-step" data-i18n="install.step3.label">Step 3</div>
-        <h3 data-i18n="install.step3.title">Build a preset</h3>
-        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step3.desc">Preview the composition with <code style="color:var(--accent);font-size:0.85em;">--dry-run</code>. Drop the flag to write a bundle (prompt.md + hooks + .mcp.json) into <code style="color:var(--accent);font-size:0.85em;">./.claude/promptweave/</code>, or pass <code style="color:var(--accent);font-size:0.85em;">--target skill</code> to write a Claude Code <code style="color:var(--accent);font-size:0.85em;">SKILL.md</code> instead.</p>
-        <div class="code-block">promptweave build inspect --dry-run<br/><span style="color:var(--muted)"># bundle (default):</span><br/>promptweave build inspect<br/><span style="color:var(--muted)"># or as a Claude Code skill:</span><br/>promptweave build inspect --target skill</div>
+        <h3 data-i18n="install.step3.title">Preview a build</h3>
+        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step3.desc">See exactly what would be assembled &mdash; resolved behaviors, composed sections, generated files &mdash; without touching disk.</p>
+        <div class="code-block"><span style="color:var(--muted)"># preview, no files written</span><br/>promptweave build inspect --dry-run</div>
+      </div>
+      <div class="install-card">
+        <div class="install-step" data-i18n="install.step4.label">Step 4</div>
+        <h3 data-i18n="install.step4.title">Ship it</h3>
+        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step4.desc">Two render targets. Default writes a bundle (prompt.md + hooks + .mcp.json) into <code style="color:var(--accent);font-size:0.85em;">./.claude/promptweave/</code>. Pass <code style="color:var(--accent);font-size:0.85em;">--target skill</code> for a Claude Code <code style="color:var(--accent);font-size:0.85em;">SKILL.md</code> instead.</p>
+        <div class="code-block"><span style="color:var(--muted)"># bundle (default target)</span><br/>promptweave build inspect<br/><span style="color:var(--muted)"># or as a Claude Code skill</span><br/>promptweave build inspect --target skill</div>
+      </div>
+      <div class="install-card">
+        <div class="install-step" data-i18n="install.step5.label">Step 5</div>
+        <h3 data-i18n="install.step5.title">Use your own catalog</h3>
+        <p style="color:var(--muted); font-size:0.88rem;" data-i18n="install.step5.desc">Point <code style="color:var(--accent);font-size:0.85em;">--root</code> at your repo's catalog and override any templated parameter on the fly with <code style="color:var(--accent);font-size:0.85em;">--set k=v</code> &mdash; repeatable, deterministic, scriptable.</p>
+        <div class="code-block"><span style="color:var(--muted)"># build from your catalog</span><br/>promptweave build my-preset --root ./my-catalog<br/><span style="color:var(--muted)"># override params at build time</span><br/>promptweave build my-preset --root ./my-catalog --set language=rust</div>
       </div>
     </div>
+  </div>
+</section>
+
+
+<!-- TUTORIAL — end-to-end walkthrough: build your first catalog -->
+<section id="tutorial">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title" data-i18n="tutorial.title">Your first catalog in 5 minutes</h2>
+      <p class="section-sub" data-i18n="tutorial.subtitle">Build a custom behavior, compose a preset, render the bundle. Real shell commands you can copy.</p>
+    </div>
+
+    <div class="steps fade-in">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-icon">&#128193;</div>
+        <h3 data-i18n="tutorial.step1.title">Scaffold the catalog</h3>
+        <p data-i18n="tutorial.step1.desc">Three folders &mdash; one per concept. Point <code style="color:var(--accent);font-size:0.9em;">--root</code> at this directory and promptweave will discover everything inside.</p>
+        <div class="dogfood-terminal" style="margin-top: 1rem; max-width: 100%;">
+          <div><span class="df-prompt">$</span> <span class="df-cmd">mkdir -p</span> my-catalog/<span class="df-highlight">{behaviors,presets,compositions}</span></div>
+          <span class="df-blank"></span>
+          <div><span class="df-prompt">my-catalog/</span></div>
+          <div><span class="df-prompt">&#9500;&#9472;&#9472;</span> <span class="df-output">behaviors/</span>      <span class="df-prompt"># one YAML per reusable trait</span></div>
+          <div><span class="df-prompt">&#9500;&#9472;&#9472;</span> <span class="df-output">presets/</span>        <span class="df-prompt"># named lists of behaviors</span></div>
+          <div><span class="df-prompt">&#9492;&#9472;&#9472;</span> <span class="df-output">compositions/</span>   <span class="df-prompt"># rules that fire when behaviors meet</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-icon">&#128221;</div>
+        <h3 data-i18n="tutorial.step2.title">Write a behavior</h3>
+        <p data-i18n="tutorial.step2.desc">A behavior is one YAML. It contributes one or more numbered sections to the assembled prompt &mdash; here, section <code style="color:var(--accent);font-size:0.9em;">070</code> in the tone layer.</p>
+        <div class="feature-terminal" style="margin-top: 1rem;">
+          <div><span class="t-dim"># behaviors/concise-tone.yaml</span></div>
+          <div><span class="t-blue">name:</span> concise-tone</div>
+          <div><span class="t-blue">description:</span> Agent answers in short, declarative sentences</div>
+          <div><span class="t-blue">category:</span> tone</div>
+          <div><span class="t-blue">sections:</span></div>
+          <div>&nbsp;&nbsp;<span class="t-yellow">"070-tone":</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-blue">prompt:</span> <span class="t-dim">|</span></div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-green">Be brief. One claim per sentence. Skip pleasantries.</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-icon">&#129520;</div>
+        <h3 data-i18n="tutorial.step3.title">Compose a preset</h3>
+        <p data-i18n="tutorial.step3.desc">A preset is a named list of behaviors. Mix bundled demos (<code style="color:var(--accent);font-size:0.9em;">project-context</code>, <code style="color:var(--accent);font-size:0.9em;">read-only-mode</code>) with your custom <code style="color:var(--accent);font-size:0.9em;">concise-tone</code>.</p>
+        <div class="feature-terminal" style="margin-top: 1rem;">
+          <div><span class="t-dim"># presets/quick-review.yaml</span></div>
+          <div><span class="t-blue">name:</span> quick-review</div>
+          <div><span class="t-blue">description:</span> Concise read-only code review</div>
+          <div><span class="t-blue">profile:</span> communicant</div>
+          <div><span class="t-blue">behaviors:</span></div>
+          <div>&nbsp;&nbsp;<span class="t-yellow">-</span> project-context</div>
+          <div>&nbsp;&nbsp;<span class="t-yellow">-</span> read-only-mode</div>
+          <div>&nbsp;&nbsp;<span class="t-yellow">-</span> <span class="t-green">concise-tone</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-icon">&#128270;</div>
+        <h3 data-i18n="tutorial.step4.title">Preview with --dry-run</h3>
+        <p data-i18n="tutorial.step4.desc">Resolve, validate, compose, assemble &mdash; nothing is written to disk. Catch missing references and section conflicts before they reach an agent.</p>
+        <div class="dogfood-terminal" style="margin-top: 1rem; max-width: 100%;">
+          <div><span class="df-prompt">$</span> <span class="df-cmd">promptweave build</span> quick-review <span class="df-highlight">--root ./my-catalog --dry-run</span></div>
+          <span class="df-blank"></span>
+          <div><span class="df-output">resolve</span>   <span class="df-prompt">quick-review &rarr; [project-context, read-only-mode, concise-tone]</span></div>
+          <div><span class="df-output">validate</span>  <span class="df-result">3/3 ok</span> <span class="df-prompt">&middot; refs resolved &middot; schema valid</span></div>
+          <div><span class="df-output">compose</span>   <span class="df-highlight">1 rule fired</span> <span class="df-prompt">&middot; announce-readonly-adaptation &rarr; section 020 rewritten</span></div>
+          <div><span class="df-output">assemble</span>  <span class="df-prompt">sections [000, 020, 070, 090] &middot; 4 unique &middot; sorted</span></div>
+          <span class="df-blank"></span>
+          <div><span class="df-result">&#9989; preview ready</span> <span class="df-prompt">&mdash; prompt.md (1.2 KB) &middot; .mcp.json &middot; hooks/ (0)</span></div>
+          <div><span class="df-prompt">&#9888;  --dry-run: nothing written. Drop the flag to ship.</span></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-icon">&#128640;</div>
+        <h3 data-i18n="tutorial.step5.title">Ship it &mdash; bundle or skill</h3>
+        <p data-i18n="tutorial.step5.desc">Same preset, two outputs. <code style="color:var(--accent);font-size:0.9em;">bundle</code> writes <code style="color:var(--accent);font-size:0.9em;">.claude/promptweave/</code> for in-repo use; <code style="color:var(--accent);font-size:0.9em;">skill</code> writes a publish-ready Claude Code <code style="color:var(--accent);font-size:0.9em;">SKILL.md</code>.</p>
+        <div class="dogfood-terminal" style="margin-top: 1rem; max-width: 100%;">
+          <div><span class="df-prompt"># default target: bundle (prompt + hooks + .mcp.json)</span></div>
+          <div><span class="df-prompt">$</span> <span class="df-cmd">promptweave build</span> quick-review <span class="df-highlight">--root ./my-catalog</span></div>
+          <div><span class="df-result">&#9989; wrote</span> <span class="df-output">.claude/promptweave/quick-review/</span> <span class="df-prompt">&middot; 3 files</span></div>
+          <span class="df-blank"></span>
+          <div><span class="df-prompt"># or, publish-ready Claude Code skill</span></div>
+          <div><span class="df-prompt">$</span> <span class="df-cmd">promptweave build</span> quick-review <span class="df-highlight">--root ./my-catalog --target skill</span></div>
+          <div><span class="df-result">&#9989; wrote</span> <span class="df-output">.claude/skills/quick-review/SKILL.md</span></div>
+          <span class="df-blank"></span>
+          <div><span class="df-prompt"># tweak params at build time, no YAML edit needed</span></div>
+          <div><span class="df-prompt">$</span> <span class="df-cmd">promptweave build</span> quick-review <span class="df-highlight">--root ./my-catalog --set language=python --output ./out</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center" style="margin-top: 2.5rem; padding: 1rem; border: 1px solid rgba(96,165,250,0.3); border-radius: 8px; background: rgba(96,165,250,0.05); max-width: 720px; margin-left: auto; margin-right: auto;">
+      <p style="font-size: 0.9rem; color: var(--muted);" data-i18n="tutorial.callout"><strong>Need richer catalogs?</strong> See <a href="https://github.com/swoofer/essaim">essaim</a> &mdash; the reference orchestrator with 32+ behaviors, 20+ presets, and 12 pre-composed templates, all rendered by promptweave.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- TARGETS — bundle vs skill decision -->
+<section id="targets">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title" data-i18n="targets.title">Bundle or Skill &mdash; pick your output</h2>
+      <p class="section-sub" data-i18n="targets.subtitle">One catalog, two emit modes. Bundle for full runtime, Skill for catalog publishing.</p>
+    </div>
+
+    <div class="deploy-grid fade-in" style="grid-template-columns: 1fr 1fr;">
+
+      <div class="deploy-card local">
+        <span class="deploy-badge badge-local" data-i18n="targets.bundle.badge">Default target</span>
+        <h3 data-i18n="targets.bundle.title">Bundle</h3>
+        <p data-i18n="targets.bundle.desc">Full runtime profile. Prompt + hooks + MCP config + env vars, written to <code style="color:var(--accent);font-size:0.9em;">./.claude/promptweave/&lt;agent&gt;/</code> with an atomic backup-swap.</p>
+
+        <div class="deploy-diagram">
+          <div class="dd-container">
+            <div class="dd-container-label">./.claude/promptweave/&lt;agent&gt;/</div>
+            <div class="dd-row">
+              <div class="dd-box dd-accent">prompt.md</div>
+              <div class="dd-box">hooks/*.sh</div>
+              <div class="dd-box dd-violet">.mcp.json</div>
+              <div class="dd-box dd-muted">.env</div>
+            </div>
+          </div>
+        </div>
+
+        <ul style="color: var(--muted); font-size: 0.88rem; line-height: 1.7; padding-left: 1.1rem; margin-bottom: 1.25rem;">
+          <li>Full prompt assembly (numbered sections)</li>
+          <li>Hooks emitted as executable <code style="color:var(--accent);font-size:0.9em;">.sh</code> files</li>
+          <li>MCP servers merged into project-root <code style="color:var(--accent);font-size:0.9em;">.mcp.json</code></li>
+          <li>Phases &amp; env vars preserved</li>
+          <li>Atomic backup-swap on rebuild</li>
+        </ul>
+
+        <div class="deploy-cmd">promptweave build inspect</div>
+      </div>
+
+      <div class="deploy-card team">
+        <span class="deploy-badge badge-team" data-i18n="targets.skill.badge">Catalog target</span>
+        <h3 data-i18n="targets.skill.title">Skill</h3>
+        <p data-i18n="targets.skill.desc">A single <code style="color:var(--blue);font-size:0.9em;">SKILL.md</code> ready to publish, written to <code style="color:var(--blue);font-size:0.9em;">./.claude/skills/&lt;preset&gt;/</code>. Frontmatter + prompt body + auto-generated Parameters.</p>
+
+        <div class="deploy-diagram">
+          <div class="dd-row">
+            <div class="dd-box dd-accent">frontmatter</div>
+            <div class="dd-arrow">+</div>
+            <div class="dd-box">body</div>
+            <div class="dd-arrow">+</div>
+            <div class="dd-box dd-violet">## Parameters</div>
+          </div>
+          <div class="dd-row"><span class="dd-arrow">&darr;</span></div>
+          <div class="dd-container">
+            <div class="dd-container-label">./.claude/skills/&lt;preset&gt;/</div>
+            <div class="dd-row">
+              <div class="dd-box">SKILL.md</div>
+            </div>
+          </div>
+        </div>
+
+        <ul style="color: var(--muted); font-size: 0.88rem; line-height: 1.7; padding-left: 1.1rem; margin-bottom: 1.25rem;">
+          <li>Slug-validated <code style="color:var(--blue);font-size:0.9em;">name</code> (<code style="color:var(--blue);font-size:0.9em;">^[a-z0-9-]+$</code>) &amp; YAML-escaped <code style="color:var(--blue);font-size:0.9em;">description</code></li>
+          <li>Auto-generated <code style="color:var(--blue);font-size:0.9em;">## Parameters</code> from preset params</li>
+          <li style="color:var(--yellow);">Drops with warning: hooks &middot; mcp_tools &middot; phases &middot; env vars</li>
+          <li>Output dir is rewritten on every build &mdash; don't hand-edit</li>
+        </ul>
+
+        <div class="deploy-cmd">promptweave build inspect --target skill</div>
+      </div>
+
+    </div>
+
+    <div class="results-card fade-in" style="max-width: 720px; margin: 2.5rem auto 0;">
+      <h4 data-i18n="targets.decide.title">Which one fits?</h4>
+      <div class="result-line">
+        <span>Need hooks, MCP tools, phased workflows, or env vars?</span>
+        <span><code style="color:var(--accent);font-size:0.95em;">&rarr; Bundle</code></span>
+      </div>
+      <div class="result-line">
+        <span>Publishing to a Claude Code skill catalog?</span>
+        <span><code style="color:var(--blue);font-size:0.95em;">&rarr; Skill</code></span>
+      </div>
+      <div class="result-line highlight">
+        <span>Just exploring? Default is fine.</span>
+        <span>bundle (no flag needed)</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1916,6 +2621,64 @@
 
     <div class="text-center" style="margin-top: 2.5rem; padding: 1rem; border: 1px solid rgba(96,165,250,0.3); border-radius: 8px; background: rgba(96,165,250,0.05); max-width: 720px; margin-left: auto; margin-right: auto;">
       <p style="font-size: 0.9rem; color: var(--muted);" data-i18n="bundled.callout"><strong>Looking for richer catalogs?</strong> The reference orchestrator <a href="https://github.com/swoofer/essaim">essaim</a> ships 32+ behaviors, 20+ presets, and 12 pre-composed templates (bug-hunt, parallel-tests, code-review, etc.) &mdash; all assembled by promptweave at runtime.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- API — programmatic library usage -->
+<section id="api">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-title" data-i18n="api.title">Use as a library</h2>
+      <p class="section-sub" data-i18n="api.subtitle">Programmatic API for CI pipelines, custom renderers, and migration tools.</p>
+    </div>
+
+    <div class="feature-block fade-in">
+      <div class="feature-text">
+        <h3 data-i18n="api.block.title">Run the pipeline programmatically</h3>
+        <p data-i18n="api.block.desc">The pipeline is a pure function: <code style="color:var(--accent);font-size:0.9em;">Registry &rarr; AgentSpec &rarr; PipelineResult</code>. No filesystem side effects until you call <code style="color:var(--accent);font-size:0.9em;">writeOutput</code>. Ideal for CI that re-renders every bundle on each commit, custom writers that target proprietary tools, or migration scripts that diff old vs. new behavior catalogs.</p>
+        <p data-i18n="api.block.desc2"><code style="color:var(--accent);font-size:0.9em;">PipelineResult</code> exposes <code style="color:var(--accent);font-size:0.9em;">agent</code>, <code style="color:var(--accent);font-size:0.9em;">behaviors[]</code>, <code style="color:var(--accent);font-size:0.9em;">compositionRulesApplied[]</code>, <code style="color:var(--accent);font-size:0.9em;">output</code>, <code style="color:var(--accent);font-size:0.9em;">warnings[]</code>, and <code style="color:var(--accent);font-size:0.9em;">sectionTrace[]</code> &mdash; everything you need to assert on in tests.</p>
+      </div>
+      <div class="feature-terminal">
+        <div><span class="t-blue">import</span> { <span class="t-blue">Registry</span>, <span class="t-blue">runPipeline</span> } <span class="t-blue">from</span> <span class="t-green">"@swoofer/promptweave"</span>;</div>
+        <div>&nbsp;</div>
+        <div><span class="t-dim">// Load behaviors, presets, compositions from disk</span></div>
+        <div><span class="t-blue">const</span> registry = <span class="t-blue">Registry</span>.load(<span class="t-green">"./my-prompts"</span>);</div>
+        <div>&nbsp;</div>
+        <div><span class="t-dim">// Pure: no writes, just resolve + assemble</span></div>
+        <div><span class="t-blue">const</span> result = <span class="t-blue">runPipeline</span>(</div>
+        <div>&nbsp;&nbsp;{ name: <span class="t-green">"agent-x"</span>, preset: <span class="t-green">"inspect"</span> },</div>
+        <div>&nbsp;&nbsp;<span class="t-green">"./my-prompts"</span>,</div>
+        <div>&nbsp;&nbsp;{},</div>
+        <div>);</div>
+        <div>&nbsp;</div>
+        <div>console.log(result.output.prompt);</div>
+        <div>console.log(result.output.hooks);</div>
+        <div>console.log(result.output.mcpTools);</div>
+      </div>
+    </div>
+
+    <div class="cards fade-in">
+      <div class="card">
+        <h3 data-i18n="api.card1.title">High-level</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.75rem;">Two entry points cover 90% of integrations.</p>
+        <p><code style="color:var(--accent);font-size:0.9em;">Registry.load(path)</code> &mdash; loads behaviors, presets, and compositions from a directory.</p>
+        <p><code style="color:var(--accent);font-size:0.9em;">runPipeline(agent, path, params)</code> &mdash; orchestrates resolve &rarr; validate &rarr; compose &rarr; assemble and returns a full <code style="color:var(--accent);font-size:0.9em;">PipelineResult</code>.</p>
+      </div>
+      <div class="card">
+        <h3 data-i18n="api.card2.title">Low-level (granular)</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.75rem;">Drop into any pipeline stage to build custom tooling.</p>
+        <p><code style="color:var(--accent);font-size:0.9em;">resolveBehaviors</code>, <code style="color:var(--accent);font-size:0.9em;">resolveParams</code> &mdash; expand presets and merge parameters.</p>
+        <p><code style="color:var(--accent);font-size:0.9em;">validateBehaviors</code> &mdash; enforce conflicts, requires, and missing-param checks.</p>
+        <p><code style="color:var(--accent);font-size:0.9em;">applyCompositionRules</code> &mdash; apply pattern-matched rule overrides.</p>
+        <p><code style="color:var(--accent);font-size:0.9em;">assemblePrompt</code>, <code style="color:var(--accent);font-size:0.9em;">assembleHooks</code>, <code style="color:var(--accent);font-size:0.9em;">assembleMcpTools</code> &mdash; deterministic section sort and dedup.</p>
+        <p><code style="color:var(--accent);font-size:0.9em;">bundleRenderer</code>, <code style="color:var(--accent);font-size:0.9em;">skillRenderer</code> &mdash; built-in writers for prompt+hooks+MCP and SKILL.md targets.</p>
+      </div>
+    </div>
+
+    <div class="text-center" style="margin-top: 2.5rem; padding: 1rem; border: 1px solid rgba(96,165,250,0.3); border-radius: 8px; background: rgba(96,165,250,0.05); max-width: 720px; margin-left: auto; margin-right: auto;">
+      <p style="font-size: 0.9rem; color: var(--muted);" data-i18n="api.note">Types live in <code style="color:var(--accent);font-size:0.9em;">@swoofer/promptweave/types</code>. The pipeline is deterministic &mdash; same inputs produce identical <code style="color:var(--accent);font-size:0.9em;">PipelineResult</code>.</p>
     </div>
   </div>
 </section>
@@ -2182,17 +2945,57 @@
       "bce.effort.high.use": "Complex execute with thinking headroom",
       "bce.effort.max.use": "Architecture debates, deep reasoning",
       "bce.usage.title": "One CLI to compose, inspect and build",
-      "install.title": "Get started in 3 steps",
-      "install.subtitle": "From npm install to your first composed prompt in under a minute.",
+      "install.title": "Get started in 5 steps",
+      "install.subtitle": "From npm install to a shipped bundle &mdash; with full control over what lands on disk.",
       "install.step1.label": "Step 1",
       "install.step1.title": "Install",
-      "install.step1.desc": "Pull the npm package. The CLI is self-contained — only Node.js 20+ is required.",
+      "install.step1.desc": "Grab the npm package. The CLI is self-contained — only Node.js 20+ required.",
       "install.step2.label": "Step 2",
-      "install.step2.title": "List the bundled demos",
-      "install.step2.desc": "4 demo behaviors and 2 demo presets ship bundled. Real-world catalogs live in your repo via --root.",
+      "install.step2.title": "Inspect bundled demos",
+      "install.step2.desc": "4 demo behaviors and 2 demo presets ship bundled — just enough to feel the engine. Real catalogs live in your repo via <code style=\"color:var(--accent);font-size:0.85em;\">--root</code>.",
       "install.step3.label": "Step 3",
-      "install.step3.title": "Build a preset",
-      "install.step3.desc": "Preview the composition with <code>--dry-run</code>. Drop the flag to write a bundle (prompt.md + hooks + .mcp.json) into <code>./.claude/promptweave/</code>, or pass <code>--target skill</code> to write a Claude Code <code>SKILL.md</code> instead.",
+      "install.step3.title": "Preview a build",
+      "install.step3.desc": "See exactly what would be assembled — resolved behaviors, composed sections, generated files — without touching disk.",
+      "install.step4.label": "Step 4",
+      "install.step4.title": "Ship it",
+      "install.step4.desc": "Two render targets. Default writes a bundle (prompt.md + hooks + .mcp.json) into <code style=\"color:var(--accent);font-size:0.85em;\">./.claude/promptweave/</code>. Pass <code style=\"color:var(--accent);font-size:0.85em;\">--target skill</code> for a Claude Code <code style=\"color:var(--accent);font-size:0.85em;\">SKILL.md</code> instead.",
+      "install.step5.label": "Step 5",
+      "install.step5.title": "Use your own catalog",
+      "install.step5.desc": "Point <code style=\"color:var(--accent);font-size:0.85em;\">--root</code> at your repo's catalog and override any templated parameter on the fly with <code style=\"color:var(--accent);font-size:0.85em;\">--set k=v</code> — repeatable, deterministic, scriptable.",
+      "nav.install": "Install",
+      "nav.tutorial": "Tutorial",
+      "nav.targets": "Targets",
+      "anatomy.title": "Anatomy of a behavior",
+      "anatomy.subtitle": "One YAML file. Every field, optional or required, in one place.",
+      "anatomy.tag.required": "required",
+      "anatomy.tag.optional": "optional",
+      "composition.title": "Composition rules: declarative behavior adaptation",
+      "composition.subtitle": "When two behaviors meet, rewrite or strip sections — without forcing every behavior to know about every other.",
+      "hooks.title": "Hook lifecycle",
+      "hooks.subtitle": "Bash scripts run at four lifecycle points. Behaviors compose them; the engine merges them per point in declared order.",
+      "phases.title": "Phases &amp; profiles",
+      "phases.subtitle": "Multi-stage workflows out of the box. Tools modes per phase, profiles for intent.",
+      "phases.phases.title": "Phases — multi-stage agent workflows",
+      "phases.profiles.title": "Profiles — declare agent intent",
+      "targets.title": "Bundle or Skill — pick your output",
+      "targets.subtitle": "One catalog, two emit modes. Bundle for full runtime, Skill for catalog publishing.",
+      "targets.bundle.title": "Bundle",
+      "targets.bundle.badge": "Default target",
+      "targets.skill.title": "Skill",
+      "targets.skill.badge": "Catalog target",
+      "targets.decide.title": "Which one fits?",
+      "tutorial.title": "Your first catalog in 5 minutes",
+      "tutorial.subtitle": "Build a custom behavior, compose a preset, render the bundle. Real shell commands you can copy.",
+      "tutorial.step1.title": "Scaffold the catalog",
+      "tutorial.step2.title": "Write a behavior",
+      "tutorial.step3.title": "Compose a preset",
+      "tutorial.step4.title": "Preview with --dry-run",
+      "tutorial.step5.title": "Ship it — bundle or skill",
+      "api.title": "Use as a library",
+      "api.subtitle": "Programmatic API for CI pipelines, custom renderers, and migration tools.",
+      "api.block.title": "Run the pipeline programmatically",
+      "api.card1.title": "High-level",
+      "api.card2.title": "Low-level (granular)",
       "roadmap.title": "Roadmap",
       "roadmap.subtitle": "Where the engine is going next.",
       "roadmap.badge.done": "Done",
@@ -2435,13 +3238,13 @@
       "bce.effort.high.use": "Execute complexe avec marge de thinking",
       "bce.effort.max.use": "D&eacute;bats d'architecture, raisonnement profond",
       "bce.usage.title": "Une CLI pour composer, inspecter et construire",
-      "install.title": "Démarrez en 3 étapes",
-      "install.subtitle": "De npm install à votre premier prompt composé en moins d'une minute.",
-      "install.step1.label": "Étape 1",
+      "install.title": "D&eacute;marrez en 5 &eacute;tapes",
+      "install.subtitle": "De npm install &agrave; un bundle exp&eacute;di&eacute; &mdash; avec un contr&ocirc;le total sur ce qui atterrit sur le disque.",
+      "install.step1.label": "&Eacute;tape 1",
       "install.step1.title": "Installer",
-      "install.step1.desc": "Récupérez le paquet npm. Le CLI est autonome — seul Node.js 20+ est requis.",
-      "install.step2.label": "Étape 2",
-      "install.step2.title": "Listez les demos incluses",
+      "install.step1.desc": "R&eacute;cup&eacute;rez le paquet npm. Le CLI est autonome &mdash; seul Node.js 20+ est requis.",
+      "install.step2.label": "&Eacute;tape 2",
+      "install.step2.title": "Inspecter les demos incluses",
       "install.step2.desc": "4 behaviors de démo et 2 presets de démo sont inclus. Les catalogues réels vivent dans votre repo via --root.",
       "install.step3.label": "Étape 3",
       "install.step3.title": "Buildez un preset",
@@ -2585,6 +3388,117 @@
       "case.mcp.line": "2 outils MCP enregistr&eacute;s",
       "case.kicker": "Modifiez un seul fichier YAML de behavior &rarr; tous les presets qui l'incluent se rerendent &agrave; l'identique au byte pr&egrave;s. <strong style=\"color:var(--accent);\">C'est &ccedil;a, le levier.</strong>",
 
+      "nav.install": "Installation",
+      "nav.tutorial": "Tutoriel",
+      "nav.targets": "Cibles",
+
+      "anatomy.title": "Anatomie d'un behavior",
+      "anatomy.subtitle": "Un fichier YAML. Tous les champs, requis ou optionnels, en un seul endroit.",
+      "anatomy.field.name.role": "Identifiant unique en kebab-case utilis&eacute; pour composer",
+      "anatomy.field.description.role": "R&eacute;sum&eacute; d'une ligne affich&eacute; dans les catalogues et les diffs",
+      "anatomy.field.sections.role": "Fragments de prompt index&eacute;s par NNN-name, ordre d&eacute;terministe",
+      "anatomy.field.category.role": "Bucket de taxonomie : workspace, coordination, mission, safety, tone",
+      "anatomy.field.requires.role": "D&eacute;pendances strictes envers d'autres behaviors et infrastructure",
+      "anatomy.field.conflicts.role": "Behaviors qui ne peuvent pas &ecirc;tre compos&eacute;s avec celui-ci",
+      "anatomy.field.suggests.role": "Indices souples remont&eacute;s &agrave; l'utilisateur, jamais impos&eacute;s",
+      "anatomy.field.params.role": "Entr&eacute;es typ&eacute;es avec valeur par d&eacute;faut, drapeau required et description",
+      "anatomy.field.hooks.role": "Scripts de cycle de vie (script, args, blocking, order) par phase",
+      "anatomy.field.mcp.role": "Serveurs MCP que ce behavior d&eacute;clare comme n&eacute;cessaires",
+      "anatomy.field.phase.role": "D&eacute;clare le nom de la phase, tools_mode et loop",
+      "anatomy.field.applies.role": "Garde conditionnelle bas&eacute;e sur le tools_mode de la phase active",
+      "anatomy.tag.required": "requis",
+      "anatomy.tag.optional": "optionnel",
+      "anatomy.callout": "Seuls <strong>name</strong>, <strong>description</strong> et <strong>sections</strong> sont strictement requis. Tout le reste est opt-in &mdash; d&eacute;clarez exactement ce dont votre behavior a besoin, rien de plus.",
+
+      "composition.title": "R&egrave;gles de composition : adaptation d&eacute;clarative des behaviors",
+      "composition.subtitle": "Quand deux behaviors se rencontrent, r&eacute;&eacute;crivez ou supprimez des sections &mdash; sans forcer chaque behavior &agrave; conna&icirc;tre tous les autres.",
+      "composition.when.title": "Le pr&eacute;dicat <code style=\"color:var(--accent);font-size:0.95em;\">when</code>",
+      "composition.when.desc": "Une r&egrave;gle ne se d&eacute;clenche que lorsque l'ensemble des behaviors assembl&eacute;s correspond &agrave; son pr&eacute;dicat. Combinez <code style=\"color:var(--blue);font-size:0.9em;\">all</code>, <code style=\"color:var(--blue);font-size:0.9em;\">any</code>, <code style=\"color:var(--blue);font-size:0.9em;\">none</code> et <code style=\"color:var(--blue);font-size:0.9em;\">params_match</code> pour exprimer &laquo; ces deux ensemble, mais pas avec ce troisi&egrave;me &raquo; sans coupler les YAMLs entre eux.",
+      "composition.actions.title": "Les quatre actions",
+      "composition.actions.desc": "Une fois qu'une r&egrave;gle correspond, ses <code style=\"color:var(--accent);font-size:0.95em;\">actions</code> remodellent l'assemblage. R&eacute;&eacute;crire une section existante, injecter une nouvelle section, forcer des params sur une behavior que vous ne poss&eacute;dez pas, ou supprimer une behavior enti&egrave;rement &mdash; tout d&eacute;clarativement.",
+      "composition.priority.title": "Priorit&eacute; et ordre d'&eacute;valuation",
+      "composition.priority.desc": "Les r&egrave;gles sont &eacute;valu&eacute;es par ordre croissant de <code style=\"color:var(--accent);font-size:0.95em;\">priority</code> (default <code style=\"color:var(--blue);font-size:0.9em;\">0</code>), puis par ordre d'enregistrement. Les priorit&eacute;s basses d'abord &mdash; ainsi une r&egrave;gle &laquo; strip &raquo; haute priorit&eacute; voit le r&eacute;sultat des overrides en dessous. D&eacute;terministe. Diffable.",
+      "composition.callout.title": "Les r&egrave;gles vivent dans <code style=\"font-family:inherit;background:none;-webkit-text-fill-color:initial;color:var(--accent);\">compositions/*.yaml</code>",
+      "composition.callout.desc": "Un fichier par r&egrave;gle, version&eacute; aux c&ocirc;t&eacute;s de vos behaviors. Le moteur charge le r&eacute;pertoire, &eacute;value chaque r&egrave;gle contre l'ensemble r&eacute;solu, et &eacute;met une trace <code style=\"color:var(--accent);font-size:0.9em;\">compositionRulesApplied</code> dans le r&eacute;sultat &mdash; auditable &agrave; chaque rendu.",
+
+      "hooks.title": "Cycle de vie des hooks",
+      "hooks.subtitle": "Des scripts Bash s'ex&eacute;cutent &agrave; quatre points du cycle de vie. Les behaviors les composent ; le moteur les fusionne par point dans l'ordre d&eacute;clar&eacute;.",
+      "hooks.table.point": "Point du cycle",
+      "hooks.table.fires": "D&eacute;clench&eacute;",
+      "hooks.table.use": "Usage typique",
+      "hooks.table.example": "Exemple",
+      "hooks.row1.fires": "Une fois, avant le premier tour de l'agent",
+      "hooks.row1.use": "Setup workspace, env, worktree",
+      "hooks.row2.fires": "Avant chaque appel d'outil",
+      "hooks.row2.use": "Valider, logger, gater",
+      "hooks.row2.example": "R&egrave;gles custom v&eacute;rifient avant edit fichier",
+      "hooks.row3.fires": "Apr&egrave;s chaque appel d'outil",
+      "hooks.row3.use": "Audit, sync, cleanup",
+      "hooks.row3.example": "Activity tracking &eacute;crit dans un log",
+      "hooks.row4.fires": "Une fois, apr&egrave;s le dernier tour",
+      "hooks.row4.use": "Teardown, archive",
+      "hooks.declare.title": "D&eacute;clarer un hook dans un behavior",
+      "hooks.declare.sub": "Ajoutez un bloc <code style=\"color:var(--accent);font-size:0.9em;\">hooks:</code> &agrave; n'importe quel YAML.",
+      "hooks.note": "Le moteur fusionne les hooks de plusieurs behaviors par point du cycle, tri&eacute;s par <code style=\"color:var(--accent);font-size:0.9em;\">order</code>. La cible Bundle les &eacute;crit en <code style=\"color:var(--accent);font-size:0.9em;\">hooks/&lt;lifecycle&gt;.sh</code>. La cible Skill les ignore avec un avertissement.",
+
+      "phases.title": "Phases &amp; profils",
+      "phases.subtitle": "Workflows multi-&eacute;tapes pr&ecirc;ts &agrave; l'emploi. Tools modes par phase, profils pour exprimer l'intention.",
+      "phases.phases.title": "Phases &mdash; workflows d'agent multi-&eacute;tapes",
+      "phases.phases.lead": "Une behavior peut d&eacute;clarer une <code style=\"color:var(--accent);font-size:0.9em;\">phase</code> ; les presets qui incluent des behaviors phas&eacute;es se rendent comme un workflow multi-&eacute;tapes, tandis que les presets sans phase produisent un seul prompt one-shot.",
+      "phases.col.phase": "Phase",
+      "phases.col.tools": "Tools",
+      "phases.col.loop": "Loop",
+      "phases.col.purpose": "But",
+      "phases.row.discover": "Scanner le code, lister les findings ind&eacute;pendamment.",
+      "phases.row.review": "Comparer findings, d&eacute;dupliquer le pool.",
+      "phases.row.execute": "Claim atomique &rarr; ex&eacute;cuter &rarr; claim suivant.",
+      "phases.row.noPhase.purpose": "Mode one-shot (backward-compat).",
+      "phases.appliesWhen": "Une behavior peut aussi d&eacute;clarer <code style=\"color:var(--accent);font-size:0.9em;\">applies_when.phase_tools_mode: [\"read_only\"]</code> pour ne s'appliquer qu'aux phases avec un tools mode correspondant.",
+      "phases.profiles.title": "Profils &mdash; d&eacute;clarer l'intention de l'agent",
+      "phases.profiles.lead": "Un <code style=\"color:var(--accent);font-size:0.9em;\">profile</code> est un raccourci d&eacute;clar&eacute; sur un preset ou un agent. Il signale ce pour quoi l'agent existe ; les composition rules et templates peuvent le lire.",
+      "phases.profile.codeur.desc": "Agent qui &eacute;crit du code. Tool access complet par d&eacute;faut. Va avec <code style=\"color:var(--accent);font-size:0.9em;\">worktree-isolation</code> et les behaviors mission.",
+      "phases.profile.communicant.desc": "Agent qui rapporte, review, communique. Va avec <code style=\"color:var(--accent);font-size:0.9em;\">read-only-mode</code> pour les flux d'analyse uniquement.",
+
+      "targets.title": "Bundle ou Skill &mdash; choisis ta sortie",
+      "targets.subtitle": "Un seul catalogue, deux modes d'&eacute;mission. Bundle pour le runtime complet, Skill pour la publication en catalogue.",
+      "targets.bundle.title": "Bundle",
+      "targets.bundle.badge": "Cible par d&eacute;faut",
+      "targets.bundle.desc": "Profil runtime complet. Prompt + hooks + config MCP + variables d'environnement, &eacute;crit dans <code style=\"color:var(--accent);font-size:0.9em;\">./.claude/promptweave/&lt;agent&gt;/</code> avec un swap atomique.",
+      "targets.skill.title": "Skill",
+      "targets.skill.badge": "Cible catalogue",
+      "targets.skill.desc": "Un unique <code style=\"color:var(--blue);font-size:0.9em;\">SKILL.md</code> pr&ecirc;t &agrave; publier, &eacute;crit dans <code style=\"color:var(--blue);font-size:0.9em;\">./.claude/skills/&lt;preset&gt;/</code>. Frontmatter + corps du prompt + Parameters auto-g&eacute;n&eacute;r&eacute;s.",
+      "targets.decide.title": "Lequel choisir ?",
+
+      "tutorial.title": "Ton premier catalogue en 5 minutes",
+      "tutorial.subtitle": "Construis un behavior personnalis&eacute;, compose un preset, g&eacute;n&egrave;re le bundle. De vraies commandes shell &agrave; copier.",
+      "tutorial.step1.title": "Initialiser le catalogue",
+      "tutorial.step1.desc": "Trois dossiers &mdash; un par concept. Pointez <code style=\"color:var(--accent);font-size:0.9em;\">--root</code> sur ce r&eacute;pertoire et promptweave d&eacute;couvrira tout ce qui s'y trouve.",
+      "tutorial.step2.title": "&Eacute;crire un behavior",
+      "tutorial.step2.desc": "Un behavior est un YAML. Il contribue une ou plusieurs sections num&eacute;rot&eacute;es au prompt assembl&eacute; &mdash; ici, section <code style=\"color:var(--accent);font-size:0.9em;\">070</code> dans la couche tone.",
+      "tutorial.step3.title": "Composer un preset",
+      "tutorial.step3.desc": "Un preset est une liste nomm&eacute;e de behaviors. M&eacute;langez les demos livr&eacute;es avec votre <code style=\"color:var(--accent);font-size:0.9em;\">concise-tone</code> custom.",
+      "tutorial.step4.title": "Pr&eacute;visualiser avec --dry-run",
+      "tutorial.step4.desc": "Resolve, validate, compose, assemble &mdash; rien n'est &eacute;crit sur disque. Attrapez les r&eacute;f&eacute;rences manquantes et les conflits avant qu'ils n'atteignent un agent.",
+      "tutorial.step5.title": "Exp&eacute;dier &mdash; bundle ou skill",
+      "tutorial.step5.desc": "M&ecirc;me preset, deux sorties. <code style=\"color:var(--accent);font-size:0.9em;\">bundle</code> &eacute;crit <code style=\"color:var(--accent);font-size:0.9em;\">.claude/promptweave/</code> ; <code style=\"color:var(--accent);font-size:0.9em;\">skill</code> &eacute;crit un <code style=\"color:var(--accent);font-size:0.9em;\">SKILL.md</code> publish-ready.",
+      "tutorial.callout": "<strong>Besoin de catalogues plus riches ?</strong> Voir <a href=\"https://github.com/swoofer/essaim\">essaim</a> &mdash; l'orchestrateur de r&eacute;f&eacute;rence avec 32+ behaviors, 20+ presets, et 12 templates pr&eacute;-compos&eacute;s.",
+
+      "api.title": "Utiliser comme biblioth&egrave;que",
+      "api.subtitle": "API programmatique pour pipelines CI, renderers personnalis&eacute;s et outils de migration.",
+      "api.block.title": "Ex&eacute;cuter le pipeline par programmation",
+      "api.block.desc": "Le pipeline est une fonction pure : <code style=\"color:var(--accent);font-size:0.9em;\">Registry &rarr; AgentSpec &rarr; PipelineResult</code>. Aucun effet de bord filesystem tant que vous n'appelez pas <code style=\"color:var(--accent);font-size:0.9em;\">writeOutput</code>. Id&eacute;al pour CI qui re-rend chaque bundle &agrave; chaque commit.",
+      "api.block.desc2": "<code style=\"color:var(--accent);font-size:0.9em;\">PipelineResult</code> expose <code style=\"color:var(--accent);font-size:0.9em;\">agent</code>, <code style=\"color:var(--accent);font-size:0.9em;\">behaviors[]</code>, <code style=\"color:var(--accent);font-size:0.9em;\">compositionRulesApplied[]</code>, <code style=\"color:var(--accent);font-size:0.9em;\">output</code>, <code style=\"color:var(--accent);font-size:0.9em;\">warnings[]</code> et <code style=\"color:var(--accent);font-size:0.9em;\">sectionTrace[]</code> &mdash; tout ce qu'il faut pour assert dans les tests.",
+      "api.card1.title": "Haut niveau",
+      "api.card2.title": "Bas niveau (granulaire)",
+      "api.note": "Les types vivent dans <code style=\"color:var(--accent);font-size:0.9em;\">@swoofer/promptweave/types</code>. Le pipeline est d&eacute;terministe &mdash; m&ecirc;mes inputs produisent un <code style=\"color:var(--accent);font-size:0.9em;\">PipelineResult</code> identique.",
+
+      "install.step4.label": "&Eacute;tape 4",
+      "install.step4.title": "Exp&eacute;dier",
+      "install.step4.desc": "Deux render targets. Le default &eacute;crit un bundle (prompt.md + hooks + .mcp.json) dans <code style=\"color:var(--accent);font-size:0.85em;\">./.claude/promptweave/</code>. Passez <code style=\"color:var(--accent);font-size:0.85em;\">--target skill</code> pour un Claude Code <code style=\"color:var(--accent);font-size:0.85em;\">SKILL.md</code> &agrave; la place.",
+      "install.step5.label": "&Eacute;tape 5",
+      "install.step5.title": "Utiliser ton propre catalogue",
+      "install.step5.desc": "Pointez <code style=\"color:var(--accent);font-size:0.85em;\">--root</code> sur le catalogue de votre repo et override n'importe quel param &agrave; la vol&eacute;e avec <code style=\"color:var(--accent);font-size:0.85em;\">--set k=v</code> &mdash; r&eacute;p&eacute;table, d&eacute;terministe, scriptable.",
+
     },
     es: {
       "nav.why": "Por qu&eacute;",
@@ -2688,17 +3602,28 @@
       "bce.effort.high.use": "Execute complejo con margen de thinking",
       "bce.effort.max.use": "Debates de arquitectura, razonamiento profundo",
       "bce.usage.title": "Una CLI para componer, inspeccionar y construir",
-      "install.title": "Empiece en 3 pasos",
-      "install.subtitle": "Desde npm install hasta su primer prompt compuesto en menos de un minuto.",
+      "install.title": "Empieza en 5 pasos",
+      "install.subtitle": "Desde npm install hasta un bundle listo &mdash; con control total sobre lo que se escribe en disco.",
       "install.step1.label": "Paso 1",
       "install.step1.title": "Instalar",
-      "install.step1.desc": "Obtenga el paquete npm. La CLI es autocontenida — solo se requiere Node.js 20+.",
+      "install.step1.desc": "Obt&eacute;n el paquete npm. La CLI es autocontenida &mdash; solo se requiere Node.js 20+.",
       "install.step2.label": "Paso 2",
-      "install.step2.title": "Liste las demos incluidas",
-      "install.step2.desc": "Se incluyen 4 behaviors demo y 2 presets demo. Los catálogos reales viven en su repo vía --root.",
+      "install.step2.title": "Inspeccionar las demos incluidas",
+      "install.step2.desc": "Se incluyen 4 behaviors demo y 2 presets demo. Los cat&aacute;logos reales viven en tu repo v&iacute;a --root.",
       "install.step3.label": "Paso 3",
-      "install.step3.title": "Compile un preset",
-      "install.step3.desc": "Previsualiza la composición con <code>--dry-run</code>. Sin el flag, escribe un bundle (prompt.md + hooks + .mcp.json) en <code>./.claude/promptweave/</code>, o pasa <code>--target skill</code> para escribir un <code>SKILL.md</code> de Claude Code en su lugar.",
+      "install.step3.title": "Previsualizar una build",
+      "install.step3.desc": "Mira exactamente qu&eacute; se ensamblar&iacute;a &mdash; behaviors resueltos, secciones compuestas, archivos generados &mdash; sin tocar el disco.",
+      "install.step4.label": "Paso 4",
+      "install.step4.title": "Publicar",
+      "install.step4.desc": "Dos render targets. Por defecto escribe un bundle (prompt.md + hooks + .mcp.json) en <code>./.claude/promptweave/</code>. Pasa <code>--target skill</code> para un <code>SKILL.md</code> de Claude Code.",
+      "install.step5.label": "Paso 5",
+      "install.step5.title": "Usa tu propio cat&aacute;logo",
+      "install.step5.desc": "Apunta <code>--root</code> al cat&aacute;logo de tu repo y sobreescribe cualquier par&aacute;metro al vuelo con <code>--set k=v</code> &mdash; repetible, determinista, scriptable.",
+      "nav.install": "Instalaci&oacute;n",
+      "nav.tutorial": "Tutorial",
+      "nav.targets": "Targets",
+      "anatomy.tag.required": "obligatorio",
+      "anatomy.tag.optional": "opcional",
       "roadmap.title": "Hoja de ruta",
       "roadmap.subtitle": "Adónde va el motor a continuación.",
       "roadmap.badge.done": "Hecho",
@@ -2941,17 +3866,28 @@
       "bce.effort.high.use": "Komplexes Execute mit Thinking-Headroom",
       "bce.effort.max.use": "Architektur-Debatten, tiefes Reasoning",
       "bce.usage.title": "Eine CLI zum Komponieren, Inspizieren, Bauen",
-      "install.title": "Loslegen in 3 Schritten",
-      "install.subtitle": "Von npm install zu Ihrem ersten zusammengesetzten Prompt in unter einer Minute.",
+      "install.title": "In 5 Schritten loslegen",
+      "install.subtitle": "Von npm install bis zum fertigen Bundle &mdash; mit voller Kontrolle dar&uuml;ber, was auf der Festplatte landet.",
       "install.step1.label": "Schritt 1",
       "install.step1.title": "Installieren",
-      "install.step1.desc": "Holen Sie sich das npm-Paket. Die CLI ist eigenständig — nur Node.js 20+ wird benötigt.",
+      "install.step1.desc": "Holen Sie sich das npm-Paket. Die CLI ist eigenst&auml;ndig &mdash; nur Node.js 20+ wird ben&ouml;tigt.",
       "install.step2.label": "Schritt 2",
-      "install.step2.title": "Listen Sie die mitgelieferten Demos auf",
-      "install.step2.desc": "4 Demo-Behaviors und 2 Demo-Presets werden mitgeliefert. Reale Kataloge leben in Ihrem Repo über --root.",
+      "install.step2.title": "Mitgelieferte Demos pr&uuml;fen",
+      "install.step2.desc": "4 Demo-Behaviors und 2 Demo-Presets werden mitgeliefert. Reale Kataloge leben in Ihrem Repo &uuml;ber --root.",
       "install.step3.label": "Schritt 3",
-      "install.step3.title": "Bauen Sie ein Preset",
-      "install.step3.desc": "Vorschau der Komposition mit <code>--dry-run</code>. Ohne das Flag wird ein Bundle (prompt.md + hooks + .mcp.json) in <code>./.claude/promptweave/</code> geschrieben, oder mit <code>--target skill</code> wird stattdessen eine Claude Code <code>SKILL.md</code> erzeugt.",
+      "install.step3.title": "Build-Vorschau",
+      "install.step3.desc": "Sehen Sie genau, was assembliert w&uuml;rde &mdash; ohne die Festplatte zu ber&uuml;hren.",
+      "install.step4.label": "Schritt 4",
+      "install.step4.title": "Ausliefern",
+      "install.step4.desc": "Zwei Render-Ziele. Standard schreibt ein Bundle in <code>./.claude/promptweave/</code>. Mit <code>--target skill</code> stattdessen eine Claude Code <code>SKILL.md</code>.",
+      "install.step5.label": "Schritt 5",
+      "install.step5.title": "Eigenen Katalog verwenden",
+      "install.step5.desc": "Zeigen Sie <code>--root</code> auf den Katalog Ihres Repos und &uuml;berschreiben Sie Parameter zur Build-Zeit mit <code>--set k=v</code> &mdash; wiederholbar, deterministisch, skriptbar.",
+      "nav.install": "Installation",
+      "nav.tutorial": "Tutorial",
+      "nav.targets": "Targets",
+      "anatomy.tag.required": "erforderlich",
+      "anatomy.tag.optional": "optional",
       "roadmap.title": "Roadmap",
       "roadmap.subtitle": "Wohin sich die Engine als nächstes entwickelt.",
       "roadmap.badge.done": "Erledigt",
@@ -3194,17 +4130,28 @@
       "bce.effort.high.use": "带 thinking 空间的复杂 execute",
       "bce.effort.max.use": "架构辩论、深度推理",
       "bce.usage.title": "一个 CLI 组合、检查、构建",
-      "install.title": "三步即可开始",
-      "install.subtitle": "从 npm install 到您的第一个组合 prompt，不到一分钟。",
+      "install.title": "5 步快速上手",
+      "install.subtitle": "从 npm install 到打包发布 &mdash; 完全掌控写入磁盘的内容。",
       "install.step1.label": "第 1 步",
       "install.step1.title": "安装",
-      "install.step1.desc": "拉取 npm 包。CLI 是自包含的 —— 仅需 Node.js 20+。",
+      "install.step1.desc": "拉取 npm 包。CLI 是自包含的 &mdash; 仅需 Node.js 20+。",
       "install.step2.label": "第 2 步",
-      "install.step2.title": "列出捆绑的示例",
-      "install.step2.desc": "捆绑了 4 个示例 behavior 和 2 个示例 preset。真实目录通过 --root 放在您的 repo 中。",
+      "install.step2.title": "查看内置示例",
+      "install.step2.desc": "捆绑了 4 个示例 behavior 和 2 个示例 preset。真实目录通过 --root 放在你的 repo 中。",
       "install.step3.label": "第 3 步",
-      "install.step3.title": "构建一个 preset",
-      "install.step3.desc": "使用 <code>--dry-run</code> 预览组装结果。去掉该标志会将 bundle（prompt.md + hooks + .mcp.json）写入 <code>./.claude/promptweave/</code>，或使用 <code>--target skill</code> 改为生成 Claude Code 的 <code>SKILL.md</code>。",
+      "install.step3.title": "预览构建",
+      "install.step3.desc": "完全看到将要组装的内容 &mdash; 解析的 behaviors、组合的 sections、生成的文件 &mdash; 不会写入磁盘。",
+      "install.step4.label": "第 4 步",
+      "install.step4.title": "发布",
+      "install.step4.desc": "两种渲染目标。默认写入 bundle 到 <code>./.claude/promptweave/</code>。传入 <code>--target skill</code> 改为生成 Claude Code 的 <code>SKILL.md</code>。",
+      "install.step5.label": "第 5 步",
+      "install.step5.title": "使用自定义目录",
+      "install.step5.desc": "将 <code>--root</code> 指向你的 repo 目录，并使用 <code>--set k=v</code> 在构建时覆盖任何参数 &mdash; 可重复、确定、可脚本化。",
+      "nav.install": "安装",
+      "nav.tutorial": "教程",
+      "nav.targets": "目标",
+      "anatomy.tag.required": "必填",
+      "anatomy.tag.optional": "可选",
       "roadmap.title": "路线图",
       "roadmap.subtitle": "引擎下一步的方向。",
       "roadmap.badge.done": "已完成",
@@ -3447,17 +4394,28 @@
       "bce.effort.high.use": "thinking 余地のある複雑な execute",
       "bce.effort.max.use": "アーキテクチャ議論、深い推論",
       "bce.usage.title": "構成、検査、ビルドのための 1 つの CLI",
-      "install.title": "3 ステップで始める",
-      "install.subtitle": "npm install から最初の組み立てプロンプトまで 1 分以内。",
+      "install.title": "5 ステップで始める",
+      "install.subtitle": "npm install から完成した bundle まで &mdash; ディスクに書き込む内容を完全に制御。",
       "install.step1.label": "ステップ 1",
       "install.step1.title": "インストール",
       "install.step1.desc": "npm パッケージを取得。CLI は自己完結型で、Node.js 20+ のみ必要です。",
       "install.step2.label": "ステップ 2",
-      "install.step2.title": "同梱されたデモを確認",
+      "install.step2.title": "同梱デモを確認",
       "install.step2.desc": "デモ behavior 4 つとデモ preset 2 つが同梱されています。実用的なカタログは --root で自分のリポジトリ内に置きます。",
       "install.step3.label": "ステップ 3",
-      "install.step3.title": "preset をビルド",
-      "install.step3.desc": "<code>--dry-run</code> でコンポジションをプレビュー。フラグを外すと bundle (prompt.md + hooks + .mcp.json) を <code>./.claude/promptweave/</code> に書き出し、<code>--target skill</code> を渡すと代わりに Claude Code の <code>SKILL.md</code> を出力します。",
+      "install.step3.title": "ビルドをプレビュー",
+      "install.step3.desc": "ディスクに触れずに、解決された behaviors、組み立てられた sections、生成されるファイルを確認できます。",
+      "install.step4.label": "ステップ 4",
+      "install.step4.title": "リリース",
+      "install.step4.desc": "2 つのレンダーターゲット。デフォルトは bundle を <code>./.claude/promptweave/</code> に書き出し、<code>--target skill</code> で Claude Code の <code>SKILL.md</code> を出力します。",
+      "install.step5.label": "ステップ 5",
+      "install.step5.title": "独自カタログを使う",
+      "install.step5.desc": "<code>--root</code> をリポジトリのカタログに向け、<code>--set k=v</code> でビルド時に任意のパラメータを上書き &mdash; 反復可能、決定論的、スクリプト化可能。",
+      "nav.install": "インストール",
+      "nav.tutorial": "チュートリアル",
+      "nav.targets": "ターゲット",
+      "anatomy.tag.required": "必須",
+      "anatomy.tag.optional": "任意",
       "roadmap.title": "ロードマップ",
       "roadmap.subtitle": "エンジンの次の方向性。",
       "roadmap.badge.done": "完了",
