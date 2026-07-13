@@ -183,6 +183,44 @@ describe('PresetSchema', () => {
     });
     expect(result.success).toBe(true);
   });
+
+  it('accepts emit_parameters: false', () => {
+    const result = PresetSchema.safeParse({
+      name: 'raid',
+      description: 'Bug hunting',
+      behaviors: ['bug-hunting'],
+      emit_parameters: false,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.emit_parameters).toBe(false);
+    }
+  });
+
+  it('accepts emit_parameters: true', () => {
+    const result = PresetSchema.safeParse({
+      name: 'raid',
+      description: 'Bug hunting',
+      behaviors: ['bug-hunting'],
+      emit_parameters: true,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.emit_parameters).toBe(true);
+    }
+  });
+
+  it('emit_parameters is optional (undefined when omitted)', () => {
+    const result = PresetSchema.safeParse({
+      name: 'raid',
+      description: 'Bug hunting',
+      behaviors: ['bug-hunting'],
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.emit_parameters).toBeUndefined();
+    }
+  });
 });
 
 describe('AgentSchema', () => {

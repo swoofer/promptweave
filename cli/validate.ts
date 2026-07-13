@@ -9,30 +9,41 @@ import {
   PresetSchema,
   CompositionRuleSchema,
 } from "../src/types.js";
-import { resolveRoot } from "./paths.js";
+import { resolveRoots } from "./paths.js";
+import { collect } from "./params.js";
 
 export function createValidateCommand(): Command {
   return new Command("validate")
     .description("Validate BCE YAML files (single file, or entire registry with --all)")
     .argument("[file]", "YAML file to validate")
     .option("--all", "Validate the bundled (or --root) registry")
-    .option("--root <path>", "Use this directory's behaviors/presets/compositions instead of bundled (only with --all)")
-    .action((file: string | undefined, opts: { all?: boolean; root?: string }) => {
+    .option("--root <path>", "Catalog root; repeatable — later roots override earlier ones (only with --all)", collect, [])
+    .action((file: string | undefined, opts: { all?: boolean; root: string[] }) => {
       if (!opts.all && !file) {
         console.error("Usage: promptweave validate <file.yaml>  OR  promptweave validate --all [--root PATH]");
         process.exit(1);
       }
       if (opts.all) {
-        validateAll(resolveRoot(opts.root));
+        validateAll(resolveRoots(opts.root));
       } else {
         validateFile(file!);
       }
     });
 }
 
-function validateAll(root: string): void {
-  const registry = Registry.load(root);
+function validateAll(roots: string[]): void {
+  const registry = Registry.load(roots);
   let hasErrors = false;
+
+  // Show what shadows what. An override is silent by construction — the key is the
+  // YAML `name`, not the file name — so an overlay can replace a bundled behavior
+  // it never meant to touch. Printing them is what makes the overlay auditable.
+  if (registry.overrides.length > 0) {
+    console.log(`Overrides (${registry.overrides.length}):`);
+    for (const o of registry.overrides) {
+      console.log(`  ${o.kind} "${o.name}": ${o.from} -> overridden by ${o.by}`);
+    }
+  }
 
   if (registry.errors.length > 0) {
     console.error("YAML validation errors:");

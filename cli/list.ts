@@ -1,19 +1,20 @@
 import { Command } from "commander";
 import { Registry } from "../src/registry.js";
-import { resolveRoot } from "./paths.js";
+import { resolveRoots } from "./paths.js";
+import { collect } from "./params.js";
 
 export function createListCommand(): Command {
   return new Command("list")
     .description("List bundled (or user) behaviors / presets / compositions")
     .argument("[type]", "behaviors | presets | compositions")
-    .option("--root <path>", "Use behaviors/presets/compositions from this directory instead of bundled")
+    .option("--root <path>", "Catalog root; repeatable — later roots override earlier ones", collect, [])
     .option("--category <cat>", "Filter behaviors by category")
-    .action((type: string | undefined, opts: { root?: string; category?: string }) => {
+    .action((type: string | undefined, opts: { root: string[]; category?: string }) => {
       if (!type) {
         console.error("Usage: promptweave list <behaviors|presets|compositions> [--category X] [--root PATH]");
         process.exit(1);
       }
-      const registry = Registry.load(resolveRoot(opts.root));
+      const registry = Registry.load(resolveRoots(opts.root));
 
       switch (type) {
         case "behaviors": {

@@ -10,7 +10,7 @@ import type { Agent, AgentContext, Behavior, PipelineResult } from './types.js';
 
 export function runPipeline(
   agent: Agent,
-  registryPath: string,
+  registryPath: string | string[],
   launchParams: Record<string, Record<string, unknown>>,
   infraStatus: Record<string, boolean> = {},
 ): PipelineResult {
@@ -61,11 +61,15 @@ export function runPipeline(
     ? (registry.getPreset(agent.preset)?.params ?? {})
     : {};
 
-  // Create a registry-like object that uses composed behaviors (with modified defaults)
-  const composedRegistry = {
-    ...registry,
-    getBehavior: (n: string) => composed.behaviors.get(n) ?? registry.getBehavior(n),
-  } as Registry;
+  // Registry view backed by the COMPOSED behaviors (composition may have changed
+  // param defaults). Object.create, not a spread: `{...registry}` copies own
+  // fields but drops the prototype, so every method — and every field added later
+  // (roots, sources, overrides…) — is silently lost behind the `as Registry` cast.
+  const composedRegistry: Registry = Object.create(registry, {
+    getBehavior: {
+      value: (n: string) => composed.behaviors.get(n) ?? registry.getBehavior(n),
+    },
+  });
 
   const resolvedParams = resolveParams(
     [...composed.behaviors.keys()],
@@ -100,7 +104,19 @@ export function runPipeline(
   );
 
   // Step 5: Warnings
+  //
+  // Catalog load errors MUST surface here. A YAML with a typo is pushed into
+  // `registry.errors`, nothing is inserted, and the lookup silently falls back to
+  // whichever root defined that name earlier — a "successful" build with the
+  // wrong prompt. Nobody read `errors` before (only `validate --all` did), which
+  // made an overlay a permanent trap: the file you edited simply had no effect,
+  // without a word.
+  const loadWarnings = registry.errors.map(
+    (e) => `Catalog entry ignored (invalid): ${e.file} — ${e.message.split('\n')[0]}`,
+  );
+
   const warnings = [
+    ...loadWarnings,
     ...generateWarnings(
       composed.behaviors,
       composed.appliedRules,
