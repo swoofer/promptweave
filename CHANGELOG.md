@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://github.com/swoofer/promptweave/compare/v0.2.0...v0.3.0) (2026-07-14)
+
+
+### Features
+
+* extra_frontmatter passthrough + side-car files for skill renderer ([3904b6d](https://github.com/swoofer/promptweave/commit/3904b6d878ea4fb10a6e29e1070a18c699d4766c))
+* **registry:** catalogue multi-racines — Registry.load accepte plusieurs roots ([#9](https://github.com/swoofer/promptweave/issues/9)) ([7fbd522](https://github.com/swoofer/promptweave/commit/7fbd522d98c1ba6a80fe175e10733354f3725633))
+* **renderers:** extra_frontmatter passthrough on preset ([2f73034](https://github.com/swoofer/promptweave/commit/2f7303460fec3b943a48487d1065af0c730489b1))
+* **renderers:** side-car files (multi-file skill output) ([951892d](https://github.com/swoofer/promptweave/commit/951892d43a70119e89e4072fda8e3c47ed2976a7))
+
+
+### Bug Fixes
+
+* **schema:** la garde anti-chemin-absolu ne dépend plus de l'OS ([#10](https://github.com/swoofer/promptweave/issues/10)) ([d8e9ade](https://github.com/swoofer/promptweave/commit/d8e9adeae08aaad86977aa02b671833000e242b4))
+* **side-car:** Windows path validation, real atomicity test, interpolate source + agent ([bb87016](https://github.com/swoofer/promptweave/commit/bb870168c13572cdf75c8302d5710e25c6e93e26))
+
 ## [0.2.0](https://github.com/swoofer/promptweave/compare/v0.1.1...v0.2.0) (2026-05-08)
 
 
