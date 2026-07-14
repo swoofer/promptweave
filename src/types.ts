@@ -1,5 +1,17 @@
 import { z } from 'zod';
-import { isAbsolute } from 'path';
+import { posix, win32 } from 'path';
+
+/**
+ * Absolute for POSIX *or* Windows — never for "whichever OS happens to run this".
+ *
+ * `path.isAbsolute` is platform-dependent: `C:/x` is absolute on Windows and
+ * RELATIVE on Linux. The same catalog YAML was therefore rejected on a dev laptop
+ * and accepted in CI/Docker. A catalog is portable data; validating it must not
+ * depend on the machine that loads it.
+ */
+function isAbsolutePath(p: string): boolean {
+  return posix.isAbsolute(p) || win32.isAbsolute(p);
+}
 
 // --- Section key must match pattern "NNN-name" ---
 const sectionKeyPattern = /^\d{3}-[\w-]+$/;
@@ -60,7 +72,7 @@ export const BehaviorSchema = z.object({
   phase: PhaseSchema.optional(),
   applies_when: AppliesWhenSchema,
   side_car_files: z.record(z.string(), z.string()).optional().default({}).refine(
-    (files) => Object.keys(files).every((p) => !isAbsolute(p) && !p.includes('..') && !p.includes('\\')),
+    (files) => Object.keys(files).every((p) => !isAbsolutePath(p) && !p.includes('..') && !p.includes('\\')),
     { message: 'side_car_files paths must be relative, forward-slash, and not contain ..' }
   ),
 });
