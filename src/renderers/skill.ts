@@ -72,7 +72,8 @@ export const skillRenderer: Renderer = {
     const frontmatter = buildFrontmatter(ctx.presetName, description, ctx.extraFrontmatter);
 
     const stripped = output.prompt.replace(/\s+$/, '');
-    const paramsSection = (ctx.params && ctx.params.length > 0) ? renderParamsSection(ctx.params) : null;
+    const emitParams = ctx.emitParameters !== false && ctx.params && ctx.params.length > 0;
+    const paramsSection = emitParams ? renderParamsSection(ctx.params!) : null;
     const bodyParts = paramsSection ? [stripped, paramsSection] : [stripped];
     const content = `${frontmatter}\n\n${bodyParts.join('\n\n')}\n`;
 

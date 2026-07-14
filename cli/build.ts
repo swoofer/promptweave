@@ -5,7 +5,7 @@ import yaml from "js-yaml";
 import { runPipeline } from "../src/pipeline.js";
 import { AgentSchema } from "../src/types.js";
 import type { Behavior } from "../src/types.js";
-import { resolveRoot } from "./paths.js";
+import { resolveRoots } from "./paths.js";
 import { collect, parseSetParams } from "./params.js";
 import { registry } from "../src/renderers/index.js";
 import type { RenderedParam } from "../src/renderers/index.js";
@@ -17,11 +17,12 @@ function buildSkillContext(
   behaviors: Behavior[],
   registryInstance: Registry,
   launchParams: Record<string, Record<string, unknown>>,
-): { description?: string; params: RenderedParam[]; extraFrontmatter: Record<string, unknown> } {
+): { description?: string; params: RenderedParam[]; extraFrontmatter: Record<string, unknown>; emitParameters?: boolean } {
   const presetSlug = agent.preset ?? agent.name;
   const preset = registryInstance.presets.get(presetSlug);
   const description = preset?.description;
   const extraFrontmatter = preset?.frontmatter ?? {};
+  const emitParameters = preset?.emit_parameters;
 
   const behaviorNames = behaviors.map((b) => b.name);
   const presetParams = preset?.params ?? {};
@@ -43,30 +44,33 @@ function buildSkillContext(
       });
     }
   }
-  return { description, params, extraFrontmatter };
+  return { description, params, extraFrontmatter, emitParameters };
 }
 
 export function createBuildCommand(): Command {
   return new Command("build")
     .description("Assemble a prompt from a preset (or agent) using bundled or user-supplied behaviors")
     .argument("<agent>", "Agent name or preset")
-    .option("--root <path>", "Use behaviors/presets/compositions from this directory instead of bundled")
+    .option("--root <path>", "Catalog root; repeatable — later roots override earlier ones (replaces the bundled catalog)", collect, [])
     .option("--dry-run", "Print the assembled output to stdout without writing files")
     .option("--set <key=value>", "Parameter override, repeatable (e.g., --set bug-hunting.modules='[\"src/auth\"]')", collect, [])
     .option("--output <dir>", "Output directory (default: .claude/promptweave in cwd)")
     .option("--target <type>", "Output target: 'bundle' (default) or 'skill'", "bundle")
-    .action(async (agentName: string, opts: { root?: string; dryRun?: boolean; set: string[]; output?: string; target: string }) => {
-      const root = resolveRoot(opts.root);
+    .action(async (agentName: string, opts: { root: string[]; dryRun?: boolean; set: string[]; output?: string; target: string }) => {
+      const roots = resolveRoots(opts.root);
       const target = opts.target;
       const renderer = registry[target];
       if (!renderer) {
         console.error(`Unknown target '${target}'. Valid: ${Object.keys(registry).join(', ')}`);
         process.exit(1);
       }
-      const agentPath = resolve(root, "agents", `${agentName}.yaml`);
+      // Same precedence as the catalog: the last root wins, so search backwards.
+      const agentPath = [...roots].reverse()
+        .map((r) => resolve(r, "agents", `${agentName}.yaml`))
+        .find((p) => existsSync(p));
 
       let agent;
-      if (existsSync(agentPath)) {
+      if (agentPath) {
         const content = readFileSync(agentPath, "utf-8");
         agent = AgentSchema.parse(yaml.load(content));
       } else {
@@ -74,7 +78,7 @@ export function createBuildCommand(): Command {
       }
 
       const launchParams = parseSetParams(opts.set);
-      const result = runPipeline(agent, root, launchParams);
+      const result = runPipeline(agent, roots, launchParams);
 
       if (opts.dryRun) {
         console.log("=== Resolution ===");
@@ -95,8 +99,8 @@ export function createBuildCommand(): Command {
           const tmpDest = join(tmpdir(), `pw-dryrun-${Date.now()}-${Math.random().toString(36).slice(2)}`);
           mkdirSync(tmpDest, { recursive: true });
 
-          const registryInstance = Registry.load(root);
-          const { description, params, extraFrontmatter } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
+          const registryInstance = Registry.load(roots);
+          const { description, params, extraFrontmatter, emitParameters } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
           let renderResult;
           try {
             renderResult = renderer.render(result.output, tmpDest, {
@@ -104,6 +108,7 @@ export function createBuildCommand(): Command {
               description,
               params,
               extraFrontmatter,
+              emitParameters,
             });
 
             console.log("\n=== Warnings ===");
@@ -162,13 +167,14 @@ export function createBuildCommand(): Command {
 
         let ctx: import("../src/renderers/index.js").RenderContext;
         if (target === 'skill') {
-          const registryInstance = Registry.load(root);
-          const { description, params, extraFrontmatter } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
+          const registryInstance = Registry.load(roots);
+          const { description, params, extraFrontmatter, emitParameters } = buildSkillContext(agent, result.behaviors, registryInstance, launchParams);
           ctx = {
             presetName: agent.preset ?? agent.name,
             description,
             params,
             extraFrontmatter,
+            emitParameters,
           };
         } else {
           ctx = {

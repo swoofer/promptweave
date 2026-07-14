@@ -20,6 +20,7 @@ export interface RenderContext {
   projectRoot?: string;
   /** Additional frontmatter fields to merge into the skill's YAML frontmatter. Bundle ignores. */
   extraFrontmatter?: Record<string, unknown>;
+  emitParameters?: boolean;  // default true; set false to suppress ## Parameters section in skill target
 }
 
 export interface RenderResult {

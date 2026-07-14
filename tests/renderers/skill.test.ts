@@ -275,6 +275,61 @@ describe('skillRenderer.render', () => {
     expect(content).not.toContain('## Parameters');
   });
 
+  it('omits ## Parameters when emitParameters is false even if params are declared', () => {
+    const dest = tmpPath('params-suppressed');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'p',
+      description: 'd',
+      params: [
+        { name: 'target_language', type: 'string', description: 'Language', required: false, effectiveDefault: 'fr' },
+      ],
+      emitParameters: false,
+    });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(content).not.toContain('## Parameters');
+    expect(content).not.toContain('target_language');
+  });
+
+  it('includes ## Parameters when emitParameters is true (explicit) with params', () => {
+    const dest = tmpPath('params-explicit-true');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'p',
+      description: 'd',
+      params: [
+        { name: 'target_language', type: 'string', description: 'Language', required: false, effectiveDefault: 'fr' },
+      ],
+      emitParameters: true,
+    });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(content).toContain('## Parameters');
+    expect(content).toContain('target_language');
+  });
+
+  it('includes ## Parameters when emitParameters is undefined (default) with params', () => {
+    const dest = tmpPath('params-default');
+    cleanup.push(dest);
+    mkdirSync(dest, { recursive: true });
+
+    skillRenderer.render(minimalOutput, dest, {
+      presetName: 'p',
+      description: 'd',
+      params: [
+        { name: 'target_language', type: 'string', description: 'Language', required: false, effectiveDefault: 'fr' },
+      ],
+    });
+
+    const content = readFileSync(join(dest, 'p', 'SKILL.md'), 'utf-8');
+    expect(content).toContain('## Parameters');
+  });
+
   it('renders params in declared order, not alphabetical', () => {
     const dest = tmpPath('params-order');
     cleanup.push(dest);
