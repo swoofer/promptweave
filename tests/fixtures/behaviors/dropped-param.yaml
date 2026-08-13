@@ -1,0 +1,11 @@
+name: dropped-param
+description: "Declares a param no channel can read — the essaim#79 shape"
+category: mission
+params:
+  categories:
+    type: string[]
+    required: false
+    description: "Accepted by the schema, then dropped at assembly"
+sections:
+  "030-mission":
+    prompt: "Six catégories en dur, aucun placeholder."

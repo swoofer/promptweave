@@ -115,6 +115,16 @@ export function runPipeline(
     (e) => `Catalog entry ignored (invalid): ${e.file} — ${e.message.split('\n')[0]}`,
   );
 
+  // Values a caller actually put on the table, in precedence order. Distinct from
+  // `resolvedParams`, which is indistinguishable from a declared default once
+  // merged — and a default nobody chose is not worth warning about.
+  const providedParams: Record<string, Record<string, unknown>> = {};
+  for (const source of [presetParams, agent.params, launchParams]) {
+    for (const [behaviorName, params] of Object.entries(source)) {
+      providedParams[behaviorName] = { ...providedParams[behaviorName], ...params };
+    }
+  }
+
   const warnings = [
     ...loadWarnings,
     ...generateWarnings(
@@ -122,6 +132,8 @@ export function runPipeline(
       composed.appliedRules,
       registry,
       prompt,
+      undefined,
+      providedParams,
     ),
     ...sideCarWarnings,
   ];

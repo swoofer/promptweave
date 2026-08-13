@@ -6,6 +6,8 @@ export { validateBehaviors } from './validate.js';
 export { applyCompositionRules, matchRules } from './compose.js';
 export { assemblePrompt, assembleHooks, assembleMcpTools, assembleEnvVars, assembleSideCarFiles } from './assemble.js';
 export { generateWarnings } from './warnings.js';
+export { findUnusedParams } from './param-usage.js';
+export type { UnusedParam } from './param-usage.js';
 export { runPipeline } from './pipeline.js';
 export { writeOutput } from './writer.js';
 export { bundleRenderer, skillRenderer, registry } from './renderers/index.js';
