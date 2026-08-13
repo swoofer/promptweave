@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/swoofer/promptweave/compare/v0.3.0...v0.4.0) (2026-08-13)
+
+
+### Features
+
+* **warnings:** signale un param fourni que rien ne peut lire ([#16](https://github.com/swoofer/promptweave/issues/16)) ([6b0b22d](https://github.com/swoofer/promptweave/commit/6b0b22dab24317d326d0fa3c7518a5194ac4fc57))
+
 ## [0.3.0](https://github.com/swoofer/promptweave/compare/v0.2.0...v0.3.0) (2026-07-14)
 
 
