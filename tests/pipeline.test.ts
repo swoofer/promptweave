@@ -84,5 +84,33 @@ describe('runPipeline', () => {
 
     expect(result.output.prompt).toContain('src/payments');
   });
+
+  it('avertit quand un launch param ne peut atteindre aucun canal', () => {
+    const agent: Agent = { name: 'ignoré', behaviors: ['dropped-param'], add: [], remove: [], params: {} };
+
+    const result = runPipeline(agent, FIXTURES, {
+      'dropped-param': { categories: ['ma catégorie maison'] },
+    });
+
+    // Le prompt sort inchangé — c'est précisément ce que le warning doit rendre audible.
+    expect(result.output.prompt).not.toContain('ma catégorie maison');
+    expect(result.warnings.some((w) => w.includes('dropped-param.categories'))).toBe(true);
+  });
+
+  it('avertit aussi quand la valeur vient du preset, pas du lancement', () => {
+    const agent: Agent = { name: 'via-preset', preset: 'preset-qui-pose', add: [], remove: [], params: {} };
+
+    const result = runPipeline(agent, FIXTURES, {});
+
+    expect(result.warnings.some((w) => w.includes('dropped-param.categories'))).toBe(true);
+  });
+
+  it('n\'avertit pas quand personne ne pose de valeur', () => {
+    const agent: Agent = { name: 'muet', behaviors: ['dropped-param'], add: [], remove: [], params: {} };
+
+    const result = runPipeline(agent, FIXTURES, {});
+
+    expect(result.warnings.some((w) => w.includes('dropped-param.categories'))).toBe(false);
+  });
 });
 

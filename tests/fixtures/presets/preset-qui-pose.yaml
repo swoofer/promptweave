@@ -1,0 +1,9 @@
+name: preset-qui-pose
+description: "Sets a param the behavior cannot read — the mekova-review shape"
+profile: codeur
+behaviors:
+  - dropped-param
+params:
+  dropped-param:
+    categories:
+      - "catégorie posée par le preset"

@@ -1,5 +1,6 @@
 import type { Behavior } from './types.js';
 import type { Registry } from './registry.js';
+import { findUnusedParams } from './param-usage.js';
 
 const DEFAULT_PROMPT_SIZE_THRESHOLD = 32000;
 
@@ -9,6 +10,12 @@ export function generateWarnings(
   registry: Registry,
   assembledPrompt: string,
   promptSizeThreshold: number = DEFAULT_PROMPT_SIZE_THRESHOLD,
+  /**
+   * Params a caller actually provided (preset + agent + launch), keyed by
+   * behavior. Only these are reported when unused: a param nobody set is dead
+   * catalog weight, which is lint's business, not every launch's.
+   */
+  setParams: Record<string, Record<string, unknown>> = {},
 ): string[] {
   const warnings: string[] = [];
   const activeNames = new Set(behaviors.keys());
@@ -71,7 +78,21 @@ export function generateWarnings(
     }
   }
 
-  // 3. Prompt size
+  // 3. Params set by the caller that no channel can read.
+  //
+  // Silent by construction otherwise: the schema accepts the value, the assembler
+  // ignores it, and a dry-run looks perfectly normal unless you happen to compare
+  // prompt sizes (essaim#79).
+  for (const { behavior, param } of findUnusedParams(behaviors, registry.compositions.values())) {
+    if (setParams[behavior]?.[param] === undefined) continue;
+    warnings.push(
+      `Param "${behavior}.${param}" est fourni mais jamais consommé : aucune section, ` +
+      `hook ou side_car_file ne l'interpole, ce n'est pas un knob de phase, et aucune ` +
+      `composition ne s'en sert. La valeur sera ignorée à l'assemblage.`
+    );
+  }
+
+  // 4. Prompt size
   if (assembledPrompt.length > promptSizeThreshold) {
     warnings.push(
       `Taille du prompt assemblé (${assembledPrompt.length} chars) dépasse le seuil ` +
