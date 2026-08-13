@@ -41,7 +41,12 @@ function tmpDir(prefix: string): string {
   return join(tmpdir(), `pw-cli-test-${prefix}-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 }
 
-describe('cli/build — --target dispatch (fixture-isolated)', () => {
+// Chaque cas ici lance la CLI dans un sous-processus via `npx tsx`, à ~2,5-3 s le
+// démarrage à froid sous Windows. Le défaut vitest de 5 s ne laisse donc aucune
+// marge : le cas qui lance la CLI DEUX fois le dépassait systématiquement, et les
+// autres passaient à deux secondes près. Le timeout est porté au niveau du
+// describe plutôt que sur un seul test — l'exposition est celle du fichier entier.
+describe('cli/build — --target dispatch (fixture-isolated)', { timeout: 30_000 }, () => {
   const cleanup: string[] = [];
   afterEach(() => {
     for (const d of cleanup) {
