@@ -3,6 +3,16 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      publish_only:
+        description: "Skip release-please and just publish to npm from main HEAD"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
 
 permissions:
   contents: write
@@ -12,28 +22,41 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: googleapis/release-please-action@v4
+      # `publish_only` exists because release-please only reports
+      # `release_created` on the run that actually cuts the release. If that run
+      # publishes a tag but fails at `npm publish` — an expired NPM_TOKEN, a
+      # registry hiccup — every later run sees the release as already cut and
+      # skips publishing, so the version stays permanently missing from npm with
+      # no way to retry. That happened to 0.4.0.
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         id: release
+        if: ${{ github.event_name == 'push' || inputs.publish_only != 'true' }}
         with:
           release-type: node
+          # Pinned explicitly so the release target always matches this
+          # workflow's `push: branches: [main]` trigger, instead of relying
+          # implicitly on the repository's default-branch setting.
+          target-branch: main
 
-      - uses: actions/checkout@v4
-        if: ${{ steps.release.outputs.release_created }}
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        if: ${{ steps.release.outputs.release_created || inputs.publish_only == 'true' }}
 
-      - uses: actions/setup-node@v4
-        if: ${{ steps.release.outputs.release_created }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        if: ${{ steps.release.outputs.release_created || inputs.publish_only == 'true' }}
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
+          cache: "npm"
 
-      - run: npm install
-        if: ${{ steps.release.outputs.release_created }}
+      - run: npm ci
+        if: ${{ steps.release.outputs.release_created || inputs.publish_only == 'true' }}
 
       - run: npm run build
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created || inputs.publish_only == 'true' }}
 
       - run: npm publish
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.release_created || inputs.publish_only == 'true' }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
