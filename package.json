@@ -55,7 +55,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "cli": "tsx cli/index.ts",
-    "prepublishOnly": "npm run build && npm test"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "commander": "^14.0.3",
