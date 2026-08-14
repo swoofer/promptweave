@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/swoofer/promptweave/compare/v0.4.0...v0.4.1) (2026-08-13)
+
+
+### Bug Fixes
+
+* **test:** timeout adapté aux tests qui lancent la CLI en sous-processus ([#20](https://github.com/swoofer/promptweave/issues/20)) ([ddbfa50](https://github.com/swoofer/promptweave/commit/ddbfa509b7fbc0b49f2e4da793d9cf76d916e8cc))
+
 ## [0.4.0](https://github.com/swoofer/promptweave/compare/v0.3.0...v0.4.0) (2026-08-13)
 
 
