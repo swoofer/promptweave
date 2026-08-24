@@ -55,7 +55,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "cli": "tsx cli/index.ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "commander": "^14.0.3",
@@ -72,5 +72,6 @@
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "packageManager": "pnpm@10.34.5"
 }
