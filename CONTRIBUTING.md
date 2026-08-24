@@ -13,17 +13,17 @@ Open an issue with the "feature" template. Explain the use case before proposing
 ## Pull requests
 
 1. Fork the repo and create a branch off `main`.
-2. Run `npm install` then `npm test` to confirm baseline passes.
+2. Run `pnpm install` then `pnpm test` to confirm baseline passes.
 3. Add tests for any new behavior. We use Vitest.
 4. Keep commits scoped and follow [Conventional Commits](https://www.conventionalcommits.org/).
 5. Open a PR against `main`. CI must pass before review.
 
 ## Development
 
-- `npm install`
-- `npm test` — run the full vitest suite.
-- `npm run build` — run TypeScript in `--noEmit` mode.
-- `npm run cli -- build raid --dry-run` — exercise the CLI end-to-end against bundled defaults.
+- `pnpm install`
+- `pnpm test` — run the full vitest suite.
+- `pnpm build` — run TypeScript in `--noEmit` mode.
+- `pnpm cli -- build raid --dry-run` — exercise the CLI end-to-end against bundled defaults.
 
 ## Architecture
 
