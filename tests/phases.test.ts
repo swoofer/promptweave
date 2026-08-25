@@ -147,6 +147,37 @@ describe('assemblePhases', () => {
     expect(result[0].maxTurns).toBe(20);
   });
 
+  it('propage requireFailingTest quand une phase le declare', () => {
+    const behaviors = new Map([
+      ['exec', makeBehavior({
+        name: 'exec',
+        phase: { name: 'execute', tools_mode: 'full', loop: true },
+      })],
+    ]);
+    const result = assemblePhases(
+      behaviors, new Map(), new Map(), agent,
+      { exec: { requireFailingTest: true } },
+    );
+    expect(result[0].requireFailingTest).toBe(true);
+  });
+
+  it('traite requireFailingTest=false comme non declare (opt-in)', () => {
+    // resolveParams remplit les booleens absents avec false : seul true compte,
+    // sinon les 27 presets qui ne produisent aucun test echouant seraient
+    // soumis a une verification qui n'a pas de sens pour eux.
+    const behaviors = new Map([
+      ['exec', makeBehavior({
+        name: 'exec',
+        phase: { name: 'execute', tools_mode: 'full', loop: true },
+      })],
+    ]);
+    const result = assemblePhases(
+      behaviors, new Map(), new Map(), agent,
+      { exec: { requireFailingTest: false } },
+    );
+    expect(result[0].requireFailingTest).toBeUndefined();
+  });
+
   it('treats empty-string model/thinking as unset (do not override profile)', () => {
     const behaviors = new Map([
       ['disc', makeBehavior({
