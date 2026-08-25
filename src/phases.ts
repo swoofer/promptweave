@@ -21,6 +21,7 @@ export function assemblePhases(
     model?: string;
     thinking?: string;
     maxTurns?: number;
+    requireFailingTest?: boolean;
     sections: Array<{ number: number; behaviorName: string; prompt: string }>;
   }>();
   const phaseOrder: string[] = [];
@@ -54,6 +55,12 @@ export function assemblePhases(
       }
       if (phase.maxTurns === undefined && typeof params.maxTurns === 'number' && params.maxTurns > 0) {
         phase.maxTurns = params.maxTurns;
+      }
+      // Opt-in, donc seul `true` compte : resolveParams remplit les paramètres
+      // absents-et-défaultés avec des valeurs vides, qu'on lit ici comme
+      // "non déclaré" — même traitement que les quatre knobs ci-dessus.
+      if (phase.requireFailingTest === undefined && params.requireFailingTest === true) {
+        phase.requireFailingTest = true;
       }
     }
 
@@ -115,6 +122,7 @@ export function assemblePhases(
         model: phase.model,
         thinking: phase.thinking,
         maxTurns: phase.maxTurns,
+        requireFailingTest: phase.requireFailingTest,
       };
     });
 }

@@ -186,6 +186,19 @@ export interface PhasePrompt {
   model?: string;
   thinking?: string;
   maxTurns?: number;
+  /**
+   * La phase exige que le livrable soit un test qui ÉCHOUE avant le patch.
+   *
+   * Opt-in : seules les missions dont le livrable est un test exposant un
+   * défaut la déclarent (chasse aux bugs, remédiation de findings). Un
+   * refactoring ou une migration ne doit rien faire échouer, et l'imposer
+   * partout ferait échouer des tâches réussies.
+   *
+   * En aval, l'agent-loop peut alors VÉRIFIER la falsifiabilité au lieu de se
+   * contenter de la demander dans le prompt — un agent peut écrire un test qui
+   * passe dans les deux cas et conclure quand même qu'il a corrigé un bug.
+   */
+  requireFailingTest?: boolean;
 }
 
 export interface AssembledOutput {
