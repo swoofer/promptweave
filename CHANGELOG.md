@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/swoofer/promptweave/compare/v0.4.1...v0.5.0) (2026-08-25)
+
+
+### Features
+
+* **phases:** propage requireFailingTest jusqu'à l'agent-loop ([#23](https://github.com/swoofer/promptweave/issues/23)) ([5b0d97d](https://github.com/swoofer/promptweave/commit/5b0d97dd0a2faa5963d975c15684c0869854e8ef))
+
 ## [0.4.1](https://github.com/swoofer/promptweave/compare/v0.4.0...v0.4.1) (2026-08-13)
 
 
