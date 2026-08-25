@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/swoofer/promptweave/compare/v0.5.0...v0.5.1) (2026-08-25)
+
+
+### Bug Fixes
+
+* **lint:** requireFailingTest est un knob de phase, pas un param orphelin ([#25](https://github.com/swoofer/promptweave/issues/25)) ([3f87f68](https://github.com/swoofer/promptweave/commit/3f87f6894c0eb51fcde6f9d0fb7f1707382b2f23))
+
 ## [0.5.0](https://github.com/swoofer/promptweave/compare/v0.4.1...v0.5.0) (2026-08-25)
 
 
