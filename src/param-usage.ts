@@ -1,12 +1,18 @@
-import Handlebars from 'handlebars';
-import type { Behavior, CompositionRule } from './types.js';
+import Handlebars from "handlebars";
+import type { Behavior, CompositionRule } from "./types.js";
 
 /**
  * Effort knobs read off the resolved params by `assemblePhases`, not by the
  * templates. They only take effect on a behavior that owns a NAMED phase —
  * see phases.ts, which skips the implicit "main" phase.
  */
-const PHASE_KNOBS: ReadonlySet<string> = new Set(['effort', 'model', 'thinking', 'maxTurns']);
+const PHASE_KNOBS: ReadonlySet<string> = new Set([
+  "effort",
+  "model",
+  "thinking",
+  "maxTurns",
+  "requireFailingTest",
+]);
 
 export interface UnusedParam {
   behavior: string;
@@ -39,7 +45,7 @@ function referencedParams(template: string): Set<string> {
   // PathExpression, and enumerating them is how you miss one.
   const seen = new Set<object>();
   const walk = (node: unknown): void => {
-    if (node === null || typeof node !== 'object') return;
+    if (node === null || typeof node !== "object") return;
     if (seen.has(node)) return;
     seen.add(node);
 
@@ -49,13 +55,13 @@ function referencedParams(template: string): Set<string> {
     }
 
     const record = node as Record<string, unknown>;
-    if (record.type === 'PathExpression' && Array.isArray(record.parts)) {
+    if (record.type === "PathExpression" && Array.isArray(record.parts)) {
       const parts = record.parts as string[];
       // Depth (`../`) is deliberately ignored. Inside `{{#each params.items}}`
       // the context is the item, so reaching the behavior's own params requires
       // `{{../params.x}}` — the root frame IS `{ agent, params }`. Treating a
       // non-zero depth as "not ours" reports a param that is genuinely read.
-      if (parts[0] === 'params' && parts.length > 1) {
+      if (parts[0] === "params" && parts.length > 1) {
         found.add(parts[1]);
       }
     }
@@ -68,24 +74,31 @@ function referencedParams(template: string): Set<string> {
 }
 
 /** Every param a behavior can actually consume, across all channels. */
-function consumedParams(behavior: Behavior, compositions: Iterable<CompositionRule>): Set<string> {
+function consumedParams(
+  behavior: Behavior,
+  compositions: Iterable<CompositionRule>,
+): Set<string> {
   const consumed = new Set<string>();
   const absorb = (template: string): void => {
     for (const name of referencedParams(template)) consumed.add(name);
   };
 
-  for (const section of Object.values(behavior.sections)) absorb(section.prompt);
+  for (const section of Object.values(behavior.sections))
+    absorb(section.prompt);
   for (const hook of Object.values(behavior.hooks)) {
     for (const arg of hook.args) absorb(arg);
   }
-  for (const content of Object.values(behavior.side_car_files ?? {})) absorb(content);
+  for (const content of Object.values(behavior.side_car_files ?? {}))
+    absorb(content);
 
-  if (behavior.phase?.name && behavior.phase.name !== 'main') {
+  if (behavior.phase?.name && behavior.phase.name !== "main") {
     for (const knob of PHASE_KNOBS) consumed.add(knob);
   }
 
   for (const rule of compositions) {
-    for (const param of Object.keys(rule.when.params_match?.[behavior.name] ?? {})) {
+    for (const param of Object.keys(
+      rule.when.params_match?.[behavior.name] ?? {},
+    )) {
       consumed.add(param);
     }
     for (const override of rule.actions.override_sections) {
